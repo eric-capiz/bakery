@@ -427,6 +427,39 @@
   }
 }
 
+.testimonials-link-wrapper {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.testimonials-link {
+  display: inline-block;
+  color: #8B4A3A;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 1rem 2.5rem;
+  border: 3px solid #E8A87C;
+  border-radius: 30px;
+  background: #FFFFFF;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(232, 168, 124, 0.2);
+
+  &:hover {
+    background: #E8A87C;
+    color: #FFFFFF;
+    border-color: #B89AA8;
+    box-shadow: 0 8px 25px rgba(232, 168, 124, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid #E8A87C;
+    outline-offset: 2px;
+  }
+}
+
 .testimonial-item {
   width: 100%;
   background: #FFFFFF;

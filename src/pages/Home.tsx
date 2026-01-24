@@ -171,6 +171,11 @@ const Home = () => {
               <p className="author-rich">- Repeat Customer</p>
             </div>
           </div>
+          <div className="testimonials-link-wrapper">
+            <Link to="/reviews" className="testimonials-link">
+              See More Reviews
+            </Link>
+          </div>
         </div>
       </section>
 
