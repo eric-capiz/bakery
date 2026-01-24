@@ -13,7 +13,6 @@ import {
   FaComments,
 } from "react-icons/fa";
 import { BsCake } from "react-icons/bs";
-import * as emailjs from "emailjs-com";
 
 interface ConsultationData {
   name: string;
@@ -70,37 +69,43 @@ const ConsultationForm = () => {
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    try {
-      const result = await emailjs.send(
-        process.env.REACT_APP_EMAILJS_SERVICE_ID!,
-        process.env.REACT_APP_EMAILJS_TEMPLATE_ID!,
-        {
-          name: consultation.name,
-          email: consultation.email,
-          phone: consultation.phone,
-          date: consultation.date ? consultation.date.toLocaleDateString() : "",
-          time: consultation.time,
-          eventType: consultation.eventType,
-          guestCount: consultation.guestCount,
-          budget: consultation.budget,
-          message: consultation.message,
-        },
-        process.env.REACT_APP_EMAILJS_PUBLIC_KEY!
-      );
+    const formData = new FormData();
+    formData.append("name", consultation.name);
+    formData.append("email", consultation.email);
+    formData.append("phone", consultation.phone);
+    formData.append("date", consultation.date ? consultation.date.toLocaleDateString() : "");
+    formData.append("time", consultation.time);
+    formData.append("eventType", consultation.eventType);
+    formData.append("guestCount", consultation.guestCount);
+    formData.append("budget", consultation.budget);
+    formData.append("message", consultation.message);
+    formData.append("_subject", `New Consultation Request from ${consultation.name}`);
 
-      console.log("Success:", result);
-      setSubmitStatus("success");
-      setConsultation({
-        name: "",
-        email: "",
-        phone: "",
-        date: null,
-        time: "",
-        eventType: "",
-        guestCount: "",
-        budget: "",
-        message: "",
+    try {
+      const response = await fetch("https://formsubmit.co/ericcapiz@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
       });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setConsultation({
+          name: "",
+          email: "",
+          phone: "",
+          date: null,
+          time: "",
+          eventType: "",
+          guestCount: "",
+          budget: "",
+          message: "",
+        });
+      } else {
+        throw new Error("Form submission failed");
+      }
     } catch (error) {
       console.error("Error sending email:", error);
       setSubmitStatus("error");
