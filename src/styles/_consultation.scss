@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .consultation-form {
   max-width: 600px;
   margin: 0 auto;
@@ -13,8 +15,8 @@
         left: 1rem;
         top: 50%;
         transform: translateY(-50%);
-        color: #24bace;
-        opacity: 0.5;
+        color: #E8A87C;
+        opacity: 0.7;
         z-index: 1;
       }
 
@@ -24,15 +26,17 @@
       .react-datepicker-wrapper {
         width: 100%;
         padding: 1rem 1rem 1rem 3rem;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 2px solid #FFB89A;
         border-radius: 30px;
         background: #fff;
         font-size: 1rem;
-        transition: all 0.3s ease;
+        color: #8B4A3A;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
         &:focus {
-          border-color: #24bace;
-          box-shadow: 0 0 0 2px rgba(36, 186, 206, 0.1);
+          border-color: #E8A87C;
+          border-width: 3px;
+          box-shadow: 0 0 0 4px rgba(232, 168, 124, 0.2);
           outline: none;
         }
 
@@ -72,21 +76,43 @@
   button[type="submit"] {
     width: 100%;
     padding: 1rem;
-    background: #24bace;
+    background: #E8A87C;
     border: none;
     border-radius: 30px;
-    color: white;
+    color: #FFFFFF;
     font-size: 1rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(232, 168, 124, 0.4);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
 
     &:hover {
-      background: darken(#24bace, 10%);
-      transform: translateY(-1px);
+      background: #D9976C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(232, 168, 124, 0.5);
+
+      &::before {
+        width: 300px;
+        height: 300px;
+      }
     }
 
     &:disabled {
-      background: rgba(36, 186, 206, 0.7);
+      background: rgba(232, 168, 124, 0.7);
       cursor: not-allowed;
     }
   }
@@ -185,17 +211,21 @@
     }
 
     &--selected {
-      background: #24bace;
+      background: #E8A87C;
       color: white;
 
       &:hover {
-        background: darken(#24bace, 5%);
+        background: #D9976C;
       }
     }
 
     &--today {
       font-weight: bold;
-      color: #24bace;
+      color: #E8A87C;
+    }
+
+    &:hover {
+      background: rgba(232, 168, 124, 0.1);
     }
   }
 
@@ -210,7 +240,7 @@
 
     &:hover {
       .react-datepicker__navigation-icon::before {
-        border-color: #24bace;
+        border-color: #E8A87C;
       }
     }
   }
@@ -232,14 +262,16 @@
   input {
     width: 100%;
     padding: 1rem 1rem 1rem 3rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 2px solid #FFB89A;
     border-radius: 30px;
     font-size: 1rem;
     background: white;
+    color: #8B4A3A;
 
     &:focus {
-      border-color: #24bace;
-      box-shadow: 0 0 0 2px rgba(36, 186, 206, 0.1);
+      border-color: #E8A87C;
+      border-width: 3px;
+      box-shadow: 0 0 0 4px rgba(232, 168, 124, 0.2);
       outline: none;
     }
   }

@@ -1,34 +1,192 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import Wave from "../components/Wave";
 import cake1 from "../img/Cakes/cake1.jpg";
-import { m } from "framer-motion";
-import { titleAnim, fade, photoAnim } from "../animation";
 
-const AboutMe = () => {
+const Home = () => {
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const specialtiesRef = useRef<HTMLDivElement>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.gsap && window.ScrollTrigger) {
+      const gsap = window.gsap;
+      const ScrollTrigger = window.ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
+
+      if (featuresRef.current) {
+        gsap.fromTo(featuresRef.current.querySelectorAll(".feature-item"), 
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: featuresRef.current,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            ease: "power1.out",
+          }
+        );
+      }
+
+      if (specialtiesRef.current) {
+        gsap.fromTo(specialtiesRef.current.querySelectorAll(".specialty-item"),
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: specialtiesRef.current,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            ease: "power1.out",
+          }
+        );
+      }
+
+      if (testimonialsRef.current) {
+        gsap.fromTo(testimonialsRef.current.querySelectorAll(".testimonial-item"),
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: testimonialsRef.current,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            ease: "power1.out",
+          }
+        );
+      }
+    }
+  }, []);
+
   return (
-    <m.div className="about" initial="hidden" animate="show">
-      <div className="description">
-        <m.div className="title">
-          <div className="hide">
-            <m.h2 variants={titleAnim}>
-              The More<span> Cake</span>,
-            </m.h2>
+    <div className="home-rich">
+      <section className="hero-rich">
+        <div className="hero-wrapper-rich">
+          <div className="hero-grid">
+            <div className="hero-image-side">
+              <div className="image-wrapper-rich">
+                <img src={cake1} alt="Delicious custom cake" />
+              </div>
+            </div>
+            <div className="hero-text-side">
+              <h1 className="hero-title-rich">
+                <span>The More</span>
+                <span className="accent-word">Cake</span>
+                <span>The Batter</span>
+              </h1>
+              <p className="hero-p-rich">
+                Contact me for all your sweet tooth needs!
+              </p>
+              <Link to="/contact" className="btn-primary">
+                Contact Me
+              </Link>
+            </div>
           </div>
-          <div className="hide">
-            <m.h2 variants={titleAnim}>Batter</m.h2>
+        </div>
+      </section>
+
+      <section ref={featuresRef} className="features-rich">
+        <div className="wrapper-rich">
+          <h2 className="heading-rich">Why Choose Us</h2>
+          <div className="features-grid-rich">
+            <div className="feature-item">
+              <div className="icon-rich">⚡</div>
+              <h3>Fast Service</h3>
+              <p>Within 24hrs in most cases!</p>
+            </div>
+            <div className="feature-item">
+              <div className="icon-rich">💰</div>
+              <h3>Affordable</h3>
+              <p>Competitive pricing with promotional discounts available!</p>
+            </div>
+            <div className="feature-item">
+              <div className="icon-rich">🎨</div>
+              <h3>Custom Made</h3>
+              <p>Dream big! We bring your vision to life.</p>
+            </div>
+            <div className="feature-item">
+              <div className="icon-rich">👨‍🍳</div>
+              <h3>Professional</h3>
+              <p>8+ years of professional baking experience.</p>
+            </div>
           </div>
-        </m.div>
-        <m.p variants={fade}>Contact me for all your sweet tooth needs!</m.p>
-        <Link to="/contact">
-          <m.button variants={fade}>Contact Me</m.button>
-        </Link>
-      </div>
-      <div className="image">
-        <m.img variants={photoAnim} src={cake1} alt="cake" />
-      </div>
-      <Wave />
-    </m.div>
+        </div>
+      </section>
+
+      <section ref={specialtiesRef} className="specialties-rich">
+        <div className="wrapper-rich">
+          <h2 className="heading-rich">Our Specialties</h2>
+          <div className="specialties-grid-rich">
+            <div className="specialty-item">
+              <h3>Birthday Cakes</h3>
+              <p>Make every birthday unforgettable with our custom designs.</p>
+            </div>
+            <div className="specialty-item">
+              <h3>Wedding Cakes</h3>
+              <p>Elegant and delicious cakes for your special day.</p>
+            </div>
+            <div className="specialty-item">
+              <h3>Anniversary Cakes</h3>
+              <p>Celebrate your milestones with style.</p>
+            </div>
+            <div className="specialty-item">
+              <h3>Corporate Events</h3>
+              <p>Professional cakes for your business occasions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section ref={testimonialsRef} className="testimonials-rich">
+        <div className="wrapper-rich">
+          <h2 className="heading-rich">What Our Customers Say</h2>
+          <div className="testimonials-grid-rich">
+            <div className="testimonial-item">
+              <p className="quote-rich">
+                "Truly a masterpiece! The most fascinating looking cake I have seen."
+              </p>
+              <p className="author-rich">- Happy Customer</p>
+            </div>
+            <div className="testimonial-item">
+              <p className="quote-rich">
+                "Sweet Dreams Bakery cakes are always moist and taste sooooo goooood!"
+              </p>
+              <p className="author-rich">- Satisfied Client</p>
+            </div>
+            <div className="testimonial-item">
+              <p className="quote-rich">
+                "I was so shocked how this came out. Always the best looking cakes!"
+              </p>
+              <p className="author-rich">- Repeat Customer</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="cta-rich">
+        <div className="wrapper-rich">
+          <div className="cta-content-rich">
+            <h2>Ready to Order Your Perfect Cake?</h2>
+            <p>Let's make your celebration unforgettable. Book a consultation today!</p>
+            <Link to="/contact" className="btn-secondary">
+              Book Consultation
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 
-export default AboutMe;
+export default Home;

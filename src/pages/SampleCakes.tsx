@@ -1,63 +1,116 @@
-import { Link } from "react-router-dom";
-import cake7 from "../img/Cakes/cake7.jpg";
-import cake11 from "../img/Cakes/cake11.jpg";
+import cake1 from "../img/Cakes/cake1.jpg";
+import cake2 from "../img/Cakes/cake2.jpg";
+import cake3 from "../img/Cakes/cake3.jpg";
 import cake4 from "../img/Cakes/cake4.jpg";
-import { m } from "framer-motion";
-import { pageAnimation, fade, photoAnim, lineAnim } from "../animation";
-import { useScroll } from "../components/useScroll";
+import cake5 from "../img/Cakes/cake5.jpg";
+import cake6 from "../img/Cakes/cake6.jpg";
+import cake7 from "../img/Cakes/cake7.jpg";
+import cake8 from "../img/Cakes/cake8.jpg";
+import cake9 from "../img/Cakes/cake9.jpg";
+import cake10 from "../img/Cakes/cake10.jpg";
+import cake11 from "../img/Cakes/cake11.jpg";
+import cake12 from "../img/Cakes/cake12.jpg";
+import cake13 from "../img/Cakes/cake13.jpg";
+import cake14 from "../img/Cakes/cake14.jpg";
+import cake15 from "../img/Cakes/cake15.jpg";
+import cake16 from "../img/Cakes/cake16.jpg";
+import cake17 from "../img/Cakes/cake17.jpg";
 
 const SampleCakes = () => {
-  const [element, controls] = useScroll();
-  const [element2, controls2] = useScroll();
-
   return (
-    <m.div
-      className="sample-cakes"
-      variants={pageAnimation}
-      initial="hidden"
-      animate="show"
-      exit="exit"
-    >
-      <div className="cake">
-        <m.h2 variants={fade}>Cake 1</m.h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake1">
-          <div className="hide">
-            <m.img variants={photoAnim} src={cake7} alt="cake" />
-            <div className="review-indicator">👆 Click to view reviews</div>
-          </div>
-        </Link>
+    <div className="sample-cakes">
+      <div className="sample-cakes-header">
+        <h2>Sample Cakes</h2>
+        <p>Explore our collection of custom-made cakes</p>
       </div>
-      <m.div
-        className="cake"
-        ref={element}
-        variants={fade}
-        animate={controls}
-        initial="hidden"
-      >
-        <h2>Cake 2</h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake2">
-          <div className="hide">
-            <img src={cake11} alt="cake" />
-            <div className="review-indicator">👆 Click to view reviews</div>
+      <div className="cakes-gallery">
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake1} alt="Custom cake" />
           </div>
-        </Link>
-      </m.div>
-      <m.div
-        className="cake"
-        ref={element2}
-        variants={fade}
-        animate={controls2}
-        initial="hidden"
-      >
-        <h2>Cake 3</h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake3">
-          <img src={cake4} alt="cake" />
-        </Link>
-      </m.div>
-    </m.div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake2} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake3} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake4} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake5} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake6} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake7} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake8} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake9} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake10} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake11} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake12} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake13} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake14} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake15} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake16} alt="Custom cake" />
+          </div>
+        </div>
+        <div className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake17} alt="Custom cake" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

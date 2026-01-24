@@ -32,7 +32,7 @@ export const CakeState = (): Cake[] => {
         {
           title: "Freshly Baked.",
           description:
-            "Nando's Cakes are always moist and taste sooooo goooood!",
+            "Sweet Dreams Bakery cakes are always moist and taste sooooo goooood!",
         },
         {
           title: "So Delicious.",
@@ -49,7 +49,7 @@ export const CakeState = (): Cake[] => {
         {
           title: "Impressed",
           description:
-            "I was so shocked how this came out. I shouldn't have been because Nando's always have the best looking cakes!",
+            "I was so shocked how this came out. I shouldn't have been because Sweet Dreams Bakery always has the best looking cakes!",
         },
         {
           title: "Timely",
