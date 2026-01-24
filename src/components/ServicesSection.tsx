@@ -5,8 +5,7 @@ import {
   faBirthdayCake,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
-import bake from "../img/bake.jfif";
-import { scrollReveal, fade } from "../animation";
+import { scrollReveal } from "../animation";
 import { useScroll } from "./useScroll";
 import { m } from "framer-motion";
 import type { CSSProperties } from "react";
@@ -64,9 +63,6 @@ const ServicesSection = () => {
             </p>
           </div>
         </div>
-      </div>
-      <div className="image">
-        <m.img variants={fade} src={bake} alt="cake" />
       </div>
     </m.div>
   );

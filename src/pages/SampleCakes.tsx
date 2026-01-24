@@ -2,62 +2,62 @@ import { Link } from "react-router-dom";
 import cake7 from "../img/Cakes/cake7.jpg";
 import cake11 from "../img/Cakes/cake11.jpg";
 import cake4 from "../img/Cakes/cake4.jpg";
-import { m } from "framer-motion";
-import { pageAnimation, fade, photoAnim, lineAnim } from "../animation";
-import { useScroll } from "../components/useScroll";
+import { useEffect, useRef } from "react";
 
 const SampleCakes = () => {
-  const [element, controls] = useScroll();
-  const [element2, controls2] = useScroll();
+  const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.gsap && window.ScrollTrigger) {
+      const gsap = window.gsap;
+      const ScrollTrigger = window.ScrollTrigger;
+      gsap.registerPlugin(ScrollTrigger);
+
+      if (galleryRef.current) {
+        gsap.fromTo(galleryRef.current.querySelectorAll(".cake-card"),
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.15,
+            scrollTrigger: {
+              trigger: galleryRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            ease: "power2.out",
+          }
+        );
+      }
+    }
+  }, []);
 
   return (
-    <m.div
-      className="sample-cakes"
-      variants={pageAnimation}
-      initial="hidden"
-      animate="show"
-      exit="exit"
-    >
-      <div className="cake">
-        <m.h2 variants={fade}>Cake 1</m.h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake1">
-          <div className="hide">
-            <m.img variants={photoAnim} src={cake7} alt="cake" />
-            <div className="review-indicator">👆 Click to view reviews</div>
+    <div className="sample-cakes">
+      <div className="sample-cakes-header">
+        <h2>Sample Cakes</h2>
+        <p>Explore our collection of custom-made cakes</p>
+        <p className="review-hint">Click any cake to view reviews</p>
+      </div>
+      <div ref={galleryRef} className="cakes-gallery">
+        <Link to="/sample-cakes/cake1" className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake7} alt="Custom cake" />
+          </div>
+        </Link>
+        <Link to="/sample-cakes/cake2" className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake11} alt="Custom cake" />
+          </div>
+        </Link>
+        <Link to="/sample-cakes/cake3" className="cake-card">
+          <div className="cake-image-wrapper">
+            <img src={cake4} alt="Custom cake" />
           </div>
         </Link>
       </div>
-      <m.div
-        className="cake"
-        ref={element}
-        variants={fade}
-        animate={controls}
-        initial="hidden"
-      >
-        <h2>Cake 2</h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake2">
-          <div className="hide">
-            <img src={cake11} alt="cake" />
-            <div className="review-indicator">👆 Click to view reviews</div>
-          </div>
-        </Link>
-      </m.div>
-      <m.div
-        className="cake"
-        ref={element2}
-        variants={fade}
-        animate={controls2}
-        initial="hidden"
-      >
-        <h2>Cake 3</h2>
-        <m.div variants={lineAnim} className="line" />
-        <Link to="/sample-cakes/cake3">
-          <img src={cake4} alt="cake" />
-        </Link>
-      </m.div>
-    </m.div>
+    </div>
   );
 };
 

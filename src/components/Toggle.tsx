@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import { useState, ReactNode } from "react";
 
 interface ToggleProps {
@@ -10,13 +9,17 @@ const Toggle = ({ children, title }: ToggleProps) => {
   const [toggle, setToggle] = useState<boolean>(false);
 
   return (
-    <m.div layout className="question" onClick={() => setToggle(!toggle)}>
-      <m.h4 layout className={toggle ? "active" : ""}>
+    <div 
+      className={`question ${toggle ? "active" : ""}`} 
+      onClick={() => setToggle(!toggle)}
+    >
+      <h4 className={toggle ? "active" : ""}>
         {title}
-      </m.h4>
-      {toggle && children}
-      <div className="faq-line"></div>
-    </m.div>
+      </h4>
+      <div className="answer">
+        {children}
+      </div>
+    </div>
   );
 };
 

@@ -1,11 +1,13 @@
 .contact-page {
   min-height: 90vh;
-  padding: 5rem 10rem;
+  padding: 8rem 10rem 5rem 10rem;
   color: #8B4A3A;
   background: #FFF8F0;
+  margin-top: 80px;
 
   @media (max-width: 1300px) {
-    padding: 2rem;
+    padding: 6rem 2rem 2rem 2rem;
+    margin-top: 70px;
     font-size: 1rem;
   }
 
