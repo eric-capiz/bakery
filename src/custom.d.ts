@@ -45,3 +45,10 @@ declare module "*.jfif" {
   const value: any;
   export = value;
 }
+
+declare global {
+  interface Window {
+    gsap: any;
+    ScrollTrigger: any;
+  }
+}

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .consultation-form {
   max-width: 600px;
   margin: 0 auto;
@@ -81,7 +83,7 @@
     transition: all 0.3s ease;
 
     &:hover {
-      background: darken(#24bace, 10%);
+      background: color.scale(#24bace, $lightness: -10%);
       transform: translateY(-1px);
     }
 
@@ -189,7 +191,7 @@
       color: white;
 
       &:hover {
-        background: darken(#24bace, 5%);
+        background: color.scale(#24bace, $lightness: -5%);
       }
     }
 
