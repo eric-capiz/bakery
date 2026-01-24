@@ -7,25 +7,29 @@
 
   h2 {
     padding-bottom: 2rem;
-    font-weight: lighter;
+    font-weight: 400;
+    color: #8B4A3A;
   }
 
   .faq-line {
-    background: #cccccc;
-    height: 0.2rem;
+    background: #E8A87C;
+    height: 2px;
     margin: 2rem 0rem;
     width: 100%;
+    opacity: 0.3;
   }
 
   .question {
     padding: 3rem 0rem;
     cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .answer {
     padding: 2rem 0rem;
     p {
       padding: 1rem 0rem;
+      color: #A85C4A;
     }
   }
 }

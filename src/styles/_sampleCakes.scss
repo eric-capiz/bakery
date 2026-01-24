@@ -2,6 +2,7 @@
   min-height: 100vh;
   overflow: hidden;
   padding: 5rem 10rem;
+  background: #FFF8F0;
 
   @media (max-width: 1300px) {
     padding: 2rem 2rem;
@@ -9,6 +10,7 @@
 
   h2 {
     padding: 1rem 0rem;
+    color: #8B4A3A;
   }
 
   .cake {
@@ -20,8 +22,9 @@
 
     .line {
       height: 0.5rem;
-      background: #23d997;
+      background: #E8A87C;
       margin-bottom: 3rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     img {
@@ -31,7 +34,9 @@
       object-fit: cover;
       border-radius: 15%;
       opacity: 85%;
-      transition: all 0.5s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 3px solid #FFB89A;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 
       @media (max-width: 375px) {
         border-radius: 5%;
@@ -41,12 +46,16 @@
 
       &:hover {
         opacity: 100%;
+        border-color: #B89AA8;
+        border-width: 4px;
+        box-shadow: 0 25px 70px rgba(184, 154, 168, 0.6), 0 0 0 4px rgba(184, 154, 168, 0.25);
+        transform: scale(1.02);
       }
     }
 
     .review-indicator {
       text-align: center;
-      color: #1b1b1b;
+      color: #8B4A3A;
       font-size: 1.2rem;
       margin-top: 1rem;
       font-weight: bold;

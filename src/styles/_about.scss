@@ -1,6 +1,6 @@
 .about-container {
   min-height: 40vh;
-  background: linear-gradient(to bottom, #2a5f68 0%, #8ccfd1 100%);
+  background: #FFE5D9;
   padding: 5rem 10rem;
   text-align: center;
   position: relative;
@@ -8,11 +8,11 @@
   h2 {
     padding-bottom: 2rem;
     font-size: 4.5rem;
-    color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    color: #8B4A3A;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 
     span {
-      color: #24bace;
+      color: #E8A87C;
     }
   }
 
@@ -20,7 +20,7 @@
     width: 70%;
     margin: 0 auto;
     padding-bottom: 4rem;
-    color: #e0e0e0;
+    color: #A85C4A;
     font-size: 1.8rem;
     line-height: 1.6;
     font-style: italic;
@@ -33,7 +33,7 @@
     left: 0;
     right: 0;
     height: 100px;
-    background: linear-gradient(to bottom, #8ccfd1 0%, transparent 100%);
+    background: linear-gradient(to bottom, #FFE5D9 0%, transparent 100%);
     z-index: 1;
   }
 
@@ -52,12 +52,13 @@
 }
 
 .services {
-  background: #fff;
+  background: #FFF8F0;
   padding: 8rem 10rem;
 
   h2 {
     text-align: center;
     margin-bottom: 4rem;
+    color: #8B4A3A;
   }
 
   .cards {
@@ -66,14 +67,17 @@
   }
 
   .card {
-    background: #aad6d7;
+    background: #FFFFFF;
+    border: 3px solid #FFB89A;
     padding: 2rem;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      transform: translateY(-5px);
+      border-color: #B89AA8;
+      border-width: 4px;
+      box-shadow: 0 25px 70px rgba(184, 154, 168, 0.6), 0 0 0 4px rgba(184, 154, 168, 0.25);
     }
 
     .icon {
@@ -81,12 +85,12 @@
 
       h3 {
         background: transparent;
-        color: #063b42;
+        color: #8B4A3A;
       }
     }
 
     p {
-      color: #2b737c;
+      color: #A85C4A;
       font-size: 1.2rem;
     }
   }
@@ -97,49 +101,51 @@
 }
 
 .faq {
-  background: #aad6d7;
+  background: #FFB89A;
   padding: 8rem 10rem;
 
   h2 {
     text-align: center;
     margin-bottom: 4rem;
-    color: #063b42;
+    color: #8B4A3A;
 
     span {
       display: block;
-      color: #24bace;
+      color: #E8A87C;
       font-size: 5rem;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
   .question {
-    background: #063b42;
+    background: #FFFFFF;
+    border: 3px solid #E8A87C;
     padding: 2rem 3rem;
     border-radius: 15px;
     margin-bottom: 2rem;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-    border-left: 5px solid #24bace;
-    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-      transform: translateX(10px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border-color: #B89AA8;
+      border-width: 4px;
+      box-shadow: 0 25px 70px rgba(184, 154, 168, 0.6), 0 0 0 4px rgba(184, 154, 168, 0.25);
     }
 
     h4 {
       cursor: pointer;
-      color: #24bace;
+      color: #8B4A3A;
       font-size: 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:after {
         content: "+";
         font-size: 2rem;
-        color: #aad6d7;
-        transition: transform 0.3s ease;
+        color: #E8A87C;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       &.active:after {
@@ -147,11 +153,15 @@
       }
     }
 
+    &:hover h4 {
+      color: #E8A87C;
+    }
+
     .answer {
       padding: 2rem 0 1rem;
 
       p {
-        color: #e0e0e0;
+        color: #A85C4A;
         font-size: 1.2rem;
         line-height: 1.6;
         padding: 0;
@@ -159,7 +169,7 @@
     }
 
     .faq-line {
-      background: #24bace;
+      background: #E8A87C;
       height: 2px;
       margin: 2rem 0 1rem;
       width: 100%;
