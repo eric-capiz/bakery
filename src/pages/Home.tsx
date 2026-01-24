@@ -160,7 +160,7 @@ const Home = () => {
             </div>
             <div className="testimonial-item">
               <p className="quote-rich">
-                "Nando's Cakes are always moist and taste sooooo goooood!"
+                "Sweet Dreams Bakery cakes are always moist and taste sooooo goooood!"
               </p>
               <p className="author-rich">- Satisfied Client</p>
             </div>

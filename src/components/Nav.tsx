@@ -23,7 +23,7 @@ const Nav = () => {
     <nav className={`nav-rich ${isScrolled ? "scrolled" : ""}`}>
       <div className="nav-container-rich">
         <Link to="/" className="nav-logo-rich">
-          <span className="logo-text-rich">Nando's Cakes</span>
+          <span className="logo-text-rich">Sweet Dreams Bakery</span>
         </Link>
         
         <button
@@ -45,6 +45,11 @@ const Nav = () => {
           <li>
             <Link to="/sample-cakes" className={location.pathname === "/sample-cakes" ? "active" : ""}>
               Sample Cakes
+            </Link>
+          </li>
+          <li>
+            <Link to="/reviews" className={location.pathname === "/reviews" ? "active" : ""}>
+              Reviews
             </Link>
           </li>
           <li>

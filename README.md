@@ -1,4 +1,4 @@
-# Nando's Cakes
+# Sweet Dreams Bakery
 
 ![Project Image](https://i.ibb.co/MD1HR8k/cake.png)
 
@@ -17,7 +17,7 @@
 
 ## Description
 
-I developed this site for a chicago start-up bakery business. They have a fb channel with over 350 followers and I offered my services to help market the business by creating their site. View the app at https://nandos-cakes2.vercel.app/ and the fb channel at https://www.facebook.com/nandoscakes95
+I developed this site for a custom bakery business specializing in personalized cakes for any occasion. The site features a gallery of sample cakes, customer reviews, and a consultation booking system to help customers place orders.
 
 ### Technologies/Libraries
 
@@ -29,7 +29,7 @@ I developed this site for a chicago start-up bakery business. They have a fb cha
 - Framer Motion
 - Yup (Form Verification)
 
-[Back To The Top](#nandos-cakes)
+[Back To The Top](#sweet-dreams-bakery)
 
 ---
 
@@ -48,7 +48,7 @@ MIT License
 
 Copyright (c) [2021] [Eric Capiz]
 
-[Back To The Top](#nandos-cakes)
+[Back To The Top](#sweet-dreams-bakery)
 
 ---
 
@@ -56,4 +56,4 @@ Copyright (c) [2021] [Eric Capiz]
 
 - LinkedIn - [@ericcapiz](https://www.linkedin.com/in/eric-capiz/)
 
-[Back To The Top](#nandos-cakes)
+[Back To The Top](#sweet-dreams-bakery)
