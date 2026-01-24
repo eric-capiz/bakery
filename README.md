@@ -1,6 +1,6 @@
 # Sweet Dreams Bakery
 
-![Project Image](https://ibb.co/wT6bhTw)
+![Project Image](https://i.ibb.co/cPTphPC/s.jpg)
 
 > This project was done for a bakery start up business where users can look at sample cakes and contact the owner to place orders.
 
