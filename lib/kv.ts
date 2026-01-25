@@ -7,6 +7,10 @@ const redis = new Redis({
 
 export async function getData(key: string): Promise<string | null> {
   try {
+    if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+      console.error('Redis credentials not configured');
+      return null;
+    }
     const value = await redis.get(key);
     return value as string | null;
   } catch (error) {
@@ -17,6 +21,9 @@ export async function getData(key: string): Promise<string | null> {
 
 export async function setData(key: string, value: string): Promise<void> {
   try {
+    if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+      throw new Error('Redis credentials not configured');
+    }
     await redis.set(key, value);
   } catch (error) {
     console.error(`Error setting ${key}:`, error);

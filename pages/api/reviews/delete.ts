@@ -40,7 +40,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'Reviews not found' });
     }
 
-    const reviews: Review[] = JSON.parse(reviewsStr);
+    let reviews: Review[];
+    try {
+      reviews = JSON.parse(reviewsStr);
+      if (!Array.isArray(reviews)) {
+        return res.status(500).json({ error: 'Invalid reviews data format' });
+      }
+    } catch (parseError) {
+      console.error('Failed to parse reviews:', parseError);
+      return res.status(500).json({ error: 'Failed to parse reviews data' });
+    }
 
     // Find review to delete
     const reviewIndex = reviews.findIndex((r) => r.id === id);

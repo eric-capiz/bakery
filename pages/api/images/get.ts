@@ -27,6 +27,14 @@ export default async function handler(
       };
     } else {
       imagesData = JSON.parse(imagesDataStr);
+      // Ensure galleryImages is always an array
+      if (!Array.isArray(imagesData.galleryImages)) {
+        imagesData.galleryImages = [];
+      }
+      // Ensure heroImage exists
+      if (!imagesData.heroImage) {
+        imagesData.heroImage = 'cake1.jpg';
+      }
     }
 
     // Get all available image files from directory

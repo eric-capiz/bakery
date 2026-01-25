@@ -131,15 +131,33 @@ export default async function handler(
       // Initialize with defaults
       const defaultContent = getDefaultContent();
       contentStr = JSON.stringify(defaultContent);
-      await setData(CONTENT_KEY, contentStr);
+      try {
+        await setData(CONTENT_KEY, contentStr);
+      } catch (saveError) {
+        console.error('Failed to save default content to Redis:', saveError);
+        // Continue with default content even if save fails
+      }
     }
     
-    const content = JSON.parse(contentStr);
+    let content;
+    try {
+      content = JSON.parse(contentStr);
+    } catch (parseError) {
+      console.error('Failed to parse content:', parseError);
+      // Return default content if parse fails
+      content = getDefaultContent();
+    }
 
     return res.status(200).json(content);
   } catch (error) {
     console.error('Get content error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    // Return default content on error
+    try {
+      const defaultContent = getDefaultContent();
+      return res.status(200).json(defaultContent);
+    } catch (defaultError) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
 }
 

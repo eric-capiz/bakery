@@ -113,9 +113,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Initialize with defaults
       reviews = getDefaultReviews();
       reviewsStr = JSON.stringify(reviews);
-      await setData(REVIEWS_KEY, reviewsStr);
+      try {
+        await setData(REVIEWS_KEY, reviewsStr);
+      } catch (err) {
+        console.error('Failed to save default reviews to Redis:', err);
+        // Continue with default reviews even if save fails
+      }
     } else {
-      reviews = JSON.parse(reviewsStr);
+      try {
+        reviews = JSON.parse(reviewsStr);
+        // Ensure reviews is an array
+        if (!Array.isArray(reviews)) {
+          reviews = getDefaultReviews();
+        }
+      } catch (parseError) {
+        console.error('Failed to parse reviews:', parseError);
+        reviews = getDefaultReviews();
+      }
     }
 
     // Sort by date (newest first)

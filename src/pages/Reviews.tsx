@@ -71,10 +71,19 @@ const Reviews = () => {
   const loadReviews = async () => {
     try {
       const response = await fetch('/api/reviews/get');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
-      setReviews(data);
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setReviews(data);
+      } else {
+        setReviews([]);
+      }
     } catch (err) {
       console.error('Failed to load reviews:', err);
+      setReviews([]);
     } finally {
       setLoading(false);
     }
