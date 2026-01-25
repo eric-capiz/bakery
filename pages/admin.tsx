@@ -53,6 +53,32 @@ const AdminPanel = () => {
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '400px', margin: '0 auto 3rem' }}>
           <Link 
+            href="/admin/images" 
+            style={{ 
+              background: '#E8A87C', 
+              color: '#FFFFFF', 
+              textDecoration: 'none', 
+              fontSize: '1.1rem', 
+              fontFamily: '"Space Grotesk", sans-serif',
+              padding: '1rem 2rem',
+              borderRadius: '12px',
+              textAlign: 'center',
+              fontWeight: '600',
+              boxShadow: '0 4px 15px rgba(232, 168, 124, 0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#D97757';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#E8A87C';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Manage Images
+          </Link>
+          <Link 
             href="/admin/settings" 
             style={{ 
               background: '#E8A87C', 

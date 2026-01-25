@@ -1,98 +1,53 @@
+import { useEffect, useState } from "react";
 
 const SampleCakes = () => {
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      try {
+        const response = await fetch("/api/images/get");
+        const data = await response.json();
+        if (data.galleryImages && Array.isArray(data.galleryImages)) {
+          setGalleryImages(data.galleryImages);
+        }
+      } catch (err) {
+        console.error("Failed to fetch gallery images:", err);
+        // Fallback to empty array if API fails
+        setGalleryImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGalleryImages();
+  }, []);
+
   return (
     <div className="sample-cakes">
       <div className="sample-cakes-header">
         <h2>Sample Cakes</h2>
         <p>Explore our collection of custom-made cakes</p>
       </div>
-      <div className="cakes-gallery">
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake1.jpg" alt="Custom cake" />
-          </div>
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '4rem', color: '#8B4A3A' }}>
+          Loading gallery...
         </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake2.jpg" alt="Custom cake" />
-          </div>
+      ) : galleryImages.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '4rem', color: '#A85C4A' }}>
+          No cakes available at the moment. Check back soon!
         </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake3.jpg" alt="Custom cake" />
-          </div>
+      ) : (
+        <div className="cakes-gallery">
+          {galleryImages.map((imageName, index) => (
+            <div key={index} className="cake-card">
+              <div className="cake-image-wrapper">
+                <img src={`/img/Cakes/${imageName}`} alt={`Custom cake ${index + 1}`} />
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake4.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake5.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake6.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake7.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake8.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake9.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake10.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake11.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake12.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake13.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake14.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake15.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake16.jpg" alt="Custom cake" />
-          </div>
-        </div>
-        <div className="cake-card">
-          <div className="cake-image-wrapper">
-            <img src="/img/Cakes/cake17.jpg" alt="Custom cake" />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

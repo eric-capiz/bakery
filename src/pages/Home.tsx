@@ -1,10 +1,28 @@
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const { ref: featuresRef, inView: featuresInView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { ref: specialtiesRef, inView: specialtiesInView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { ref: testimonialsRef, inView: testimonialsInView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const [heroImage, setHeroImage] = useState("cake1.jpg");
+
+  useEffect(() => {
+    const fetchHeroImage = async () => {
+      try {
+        const response = await fetch("/api/images/get");
+        const data = await response.json();
+        if (data.heroImage) {
+          setHeroImage(data.heroImage);
+        }
+      } catch (err) {
+        // Fallback to default if API fails
+        console.error("Failed to fetch hero image:", err);
+      }
+    };
+    fetchHeroImage();
+  }, []);
 
   return (
     <div className="home-rich">
@@ -13,7 +31,7 @@ const Home = () => {
           <div className="hero-grid">
             <div className="hero-image-side">
               <div className="image-wrapper-rich">
-                <img src="/img/Cakes/cake1.jpg" alt="Delicious custom cake" />
+                <img src={`/img/Cakes/${heroImage}`} alt="Delicious custom cake" />
               </div>
             </div>
             <div className="hero-text-side">
