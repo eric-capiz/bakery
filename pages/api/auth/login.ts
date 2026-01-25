@@ -67,7 +67,13 @@ export default async function handler(
     return res.status(200).json({ success: true, message: 'Login successful' });
   } catch (error) {
     console.error('Login error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : String(error);
+    console.error('Login error details:', { errorMessage, errorStack });
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+    });
   }
 }
 

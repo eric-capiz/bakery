@@ -8,13 +8,20 @@ const redis = new Redis({
 export async function getData(key: string): Promise<string | null> {
   try {
     if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-      console.error('Redis credentials not configured');
+      console.error('Redis credentials not configured', {
+        hasUrl: !!process.env.KV_REST_API_URL,
+        hasToken: !!process.env.KV_REST_API_TOKEN,
+        urlLength: process.env.KV_REST_API_URL?.length || 0,
+        tokenLength: process.env.KV_REST_API_TOKEN?.length || 0,
+      });
       return null;
     }
     const value = await redis.get(key);
     return value as string | null;
   } catch (error) {
-    console.error(`Error getting ${key}:`, error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error(`Error getting ${key}:`, errorMessage, errorStack);
     return null;
   }
 }
@@ -22,11 +29,18 @@ export async function getData(key: string): Promise<string | null> {
 export async function setData(key: string, value: string): Promise<void> {
   try {
     if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
-      throw new Error('Redis credentials not configured');
+      const errorMsg = 'Redis credentials not configured';
+      console.error(errorMsg, {
+        hasUrl: !!process.env.KV_REST_API_URL,
+        hasToken: !!process.env.KV_REST_API_TOKEN,
+      });
+      throw new Error(errorMsg);
     }
     await redis.set(key, value);
   } catch (error) {
-    console.error(`Error setting ${key}:`, error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error(`Error setting ${key}:`, errorMessage, errorStack);
     throw error;
   }
 }
