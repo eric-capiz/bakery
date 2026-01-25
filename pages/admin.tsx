@@ -47,9 +47,14 @@ const AdminPanel = () => {
         <h1 style={{ fontFamily: '"DM Serif Display", serif', fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#8B4A3A', marginBottom: '2rem', textAlign: 'center' }}>
           Admin Panel
         </h1>
-        <p style={{ textAlign: 'center', color: '#A85C4A', fontSize: '1.2rem', marginBottom: '3rem' }}>
-          Welcome to the admin panel. Admin features coming soon.
-        </p>
+        <div style={{ textAlign: 'center', color: '#A85C4A', fontSize: '1.1rem', marginBottom: '3rem', maxWidth: '800px', margin: '0 auto 3rem' }}>
+          <p style={{ marginBottom: '1rem' }}>
+            Welcome to the admin panel. Use the options below to manage your site content and images.
+          </p>
+          <p style={{ fontSize: '0.95rem', color: '#8B4A3A', fontStyle: 'italic' }}>
+            Need changes or features that aren't available here? Please contact the developer for assistance with additional updates or new feature requests.
+          </p>
+        </div>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '400px', margin: '0 auto 3rem' }}>
           <Link 
@@ -77,6 +82,32 @@ const AdminPanel = () => {
             }}
           >
             Manage Images
+          </Link>
+          <Link 
+            href="/admin/content" 
+            style={{ 
+              background: '#E8A87C', 
+              color: '#FFFFFF', 
+              textDecoration: 'none', 
+              fontSize: '1.1rem', 
+              fontFamily: '"Space Grotesk", sans-serif',
+              padding: '1rem 2rem',
+              borderRadius: '12px',
+              textAlign: 'center',
+              fontWeight: '600',
+              boxShadow: '0 4px 15px rgba(232, 168, 124, 0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#D97757';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#E8A87C';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Manage Content
           </Link>
           <Link 
             href="/admin/settings" 
