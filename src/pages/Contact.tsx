@@ -1,17 +1,8 @@
-import React from "react";
-import { m } from "framer-motion";
-import { pageAnimation } from "../animation";
 import ConsultationForm from "../components/ConsultationForm";
 
 const Contact = () => {
   return (
-    <m.div
-      className="contact-page"
-      variants={pageAnimation}
-      initial="hidden"
-      animate="show"
-      exit="exit"
-    >
+    <div className="contact-page">
       <div className="contact-container">
         <section className="consultation-section">
           <h2>Book a Consultation</h2>
@@ -23,7 +14,7 @@ const Contact = () => {
           <ConsultationForm />
         </section>
       </div>
-    </m.div>
+    </div>
   );
 };
 

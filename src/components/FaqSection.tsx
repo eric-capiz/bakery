@@ -1,25 +1,18 @@
-import { LayoutGroup } from "framer-motion";
-import { useScroll } from "./useScroll";
-import { scrollReveal } from "../animation";
-import { m } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import Toggle from "./Toggle";
 
 const FaqSection = () => {
-  const [element, controls] = useScroll();
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
   return (
-    <m.div
-      className="faq"
-      variants={scrollReveal}
-      ref={element}
-      animate={controls}
-      initial="hidden"
+    <div
+      className={`faq ${inView ? "animate-in" : ""}`}
+      ref={ref}
     >
       <h2>
         <span>FAQ</span>
       </h2>
       <div className="faq-grid">
-        <LayoutGroup>
           <Toggle title="How Long Does Delivery Take?">
             <p>Delivery is available within 24hrs in most cases!</p>
           </Toggle>
@@ -32,9 +25,8 @@ const FaqSection = () => {
           <Toggle title="Do You Deliver?">
             <p>Yes! Delivery is available within a 25 mile radius.</p>
           </Toggle>
-        </LayoutGroup>
       </div>
-    </m.div>
+    </div>
   );
 };
 

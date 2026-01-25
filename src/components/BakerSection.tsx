@@ -1,33 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 const BakerSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.gsap && window.ScrollTrigger) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (sectionRef.current) {
-        gsap.fromTo(sectionRef.current.querySelectorAll(".baker-section-item"),
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.15,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 85%",
-              toggleActions: "play none none none",
-            },
-            ease: "power2.out",
-          }
-        );
-      }
-    }
-  }, []);
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
   const items = [
     "Custom Cakes",
@@ -43,7 +17,7 @@ const BakerSection = () => {
   ];
 
   return (
-    <div ref={sectionRef} className="baker-section">
+    <div ref={ref} className={`baker-section ${inView ? "animate-in" : ""}`}>
       <div className="baker-content">
         <div className="baker-info">
           <h2>Meet the Baker</h2>

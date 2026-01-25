@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
 
 const ScrollTop = (): null => {
-  const { pathname } = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
-    window.scroll({
-      top: 0,
-      left: 0,
-    });
-  }, [pathname]);
+    if (router.isReady) {
+      window.scroll({
+        top: 0,
+        left: 0,
+      });
+    }
+  }, [router.isReady, router.pathname]);
 
   return null;
 };

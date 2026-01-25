@@ -5,13 +5,11 @@ import {
   faBirthdayCake,
   faUserTie,
 } from "@fortawesome/free-solid-svg-icons";
-import { scrollReveal } from "../animation";
-import { useScroll } from "./useScroll";
-import { m } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import type { CSSProperties } from "react";
 
 const ServicesSection = () => {
-  const [element, controls] = useScroll();
+  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
 
   const style: CSSProperties = {
     fontSize: "1.5rem",
@@ -19,12 +17,9 @@ const ServicesSection = () => {
   };
 
   return (
-    <m.div
-      className="about services"
-      animate={controls}
-      ref={element}
-      initial="hidden"
-      variants={scrollReveal}
+    <div
+      className={`about services ${inView ? "animate-in" : ""}`}
+      ref={ref}
     >
       <div className="description">
         <h2>
@@ -64,7 +59,7 @@ const ServicesSection = () => {
           </div>
         </div>
       </div>
-    </m.div>
+    </div>
   );
 };
 

@@ -10,6 +10,8 @@
 
 # production
 /build
+/.next
+/out
 
 # misc
 .env
@@ -22,3 +24,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Next.js
+next-env.d.ts
