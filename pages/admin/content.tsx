@@ -116,7 +116,11 @@ const AdminContent = () => {
     }
   };
 
-  const updateContent = async (section: string, path: string, value: any) => {
+  const updateContent = async (
+    section: string, 
+    path: string, 
+    value: string | number | boolean | string[]
+  ) => {
     setError('');
     setSuccess('');
 
@@ -146,7 +150,7 @@ const AdminContent = () => {
     path: string,
     action: 'add' | 'update' | 'delete',
     index?: number,
-    item?: any,
+    item?: Record<string, unknown> | string,
     maxItems?: number
   ) => {
     setError('');

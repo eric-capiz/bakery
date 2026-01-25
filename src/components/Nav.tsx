@@ -30,12 +30,14 @@ const Nav = () => {
       setIsAdminLoggedIn(false);
       // Dispatch custom event to notify other components
       window.dispatchEvent(new Event('adminLogout'));
-      // Stay on current page instead of redirecting
+      // Redirect to home page after logout
+      router.push("/");
     } catch (err) {
       // Still logout locally even if API call fails
       setIsAdminLoggedIn(false);
       window.dispatchEvent(new Event('adminLogout'));
-      // Stay on current page instead of redirecting
+      // Redirect to home page after logout
+      router.push("/");
     }
   };
 

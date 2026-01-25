@@ -3,6 +3,13 @@ import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB, MAX_REVIEW_DESCRIPTION_LENGTH } from '../../../lib/constants';
+
+interface FormidableError extends Error {
+  files?: Record<string, formidable.File | formidable.File[]>;
+  code?: string;
+  httpCode?: number;
+}
 
 export const config = {
   api: {
@@ -27,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const form = formidable({
       uploadDir: reviewsImageDir,
       keepExtensions: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
+      maxFileSize: MAX_FILE_SIZE_BYTES,
       filter: (part) => {
         // Only allow image files
         if (part.name === 'image' && part.mimetype) {
@@ -52,8 +59,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Description is required' });
     }
 
-    if (description.length > 500) {
-      return res.status(400).json({ error: 'Description must be 500 characters or less' });
+    if (description.length > MAX_REVIEW_DESCRIPTION_LENGTH) {
+      return res.status(400).json({ error: `Description must be ${MAX_REVIEW_DESCRIPTION_LENGTH} characters or less` });
     }
 
     // Handle image upload if provided
@@ -112,14 +119,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2));
 
     return res.status(200).json({ success: true, review: newReview });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error submitting review:', error);
     
     // Clean up any uploaded files on error
-    if (error.files) {
-      Object.values(error.files).forEach((file: any) => {
+    const formidableError = error as FormidableError;
+    if (formidableError.files) {
+      Object.values(formidableError.files).forEach((file) => {
         if (Array.isArray(file)) {
-          file.forEach((f: any) => {
+          file.forEach((f) => {
             if (f.filepath && fs.existsSync(f.filepath)) {
               fs.unlinkSync(f.filepath);
             }
@@ -130,8 +138,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    if (error.message?.includes('maxFileSize')) {
-      return res.status(400).json({ error: 'Image file is too large. Maximum size is 10MB.' });
+    if (formidableError.message?.includes('maxFileSize')) {
+      return res.status(400).json({ error: `Image file is too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.` });
     }
 
     return res.status(500).json({ error: 'Failed to submit review. Please try again.' });

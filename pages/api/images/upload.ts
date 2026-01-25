@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { IncomingForm } from 'formidable';
 import { requireAdmin } from '../../../lib/auth';
+import { MAX_FILE_SIZE_BYTES } from '../../../lib/constants';
 
 const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
 const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json');
@@ -36,7 +37,7 @@ export default async function handler(
     const form = new IncomingForm({
       uploadDir: IMAGES_DIR,
       keepExtensions: true,
-      maxFileSize: 10 * 1024 * 1024, // 10MB
+      maxFileSize: MAX_FILE_SIZE_BYTES,
     });
 
     form.parse(req, (err, fields, files) => {

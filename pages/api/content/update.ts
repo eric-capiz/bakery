@@ -31,11 +31,11 @@ export default async function handler(
       return res.status(500).json({ error: 'Content file not found' });
     }
 
-    const content = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+    const content: Record<string, unknown> = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
 
     // Navigate to the section and update
     const pathArray = contentPath.split('.');
-    let current: any = content[section];
+    let current: Record<string, unknown> = content[section] as Record<string, unknown>;
     
     if (!current) {
       return res.status(400).json({ error: 'Invalid section' });
@@ -46,7 +46,7 @@ export default async function handler(
       if (current[pathArray[i]] === undefined) {
         return res.status(400).json({ error: 'Invalid path' });
       }
-      current = current[pathArray[i]];
+      current = current[pathArray[i]] as Record<string, unknown>;
     }
 
     // Set the value

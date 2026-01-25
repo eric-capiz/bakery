@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { MAX_REVIEW_DESCRIPTION_LENGTH, ADMIN_STATUS_POLL_INTERVAL, MODAL_AUTO_CLOSE_DELAY } from '../../lib/constants';
 
 interface Review {
   id: string;
@@ -45,7 +46,7 @@ const Reviews = () => {
     window.addEventListener('adminLogout', handleAdminChange);
     
     // Also check periodically and on focus
-    const interval = setInterval(checkAdminStatus, 2000);
+    const interval = setInterval(checkAdminStatus, ADMIN_STATUS_POLL_INTERVAL);
     const handleFocus = () => checkAdminStatus();
     window.addEventListener('focus', handleFocus);
     
@@ -136,11 +137,11 @@ const Reviews = () => {
 
       if (response.ok) {
         setSuccess(true);
-        // Close modal after 2-3 seconds and reload reviews
+        // Close modal after delay and reload reviews
         setTimeout(() => {
           handleCloseModal();
           loadReviews();
-        }, 2500);
+        }, MODAL_AUTO_CLOSE_DELAY);
       } else {
         setError(data.error || 'Failed to submit review. Please try again.');
       }
@@ -497,7 +498,7 @@ const Reviews = () => {
                   <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600', fontSize: '0.95rem' }}>
                     Review Details <span style={{ color: '#A85C4A' }}>*</span>
                     <span style={{ fontSize: '0.85rem', fontWeight: '400', color: '#A85C4A', marginLeft: '0.5rem' }}>
-                      (Max 500 characters)
+                      (Max {MAX_REVIEW_DESCRIPTION_LENGTH} characters)
                     </span>
                   </label>
                   <textarea
@@ -505,12 +506,12 @@ const Reviews = () => {
                     value={formData.description}
                     onChange={handleInputChange}
                     required
-                    maxLength={500}
+                    maxLength={MAX_REVIEW_DESCRIPTION_LENGTH}
                     rows={4}
                     style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '0.95rem', fontFamily: 'inherit' }}
                   />
                   <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#A85C4A', marginTop: '0.25rem' }}>
-                    {formData.description.length}/500
+                    {formData.description.length}/{MAX_REVIEW_DESCRIPTION_LENGTH}
                   </div>
                 </div>
 

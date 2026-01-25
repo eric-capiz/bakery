@@ -1,6 +1,7 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const AdminSettings = () => {
   const router = useRouter();
@@ -15,6 +16,9 @@ const AdminSettings = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -121,14 +125,37 @@ const AdminSettings = () => {
             <label htmlFor="currentPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
               Current Password *
             </label>
-            <input
-              type="password"
-              id="currentPassword"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-              style={{ width: '100%', padding: '0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showCurrentPassword ? "text" : "password"}
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#8B4A3A',
+                  fontSize: '1.1rem',
+                  padding: '0.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+              >
+                {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
@@ -148,14 +175,37 @@ const AdminSettings = () => {
             <label htmlFor="newPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
               New Password (leave blank to keep current)
             </label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              minLength={4}
-              style={{ width: '100%', padding: '0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type={showNewPassword ? "text" : "password"}
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                minLength={4}
+                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                style={{
+                  position: 'absolute',
+                  right: '0.75rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: '#8B4A3A',
+                  fontSize: '1.1rem',
+                  padding: '0.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                aria-label={showNewPassword ? "Hide password" : "Show password"}
+              >
+                {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {newPassword && (
               <p style={{ fontSize: '0.85rem', color: '#A85C4A', marginTop: '0.25rem' }}>
                 Password must be at least 4 characters
@@ -168,13 +218,36 @@ const AdminSettings = () => {
               <label htmlFor="confirmPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
                 Confirm New Password
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{ width: '100%', padding: '0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: '#8B4A3A',
+                    fontSize: '1.1rem',
+                    padding: '0.25rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
           )}
 

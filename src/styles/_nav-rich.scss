@@ -482,6 +482,40 @@
   }
 }
 
+.admin-login-password-wrapper {
+  position: relative;
+  width: 100%;
+
+  .admin-login-password-input {
+    width: 100%;
+    padding-right: 3rem;
+  }
+
+  .admin-login-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #8B4A3A;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #A85C4A;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
 .admin-login-error {
   background: #FFE5D9;
   color: #A85C4A;

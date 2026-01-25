@@ -56,7 +56,7 @@ const ConsultationForm = () => {
 
   const handleConsultationChange = (
     field: keyof ConsultationData,
-    value: any
+    value: string | Date | null
   ) => {
     setConsultation((prev) => ({
       ...prev,

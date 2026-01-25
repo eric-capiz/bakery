@@ -54,13 +54,5 @@
     "name": "Emily",
     "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop",
     "date": "2024-01-13T08:45:00Z"
-  },
-  {
-    "id": "review-9",
-    "title": "Professional and Delicious",
-    "description": "Professional service from start to finish. The consultation was helpful, the cake was delivered on time, and it tasted incredible. Highly professional bakery!",
-    "name": "Robert",
-    "image": null,
-    "date": "2024-01-12T12:20:00Z"
   }
 ]

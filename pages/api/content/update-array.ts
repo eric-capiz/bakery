@@ -31,21 +31,21 @@ export default async function handler(
       return res.status(500).json({ error: 'Content file not found' });
     }
 
-    const content = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+    const content: Record<string, unknown> = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
 
     // Navigate to the array
     const pathArray = contentPath.split('.');
-    let current: any = content[section];
+    let current: unknown = content[section];
     
     if (!current) {
       return res.status(400).json({ error: 'Invalid section' });
     }
 
     for (let i = 0; i < pathArray.length; i++) {
-      if (current[pathArray[i]] === undefined) {
+      if (typeof current !== 'object' || current === null || !(pathArray[i] in current)) {
         return res.status(400).json({ error: 'Invalid path' });
       }
-      current = current[pathArray[i]];
+      current = (current as Record<string, unknown>)[pathArray[i]];
     }
 
     if (!Array.isArray(current)) {

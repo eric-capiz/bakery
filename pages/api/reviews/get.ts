@@ -2,6 +2,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 
+interface Review {
+  id: string;
+  title: string;
+  description: string;
+  name: string | null;
+  image: string | null;
+  date: string;
+}
+
 const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
 
 function initializeReviewsFile() {
@@ -105,7 +114,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    let reviews = [];
+    let reviews: Review[] = [];
 
     if (fs.existsSync(reviewsFilePath)) {
       const fileContent = fs.readFileSync(reviewsFilePath, 'utf-8');
@@ -115,7 +124,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     // Sort by date (newest first)
-    reviews.sort((a: any, b: any) => {
+    reviews.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 

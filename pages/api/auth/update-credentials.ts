@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
 import { requireAdmin, JWT_SECRET } from '../../../lib/auth';
+import { COOKIE_EXPIRATION_SECONDS } from '../../../lib/constants';
 
 const ADMIN_FILE = path.join(process.cwd(), 'data', 'admin.json');
 
@@ -74,7 +75,7 @@ export default async function handler(
 
       res.setHeader(
         'Set-Cookie',
-        `adminToken=${newToken}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; ${
+        `adminToken=${newToken}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${COOKIE_EXPIRATION_SECONDS}; ${
           process.env.NODE_ENV === 'production' ? 'Secure;' : ''
         }`
       );

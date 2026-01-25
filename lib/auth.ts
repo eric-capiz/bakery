@@ -1,4 +1,4 @@
-import type { NextApiRequest } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -47,7 +47,7 @@ export function verifyAdminToken(req: NextApiRequest): DecodedToken | null {
  */
 export function requireAdmin(
   req: NextApiRequest,
-  res: { status: (code: number) => { json: (data: any) => void } }
+  res: NextApiResponse
 ): DecodedToken | null {
   const decoded = verifyAdminToken(req);
 

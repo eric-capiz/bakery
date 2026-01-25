@@ -3,6 +3,15 @@ import fs from 'fs';
 import path from 'path';
 import { requireAdmin } from '../../../lib/auth';
 
+interface Review {
+  id: string;
+  title: string;
+  description: string;
+  name: string | null;
+  image: string | null;
+  date: string;
+}
+
 const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
 const reviewsImageDir = path.join(process.cwd(), 'public', 'img', 'reviews');
 
@@ -30,10 +39,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const fileContent = fs.readFileSync(reviewsFilePath, 'utf-8');
-    const reviews = JSON.parse(fileContent);
+    const reviews: Review[] = JSON.parse(fileContent);
 
     // Find review to delete
-    const reviewIndex = reviews.findIndex((r: any) => r.id === id);
+    const reviewIndex = reviews.findIndex((r) => r.id === id);
     if (reviewIndex === -1) {
       return res.status(404).json({ error: 'Review not found' });
     }
