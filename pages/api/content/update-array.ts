@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 
-const CONTENT_FILE = path.join(process.cwd(), 'data', 'content.json');
+const CONTENT_KEY = 'content';
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,12 +25,13 @@ export default async function handler(
       return res.status(400).json({ error: 'Section, path, and action are required' });
     }
 
-    // Read current content
-    if (!fs.existsSync(CONTENT_FILE)) {
-      return res.status(500).json({ error: 'Content file not found' });
+    // Read current content from Redis
+    const contentStr = await getData(CONTENT_KEY);
+    if (!contentStr) {
+      return res.status(500).json({ error: 'Content not found' });
     }
 
-    const content: Record<string, unknown> = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+    const content: Record<string, unknown> = JSON.parse(contentStr);
 
     // Navigate to the array
     const pathArray = contentPath.split('.');
@@ -81,8 +81,8 @@ export default async function handler(
       return res.status(400).json({ error: 'Invalid action' });
     }
 
-    // Write updated content
-    fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2));
+    // Write updated content to Redis
+    await setData(CONTENT_KEY, JSON.stringify(content));
 
     return res.status(200).json({
       success: true,
