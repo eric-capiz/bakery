@@ -1,73 +1,10 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import cake1 from "../img/Cakes/cake1.jpg";
+import { useInView } from "react-intersection-observer";
+import Link from "next/link";
 
 const Home = () => {
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const specialtiesRef = useRef<HTMLDivElement>(null);
-  const testimonialsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.gsap && window.ScrollTrigger) {
-      const gsap = window.gsap;
-      const ScrollTrigger = window.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
-
-      if (featuresRef.current) {
-        gsap.fromTo(featuresRef.current.querySelectorAll(".feature-item"), 
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: featuresRef.current,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-            ease: "power1.out",
-          }
-        );
-      }
-
-      if (specialtiesRef.current) {
-        gsap.fromTo(specialtiesRef.current.querySelectorAll(".specialty-item"),
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: specialtiesRef.current,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-            ease: "power1.out",
-          }
-        );
-      }
-
-      if (testimonialsRef.current) {
-        gsap.fromTo(testimonialsRef.current.querySelectorAll(".testimonial-item"),
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: testimonialsRef.current,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-            ease: "power1.out",
-          }
-        );
-      }
-    }
-  }, []);
+  const { ref: featuresRef, inView: featuresInView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { ref: specialtiesRef, inView: specialtiesInView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { ref: testimonialsRef, inView: testimonialsInView } = useInView({ threshold: 0.1, triggerOnce: true });
 
   return (
     <div className="home-rich">
@@ -76,7 +13,7 @@ const Home = () => {
           <div className="hero-grid">
             <div className="hero-image-side">
               <div className="image-wrapper-rich">
-                <img src={cake1} alt="Delicious custom cake" />
+                <img src="/img/Cakes/cake1.jpg" alt="Delicious custom cake" />
               </div>
             </div>
             <div className="hero-text-side">
@@ -88,7 +25,7 @@ const Home = () => {
               <p className="hero-p-rich">
                 Contact me for all your sweet tooth needs!
               </p>
-              <Link to="/contact" className="btn-primary">
+              <Link href="/contact" className="btn-primary">
                 Contact Me
               </Link>
             </div>
@@ -96,7 +33,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section ref={featuresRef} className="features-rich">
+      <section ref={featuresRef} className={`features-rich ${featuresInView ? "animate-in" : ""}`}>
         <div className="wrapper-rich">
           <h2 className="heading-rich">Why Choose Us</h2>
           <div className="features-grid-rich">
@@ -124,7 +61,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section ref={specialtiesRef} className="specialties-rich">
+      <section ref={specialtiesRef} className={`specialties-rich ${specialtiesInView ? "animate-in" : ""}`}>
         <div className="wrapper-rich">
           <h2 className="heading-rich">Our Specialties</h2>
           <div className="specialties-grid-rich">
@@ -148,7 +85,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section ref={testimonialsRef} className="testimonials-rich">
+      <section ref={testimonialsRef} className={`testimonials-rich ${testimonialsInView ? "animate-in" : ""}`}>
         <div className="wrapper-rich">
           <h2 className="heading-rich">What Our Customers Say</h2>
           <div className="testimonials-grid-rich">
@@ -172,7 +109,7 @@ const Home = () => {
             </div>
           </div>
           <div className="testimonials-link-wrapper">
-            <Link to="/reviews" className="testimonials-link">
+            <Link href="/reviews" className="testimonials-link">
               See More Reviews
             </Link>
           </div>
@@ -184,7 +121,7 @@ const Home = () => {
           <div className="cta-content-rich">
             <h2>Ready to Order Your Perfect Cake?</h2>
             <p>Let's make your celebration unforgettable. Book a consultation today!</p>
-            <Link to="/contact" className="btn-secondary">
+            <Link href="/contact" className="btn-secondary">
               Book Consultation
             </Link>
           </div>

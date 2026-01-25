@@ -1,12 +1,10 @@
-import { m } from "framer-motion";
-import { pageAnimation } from "../animation";
 import ServicesSection from "../components/ServicesSection";
 import FaqSection from "../components/FaqSection";
 import BakerSection from "../components/BakerSection";
 
 const About = () => {
   return (
-    <m.div variants={pageAnimation} initial="hidden" animate="show" exit="exit">
+    <div className="about-page">
       <div className="about-container">
         <h2>
           About <span>Sweet Dreams Bakery</span>
@@ -19,7 +17,7 @@ const About = () => {
       <BakerSection />
       <ServicesSection />
       <FaqSection />
-    </m.div>
+    </div>
   );
 };
 
