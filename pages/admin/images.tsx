@@ -48,10 +48,24 @@ const AdminImages = () => {
   const loadImages = async () => {
     try {
       const response = await fetch('/api/images/get');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
+      // Ensure galleryImages exists and is an array
+      if (data && (!data.galleryImages || !Array.isArray(data.galleryImages))) {
+        data.galleryImages = [];
+      }
       setImageData(data);
     } catch (err) {
+      console.error('Failed to load images:', err);
       setError('Failed to load images');
+      // Set default data to prevent crashes
+      setImageData({
+        heroImage: 'cake1.jpg',
+        galleryImages: [],
+        allImages: [],
+      });
     } finally {
       setLoading(false);
     }
@@ -275,7 +289,7 @@ const AdminImages = () => {
                 </div>
               </form>
 
-              {imageData.allImages.filter(img => img !== imageData.heroImage).length > 0 && (
+              {imageData && imageData.allImages && imageData.allImages.filter(img => img !== imageData.heroImage).length > 0 && (
                 <div>
                   <p style={{ marginBottom: '1rem', color: '#8B4A3A', fontWeight: '600' }}>Or select from existing images:</p>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '1rem' }}>
@@ -359,7 +373,7 @@ const AdminImages = () => {
               </form>
 
               {/* Gallery Images Grid */}
-              {imageData.galleryImages.length === 0 ? (
+              {!imageData || !imageData.galleryImages || imageData.galleryImages.length === 0 ? (
                 <p style={{ textAlign: 'center', color: '#A85C4A', padding: '2rem' }}>
                   No gallery images yet. Upload some images to get started!
                 </p>
