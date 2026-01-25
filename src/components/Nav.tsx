@@ -12,20 +12,39 @@ const Nav = () => {
 
   useEffect(() => {
     // Check if admin is logged in on mount
-    if (typeof window !== "undefined") {
-      const loggedIn = localStorage.getItem("adminLoggedIn") === "true";
-      setIsAdminLoggedIn(loggedIn);
-    }
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/auth/verify");
+        const data = await response.json();
+        setIsAdminLoggedIn(data.authenticated || false);
+      } catch (err) {
+        setIsAdminLoggedIn(false);
+      }
+    };
+    checkAuth();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminLoggedIn");
-    setIsAdminLoggedIn(false);
-    router.push("/");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setIsAdminLoggedIn(false);
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('adminLogout'));
+      // Redirect to home page after logout
+      router.push("/");
+    } catch (err) {
+      // Still logout locally even if API call fails
+      setIsAdminLoggedIn(false);
+      window.dispatchEvent(new Event('adminLogout'));
+      // Redirect to home page after logout
+      router.push("/");
+    }
   };
 
   const handleLoginSuccess = () => {
     setIsAdminLoggedIn(true);
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('adminLogin'));
   };
 
   const isActive = (path: string) => {
@@ -110,6 +129,38 @@ const Nav = () => {
                 <Link href="/contact" className={isActive("/contact") ? "active" : ""}>
                   Contact Me
                 </Link>
+              </li>
+              <li className="mobile-admin-section">
+                {!isAdminLoggedIn ? (
+                  <button
+                    className="mobile-admin-login-btn"
+                    onClick={() => {
+                      setShowLoginModal(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Admin Login
+                  </button>
+                ) : (
+                  <>
+                    <Link 
+                      href="/admin" 
+                      className="mobile-admin-panel-btn"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                    <button 
+                      className="mobile-admin-logout-btn" 
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
               </li>
             </ul>
           </div>
