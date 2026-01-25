@@ -28,16 +28,21 @@ const Nav = () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
       setIsAdminLoggedIn(false);
-      router.push("/");
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new Event('adminLogout'));
+      // Stay on current page instead of redirecting
     } catch (err) {
       // Still logout locally even if API call fails
       setIsAdminLoggedIn(false);
-      router.push("/");
+      window.dispatchEvent(new Event('adminLogout'));
+      // Stay on current page instead of redirecting
     }
   };
 
   const handleLoginSuccess = () => {
     setIsAdminLoggedIn(true);
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('adminLogin'));
   };
 
   const isActive = (path: string) => {

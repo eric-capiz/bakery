@@ -157,6 +157,10 @@
 .nav-links-rich li {
   margin: 0;
   padding: 0;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 1rem; // Add spacing between nav links in mobile menu
+  }
 }
 
 .nav-links-rich a {
@@ -207,6 +211,13 @@
     padding: 1rem 0;
     white-space: normal;
     border-bottom: none;
+    
+    // Remove underline for active links in mobile menu
+    &.active {
+      &::after {
+        display: none;
+      }
+    }
   }
 }
 
@@ -221,6 +232,17 @@
 
   @media (min-width: 769px) {
     display: none;
+  }
+  
+  // Remove border between admin panel and logout
+  .mobile-admin-panel-btn {
+    border-bottom: none !important;
+    margin-bottom: 0;
+  }
+  
+  .mobile-admin-logout-btn {
+    border-top: none !important;
+    margin-top: 0;
   }
 }
 
