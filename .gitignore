@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Next.js
 next-env.d.ts
+
+# Admin credentials (keep secure)
+/data/admin.json

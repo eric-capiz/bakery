@@ -12,16 +12,28 @@ const Nav = () => {
 
   useEffect(() => {
     // Check if admin is logged in on mount
-    if (typeof window !== "undefined") {
-      const loggedIn = localStorage.getItem("adminLoggedIn") === "true";
-      setIsAdminLoggedIn(loggedIn);
-    }
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/auth/verify");
+        const data = await response.json();
+        setIsAdminLoggedIn(data.authenticated || false);
+      } catch (err) {
+        setIsAdminLoggedIn(false);
+      }
+    };
+    checkAuth();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("adminLoggedIn");
-    setIsAdminLoggedIn(false);
-    router.push("/");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setIsAdminLoggedIn(false);
+      router.push("/");
+    } catch (err) {
+      // Still logout locally even if API call fails
+      setIsAdminLoggedIn(false);
+      router.push("/");
+    }
   };
 
   const handleLoginSuccess = () => {

@@ -9,18 +9,34 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
-    if (username === "admin" && password === "admin") {
-      // Store session in localStorage
-      localStorage.setItem("adminLoggedIn", "true");
-      onLogin();
-      onClose();
-    } else {
-      setError("Invalid username or password");
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        onLogin();
+        onClose();
+      } else {
+        setError(data.error || "Invalid username or password");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,8 +70,8 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
             />
           </div>
           {error && <div className="admin-login-error">{error}</div>}
-          <button type="submit" className="admin-login-submit">
-            Login
+          <button type="submit" className="admin-login-submit" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
