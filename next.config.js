@@ -4,14 +4,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: ['./src/styles'],
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-    ],
-  },
   devIndicators: {
     position: 'bottom-left',
   },

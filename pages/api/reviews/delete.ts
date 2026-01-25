@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
-import jwt from 'jsonwebtoken';
+import { requireAdmin } from '../../../lib/auth';
 
 const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
 const reviewsImageDir = path.join(process.cwd(), 'public', 'img', 'reviews');
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'DELETE') {
@@ -14,15 +13,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     // Check authentication
-    const token = req.cookies.adminToken;
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    try {
-      jwt.verify(token, JWT_SECRET);
-    } catch (err) {
-      return res.status(401).json({ error: 'Invalid token' });
+    const decoded = requireAdmin(req, res);
+    if (!decoded) {
+      return;
     }
 
     const { id } = req.query;

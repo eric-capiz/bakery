@@ -3,8 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import path from 'path';
+import { requireAdmin, JWT_SECRET } from '../../../lib/auth';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 const ADMIN_FILE = path.join(process.cwd(), 'data', 'admin.json');
 
 export default async function handler(
@@ -17,20 +17,9 @@ export default async function handler(
 
   try {
     // Verify authentication
-    const token = req.cookies.adminToken;
-    if (!token) {
-      return res.status(401).json({ error: 'Not authenticated' });
-    }
-
-    let decoded: { username: string; admin: boolean };
-    try {
-      decoded = jwt.verify(token, JWT_SECRET) as { username: string; admin: boolean };
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
-
-    if (!decoded.admin) {
-      return res.status(403).json({ error: 'Forbidden' });
+    const decoded = requireAdmin(req, res);
+    if (!decoded) {
+      return;
     }
 
     const { currentPassword, newUsername, newPassword } = req.body;

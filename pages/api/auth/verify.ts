@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+import { verifyAdminToken } from '../../../lib/auth';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,13 +10,11 @@ export default async function handler(
   }
 
   try {
-    const token = req.cookies.adminToken;
+    const decoded = verifyAdminToken(req);
 
-    if (!token) {
+    if (!decoded) {
       return res.status(401).json({ authenticated: false });
     }
-
-    const decoded = jwt.verify(token, JWT_SECRET) as { username: string; admin: boolean };
     
     return res.status(200).json({ authenticated: true, username: decoded.username });
   } catch (error) {

@@ -493,16 +493,67 @@ const AdminContent = () => {
                             <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
                               Icon (emoji)
                             </label>
-                            <input
-                              type="text"
-                              value={feature.icon}
-                              onChange={(e) => {
-                                const updated = [...featuresData];
-                                updated[index].icon = e.target.value;
-                                setFeaturesData(updated);
-                              }}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
-                            />
+                            <div style={{ marginBottom: '0.75rem' }}>
+                              <div style={{ 
+                                display: 'grid', 
+                                gridTemplateColumns: 'repeat(8, 1fr)', 
+                                gap: '0.5rem',
+                                padding: '0.75rem',
+                                background: '#FFF8F0',
+                                borderRadius: '8px',
+                                border: '2px solid #FFE5D9',
+                                marginBottom: '0.5rem'
+                              }}>
+                                {['⚡', '💰', '🎨', '👨‍🍳', '⭐', '❤️', '🎂', '🍰', '🧁', '🍪', '🥧', '🍩', '🎁', '🎉', '✨', '🔥', '💎', '🏆', '🎯', '🚀', '💪', '🌟', '💫', '🎊', '🎈', '🎀', '🍓', '🍒', '🍇', '🍊', '🍋', '🍌', '🍉', '🍑', '🍍', '🥭', '🍎', '🍏', '🍐', '🍊'].map((emoji) => (
+                                  <button
+                                    key={emoji}
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = [...featuresData];
+                                      updated[index].icon = emoji;
+                                      setFeaturesData(updated);
+                                    }}
+                                    style={{
+                                      background: feature.icon === emoji ? '#E8A87C' : '#FFFFFF',
+                                      border: `2px solid ${feature.icon === emoji ? '#E8A87C' : '#FFB89A'}`,
+                                      borderRadius: '6px',
+                                      padding: '0.5rem',
+                                      fontSize: '1.5rem',
+                                      cursor: 'pointer',
+                                      transition: 'all 0.2s ease',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}
+                                    onMouseOver={(e) => {
+                                      if (feature.icon !== emoji) {
+                                        e.currentTarget.style.background = '#FFE5D9';
+                                        e.currentTarget.style.transform = 'scale(1.1)';
+                                      }
+                                    }}
+                                    onMouseOut={(e) => {
+                                      if (feature.icon !== emoji) {
+                                        e.currentTarget.style.background = '#FFFFFF';
+                                        e.currentTarget.style.transform = 'scale(1)';
+                                      }
+                                    }}
+                                  >
+                                    {emoji}
+                                  </button>
+                                ))}
+                              </div>
+                              <input
+                                type="text"
+                                value={feature.icon}
+                                onChange={(e) => {
+                                  const updated = [...featuresData];
+                                  updated[index].icon = e.target.value;
+                                  setFeaturesData(updated);
+                                }}
+                                placeholder="Or type custom emoji"
+                                style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                              />
+                            </div>
                           </div>
                           <div>
                             <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>

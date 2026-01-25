@@ -18,6 +18,9 @@ const Reviews = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -148,24 +151,41 @@ const Reviews = () => {
     }
   };
 
-  const handleDelete = async (reviewId: string) => {
-    if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
-      return;
-    }
+  const handleDeleteClick = (reviewId: string) => {
+    setReviewToDelete(reviewId);
+  };
+
+  const handleDeleteCancel = () => {
+    setReviewToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!reviewToDelete) return;
+    const reviewIdToDelete = reviewToDelete;
 
     try {
-      const response = await fetch(`/api/reviews/delete?id=${reviewId}`, {
+      const response = await fetch(`/api/reviews/delete?id=${reviewIdToDelete}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         loadReviews();
+        setReviewToDelete(null);
       } else {
-        alert('Failed to delete review');
+        setAlertMessage('Failed to delete review');
+        setShowAlert(true);
+        setReviewToDelete(null);
       }
     } catch (err) {
-      alert('An error occurred while deleting the review');
+      setAlertMessage('An error occurred while deleting the review');
+      setShowAlert(true);
+      setReviewToDelete(null);
     }
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+    setAlertMessage('');
   };
 
   return (
@@ -220,9 +240,83 @@ const Reviews = () => {
                 minHeight: '480px',
               }}
             >
-              {isAdmin && (
+              {/* Delete Confirmation Overlay */}
+              {isAdmin && reviewToDelete === review.id && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    borderRadius: '12px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 100,
+                    padding: '1.5rem',
+                  }}
+                >
+                  <h3 style={{
+                    color: '#FFFFFF',
+                    fontFamily: '"DM Serif Display", serif',
+                    fontSize: '1.5rem',
+                    marginTop: 0,
+                    marginBottom: '1rem',
+                    textAlign: 'center',
+                  }}>
+                    Delete Review?
+                  </h3>
+                  <p style={{
+                    color: '#FFFFFF',
+                    marginBottom: '1.5rem',
+                    textAlign: 'center',
+                    fontSize: '0.95rem',
+                    lineHeight: '1.6',
+                  }}>
+                    This action cannot be undone.
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    gap: '1rem',
+                  }}>
+                    <button
+                      onClick={handleDeleteCancel}
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        background: '#FFFFFF',
+                        color: '#8B4A3A',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleDeleteConfirm}
+                      style={{
+                        padding: '0.75rem 1.5rem',
+                        background: '#A85C4A',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {isAdmin && reviewToDelete !== review.id && (
                 <button
-                  onClick={() => handleDelete(review.id)}
+                  onClick={() => handleDeleteClick(review.id)}
                   style={{
                     position: 'absolute',
                     top: '1rem',
@@ -485,6 +579,97 @@ const Reviews = () => {
                 </div>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+
+      {/* Alert Modal */}
+      {showAlert && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.6)',
+            zIndex: 99999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem',
+          }}
+          onClick={handleAlertClose}
+        >
+          <div
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '16px',
+              padding: '1.5rem',
+              maxWidth: '500px',
+              width: '100%',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              marginBottom: '1rem' 
+            }}>
+              <h3 style={{ 
+                fontFamily: '"DM Serif Display", serif', 
+                fontSize: '1.5rem', 
+                color: '#A85C4A', 
+                margin: 0 
+              }}>
+                Error
+              </h3>
+              <button
+                onClick={handleAlertClose}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#8B4A3A',
+                  padding: '0.5rem',
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <p style={{ 
+              color: '#5C3A2A', 
+              marginBottom: '1rem',
+              lineHeight: '1.6',
+              fontSize: '0.95rem'
+            }}>
+              {alertMessage}
+            </p>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'flex-end',
+              marginTop: '0.5rem'
+            }}>
+              <button
+                onClick={handleAlertClose}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: '#E8A87C',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                }}
+              >
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}
