@@ -111,6 +111,38 @@ const Nav = () => {
                   Contact Me
                 </Link>
               </li>
+              <li className="mobile-admin-section">
+                {!isAdminLoggedIn ? (
+                  <button
+                    className="mobile-admin-login-btn"
+                    onClick={() => {
+                      setShowLoginModal(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Admin Login
+                  </button>
+                ) : (
+                  <>
+                    <Link 
+                      href="/admin" 
+                      className="mobile-admin-panel-btn"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                    <button 
+                      className="mobile-admin-logout-btn" 
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </li>
             </ul>
           </div>
         </div>
