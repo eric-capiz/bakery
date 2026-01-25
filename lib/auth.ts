@@ -28,14 +28,21 @@ export function verifyAdminToken(req: NextApiRequest): DecodedToken | null {
       return null;
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
+    const decoded = jwt.verify(token, JWT_SECRET as string);
+    
+    // Type guard to ensure decoded is an object with expected properties
+    if (typeof decoded !== 'object' || decoded === null) {
+      return null;
+    }
+    
+    const tokenData = decoded as DecodedToken;
     
     // Ensure admin flag is present
-    if (!decoded.admin) {
+    if (!tokenData.admin || !tokenData.username) {
       return null;
     }
 
-    return decoded;
+    return tokenData;
   } catch (error) {
     return null;
   }

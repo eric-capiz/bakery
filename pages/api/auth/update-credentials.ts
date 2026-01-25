@@ -69,7 +69,7 @@ export default async function handler(
     if (updates.username) {
       const newToken = jwt.sign(
         { username: updates.username, admin: true },
-        JWT_SECRET,
+        JWT_SECRET as string,
         { expiresIn: '7d' }
       );
 

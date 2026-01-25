@@ -60,7 +60,7 @@ export default async function handler(
     // Generate JWT token
     const token = jwt.sign(
       { username: adminData.username, admin: true },
-      JWT_SECRET,
+      JWT_SECRET as string,
       { expiresIn: '7d' }
     );
 
