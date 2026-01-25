@@ -1,8 +1,3 @@
-import cake7 from "./img/Cakes/cake7.jpg";
-import cake11 from "./img/Cakes/cake11.jpg";
-import cake5 from "./img/Cakes/cake5.jpg";
-import cake3 from "./img/Cakes/cake3.jpg";
-import cake4 from "./img/Cakes/cake4.jpg";
 
 interface Review {
   title: string;
@@ -21,8 +16,8 @@ export const CakeState = (): Cake[] => {
   return [
     {
       title: "Cake 1",
-      mainImg: cake7,
-      secondaryImg: cake5,
+      mainImg: "/img/Cakes/cake7.jpg",
+      secondaryImg: "/img/Cakes/cake5.jpg",
       url: "cake1",
       reviews: [
         {
@@ -42,8 +37,8 @@ export const CakeState = (): Cake[] => {
     },
     {
       title: "Cake 2",
-      mainImg: cake11,
-      secondaryImg: cake3,
+      mainImg: "/img/Cakes/cake11.jpg",
+      secondaryImg: "/img/Cakes/cake3.jpg",
       url: "cake2",
       reviews: [
         {
@@ -65,8 +60,8 @@ export const CakeState = (): Cake[] => {
     },
     {
       title: "Cake 3",
-      mainImg: cake4,
-      secondaryImg: cake3,
+      mainImg: "/img/Cakes/cake4.jpg",
+      secondaryImg: "/img/Cakes/cake3.jpg",
       url: "cake3",
       reviews: [
         {

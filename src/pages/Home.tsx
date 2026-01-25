@@ -1,6 +1,5 @@
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
-import cake1 from "../img/Cakes/cake1.jpg";
 
 const Home = () => {
   const { ref: featuresRef, inView: featuresInView } = useInView({ threshold: 0.1, triggerOnce: true });
@@ -14,7 +13,7 @@ const Home = () => {
           <div className="hero-grid">
             <div className="hero-image-side">
               <div className="image-wrapper-rich">
-                <img src={cake1} alt="Delicious custom cake" />
+                <img src="/img/Cakes/cake1.jpg" alt="Delicious custom cake" />
               </div>
             </div>
             <div className="hero-text-side">
