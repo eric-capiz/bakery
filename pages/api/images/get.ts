@@ -1,27 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 
-const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json');
+const IMAGES_KEY = 'images';
 const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
-
-// Initialize images.json if it doesn't exist
-function initializeImagesFile() {
-  if (!fs.existsSync(IMAGES_FILE)) {
-    const dataDir = path.dirname(IMAGES_FILE);
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-    
-    // Set default hero image
-    const defaultImages = {
-      heroImage: 'cake1.jpg',
-      galleryImages: [],
-    };
-    
-    fs.writeFileSync(IMAGES_FILE, JSON.stringify(defaultImages, null, 2));
-  }
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,11 +15,19 @@ export default async function handler(
   }
 
   try {
-    // Initialize images file if needed
-    initializeImagesFile();
-
-    // Read images registry
-    const imagesData = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf8'));
+    // Read images registry from Redis
+    let imagesDataStr = await getData(IMAGES_KEY);
+    let imagesData: { heroImage: string; galleryImages: string[] };
+    
+    if (!imagesDataStr) {
+      // Initialize with defaults
+      imagesData = {
+        heroImage: 'cake1.jpg',
+        galleryImages: [],
+      };
+    } else {
+      imagesData = JSON.parse(imagesDataStr);
+    }
 
     // Get all available image files from directory
     const allImages: string[] = [];
@@ -65,8 +56,8 @@ export default async function handler(
     // Sort gallery images
     imagesData.galleryImages.sort();
 
-    // Write updated registry
-    fs.writeFileSync(IMAGES_FILE, JSON.stringify(imagesData, null, 2));
+    // Write updated registry to Redis
+    await setData(IMAGES_KEY, JSON.stringify(imagesData));
 
     return res.status(200).json({
       heroImage: imagesData.heroImage,

@@ -1,29 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 import { JWT_SECRET } from '../../../lib/auth';
 import { COOKIE_EXPIRATION_SECONDS } from '../../../lib/constants';
 
-const ADMIN_FILE = path.join(process.cwd(), 'data', 'admin.json');
-
-// Initialize admin.json if it doesn't exist
-function initializeAdminFile() {
-  if (!fs.existsSync(ADMIN_FILE)) {
-    const adminDir = path.dirname(ADMIN_FILE);
-    if (!fs.existsSync(adminDir)) {
-      fs.mkdirSync(adminDir, { recursive: true });
-    }
-    // Hash default password "admin"
-    const defaultHash = bcrypt.hashSync('admin', 10);
-    const defaultAdmin = {
-      username: 'admin',
-      passwordHash: defaultHash,
-    };
-    fs.writeFileSync(ADMIN_FILE, JSON.stringify(defaultAdmin, null, 2));
-  }
-}
+const ADMIN_KEY = 'admin';
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,17 +16,27 @@ export default async function handler(
   }
 
   try {
-    // Initialize admin file if needed
-    initializeAdminFile();
+    // Read admin credentials from Redis
+    let adminDataStr = await getData(ADMIN_KEY);
+    
+    if (!adminDataStr) {
+      // Initialize with defaults
+      const defaultHash = bcrypt.hashSync('admin', 10);
+      const defaultAdmin = {
+        username: 'admin',
+        passwordHash: defaultHash,
+      };
+      adminDataStr = JSON.stringify(defaultAdmin);
+      await setData(ADMIN_KEY, adminDataStr);
+    }
+    
+    const adminData = JSON.parse(adminDataStr);
 
     const { username, password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required' });
     }
-
-    // Read admin credentials
-    const adminData = JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
 
     // Verify username
     if (username !== adminData.username) {

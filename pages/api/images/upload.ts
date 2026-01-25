@@ -2,11 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 import { IncomingForm } from 'formidable';
+import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 import { MAX_FILE_SIZE_BYTES } from '../../../lib/constants';
 
 const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
-const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json');
+const IMAGES_KEY = 'images';
 
 export const config = {
   api: {
@@ -40,54 +41,60 @@ export default async function handler(
       maxFileSize: MAX_FILE_SIZE_BYTES,
     });
 
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        return res.status(500).json({ error: 'File upload error' });
-      }
-
-      const fileArray = Array.isArray(files.image) ? files.image : [files.image];
-      if (!fileArray || fileArray.length === 0) {
-        return res.status(400).json({ error: 'No file uploaded' });
-      }
-
-      const uploadedFiles: string[] = [];
-
-      fileArray.forEach((file) => {
-        if (file && file.filepath) {
-          const originalName = file.originalFilename || 'image.jpg';
-          const ext = path.extname(originalName);
-          const baseName = path.basename(originalName, ext);
-          
-          // Generate unique filename
-          let newFileName = `${baseName}${ext}`;
-          let counter = 1;
-          while (fs.existsSync(path.join(IMAGES_DIR, newFileName))) {
-            newFileName = `${baseName}_${counter}${ext}`;
-            counter++;
-          }
-
-          const newPath = path.join(IMAGES_DIR, newFileName);
-          fs.renameSync(file.filepath, newPath);
-          uploadedFiles.push(newFileName);
+    return new Promise<void>((resolve) => {
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          res.status(500).json({ error: 'File upload error' });
+          resolve();
+          return;
         }
-      });
 
-      // Update images registry
-      if (fs.existsSync(IMAGES_FILE)) {
-        const imagesData = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf8'));
+        const fileArray = Array.isArray(files.image) ? files.image : [files.image];
+        if (!fileArray || fileArray.length === 0) {
+          res.status(400).json({ error: 'No file uploaded' });
+          resolve();
+          return;
+        }
+
+        const uploadedFiles: string[] = [];
+
+        fileArray.forEach((file) => {
+          if (file && file.filepath) {
+            const originalName = file.originalFilename || 'image.jpg';
+            const ext = path.extname(originalName);
+            const baseName = path.basename(originalName, ext);
+            
+            // Generate unique filename
+            let newFileName = `${baseName}${ext}`;
+            let counter = 1;
+            while (fs.existsSync(path.join(IMAGES_DIR, newFileName))) {
+              newFileName = `${baseName}_${counter}${ext}`;
+              counter++;
+            }
+
+            const newPath = path.join(IMAGES_DIR, newFileName);
+            fs.renameSync(file.filepath, newPath);
+            uploadedFiles.push(newFileName);
+          }
+        });
+
+        // Update images registry in Redis
+        const imagesDataStr = await getData(IMAGES_KEY);
+        const imagesData = imagesDataStr ? JSON.parse(imagesDataStr) : { heroImage: 'cake1.jpg', galleryImages: [] };
         uploadedFiles.forEach((fileName) => {
           if (!imagesData.galleryImages.includes(fileName)) {
             imagesData.galleryImages.push(fileName);
           }
         });
         imagesData.galleryImages.sort();
-        fs.writeFileSync(IMAGES_FILE, JSON.stringify(imagesData, null, 2));
-      }
+        await setData(IMAGES_KEY, JSON.stringify(imagesData));
 
-      return res.status(200).json({
-        success: true,
-        files: uploadedFiles,
-        message: `${uploadedFiles.length} file(s) uploaded successfully`,
+        res.status(200).json({
+          success: true,
+          files: uploadedFiles,
+          message: `${uploadedFiles.length} file(s) uploaded successfully`,
+        });
+        resolve();
       });
     });
   } catch (error) {

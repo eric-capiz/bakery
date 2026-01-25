@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 
 interface Review {
@@ -12,10 +13,10 @@ interface Review {
   date: string;
 }
 
-const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
+const REVIEWS_KEY = 'reviews';
 const reviewsImageDir = path.join(process.cwd(), 'public', 'img', 'reviews');
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -33,13 +34,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error: 'Review ID is required' });
     }
 
-    // Read existing reviews
-    if (!fs.existsSync(reviewsFilePath)) {
-      return res.status(404).json({ error: 'Reviews file not found' });
+    // Read existing reviews from Redis
+    const reviewsStr = await getData(REVIEWS_KEY);
+    if (!reviewsStr) {
+      return res.status(404).json({ error: 'Reviews not found' });
     }
 
-    const fileContent = fs.readFileSync(reviewsFilePath, 'utf-8');
-    const reviews: Review[] = JSON.parse(fileContent);
+    const reviews: Review[] = JSON.parse(reviewsStr);
 
     // Find review to delete
     const reviewIndex = reviews.findIndex((r) => r.id === id);
@@ -65,8 +66,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     // Remove review from array
     reviews.splice(reviewIndex, 1);
 
-    // Save updated reviews
-    fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2));
+    // Save updated reviews to Redis
+    await setData(REVIEWS_KEY, JSON.stringify(reviews));
 
     return res.status(200).json({ success: true });
   } catch (error) {

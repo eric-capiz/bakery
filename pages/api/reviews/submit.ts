@@ -3,6 +3,7 @@ import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { getData, setData } from '../../../lib/kv';
 import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB, MAX_REVIEW_DESCRIPTION_LENGTH } from '../../../lib/constants';
 
 interface FormidableError extends Error {
@@ -17,7 +18,7 @@ export const config = {
   },
 };
 
-const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
+const REVIEWS_KEY = 'reviews';
 const reviewsImageDir = path.join(process.cwd(), 'public', 'img', 'reviews');
 
 // Ensure reviews image directory exists
@@ -105,18 +106,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       date: new Date().toISOString(),
     };
 
-    // Read existing reviews
-    let reviews = [];
-    if (fs.existsSync(reviewsFilePath)) {
-      const fileContent = fs.readFileSync(reviewsFilePath, 'utf-8');
-      reviews = JSON.parse(fileContent);
-    }
+    // Read existing reviews from Redis
+    const reviewsStr = await getData(REVIEWS_KEY);
+    const reviews = reviewsStr ? JSON.parse(reviewsStr) : [];
 
     // Add new review
     reviews.push(newReview);
 
-    // Save to file
-    fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2));
+    // Save to Redis
+    await setData(REVIEWS_KEY, JSON.stringify(reviews));
 
     return res.status(200).json({ success: true, review: newReview });
   } catch (error: unknown) {

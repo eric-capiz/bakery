@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
-import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 import { requireAdmin, JWT_SECRET } from '../../../lib/auth';
 import { COOKIE_EXPIRATION_SECONDS } from '../../../lib/constants';
 
-const ADMIN_FILE = path.join(process.cwd(), 'data', 'admin.json');
+const ADMIN_KEY = 'admin';
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,12 +28,13 @@ export default async function handler(
       return res.status(400).json({ error: 'Current password is required' });
     }
 
-    // Read current admin credentials
-    if (!fs.existsSync(ADMIN_FILE)) {
-      return res.status(500).json({ error: 'Admin file not found' });
+    // Read current admin credentials from Redis
+    const adminDataStr = await getData(ADMIN_KEY);
+    if (!adminDataStr) {
+      return res.status(500).json({ error: 'Admin data not found' });
     }
 
-    const adminData = JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
+    const adminData = JSON.parse(adminDataStr);
 
     // Verify current password
     const isValidPassword = await bcrypt.compare(currentPassword, adminData.passwordHash);
@@ -62,8 +62,8 @@ export default async function handler(
       ...updates,
     };
 
-    // Write updated data
-    fs.writeFileSync(ADMIN_FILE, JSON.stringify(updatedAdminData, null, 2));
+    // Write updated data to Redis
+    await setData(ADMIN_KEY, JSON.stringify(updatedAdminData));
 
     // If username changed, generate new token
     if (updates.username) {

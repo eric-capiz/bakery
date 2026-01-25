@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 
-const IMAGES_FILE = path.join(process.cwd(), 'data', 'images.json');
+const IMAGES_KEY = 'images';
 const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
 
 export default async function handler(
@@ -27,12 +28,13 @@ export default async function handler(
       return res.status(400).json({ error: 'Image name is required' });
     }
 
-    // Read images registry
-    if (!fs.existsSync(IMAGES_FILE)) {
+    // Read images registry from Redis
+    const imagesDataStr = await getData(IMAGES_KEY);
+    if (!imagesDataStr) {
       return res.status(500).json({ error: 'Images registry not found' });
     }
 
-    const imagesData = JSON.parse(fs.readFileSync(IMAGES_FILE, 'utf8'));
+    const imagesData = JSON.parse(imagesDataStr);
 
     // Prevent deleting hero image - must set a new one first
     if (imagesData.heroImage === imageName) {
@@ -52,8 +54,8 @@ export default async function handler(
       (img: string) => img !== imageName
     );
 
-    // Write updated registry
-    fs.writeFileSync(IMAGES_FILE, JSON.stringify(imagesData, null, 2));
+    // Write updated registry to Redis
+    await setData(IMAGES_KEY, JSON.stringify(imagesData));
 
     return res.status(200).json({
       success: true,

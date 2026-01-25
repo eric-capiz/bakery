@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 
 interface Review {
   id: string;
@@ -11,9 +10,9 @@ interface Review {
   date: string;
 }
 
-const reviewsFilePath = path.join(process.cwd(), 'data', 'reviews.json');
+const REVIEWS_KEY = 'reviews';
 
-function initializeReviewsFile() {
+function getDefaultReviews(): Review[] {
   const defaultReviews = [
     {
       id: "review-1",
@@ -97,30 +96,26 @@ function initializeReviewsFile() {
     }
   ];
 
-  // Create data directory if it doesn't exist
-  const dataDir = path.dirname(reviewsFilePath);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-
-  // Write default reviews
-  fs.writeFileSync(reviewsFilePath, JSON.stringify(defaultReviews, null, 2));
   return defaultReviews;
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    let reviews: Review[] = [];
-
-    if (fs.existsSync(reviewsFilePath)) {
-      const fileContent = fs.readFileSync(reviewsFilePath, 'utf-8');
-      reviews = JSON.parse(fileContent);
+    // Read reviews from Redis
+    let reviewsStr = await getData(REVIEWS_KEY);
+    let reviews: Review[];
+    
+    if (!reviewsStr) {
+      // Initialize with defaults
+      reviews = getDefaultReviews();
+      reviewsStr = JSON.stringify(reviews);
+      await setData(REVIEWS_KEY, reviewsStr);
     } else {
-      reviews = initializeReviewsFile();
+      reviews = JSON.parse(reviewsStr);
     }
 
     // Sort by date (newest first)

@@ -1,16 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { getData, setData } from '../../../lib/kv';
 
-const CONTENT_FILE = path.join(process.cwd(), 'data', 'content.json');
+const CONTENT_KEY = 'content';
 
 // Initialize content.json with default values
-function initializeContentFile() {
-  if (!fs.existsSync(CONTENT_FILE)) {
-    const dataDir = path.dirname(CONTENT_FILE);
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
+function getDefaultContent() {
     
     const defaultContent = {
       home: {
@@ -118,8 +112,7 @@ function initializeContentFile() {
       }
     };
     
-    fs.writeFileSync(CONTENT_FILE, JSON.stringify(defaultContent, null, 2));
-  }
+  return defaultContent;
 }
 
 export default async function handler(
@@ -131,11 +124,17 @@ export default async function handler(
   }
 
   try {
-    // Initialize content file if needed
-    initializeContentFile();
-
-    // Read content
-    const content = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+    // Read content from Redis
+    let contentStr = await getData(CONTENT_KEY);
+    
+    if (!contentStr) {
+      // Initialize with defaults
+      const defaultContent = getDefaultContent();
+      contentStr = JSON.stringify(defaultContent);
+      await setData(CONTENT_KEY, contentStr);
+    }
+    
+    const content = JSON.parse(contentStr);
 
     return res.status(200).json(content);
   } catch (error) {
