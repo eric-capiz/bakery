@@ -17,7 +17,18 @@ export async function getData(key: string): Promise<string | null> {
       return null;
     }
     const value = await redis.get(key);
-    return value as string | null;
+    
+    // Upstash Redis returns the value directly (could be string, object, etc.)
+    // If it's already a string, return it
+    if (typeof value === 'string') {
+      return value;
+    }
+    // If it's null or undefined, return null
+    if (value === null || value === undefined) {
+      return null;
+    }
+    // If it's an object/array, stringify it (Redis might have auto-parsed JSON)
+    return JSON.stringify(value);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorStack = error instanceof Error ? error.stack : undefined;
