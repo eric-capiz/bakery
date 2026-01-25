@@ -52,7 +52,8 @@ I developed this site for a custom bakery business specializing in personalized 
   - Hero image management (must always have an image, defaults to cake1.jpg)
   - Gallery images management (upload, replace, delete)
   - Supports 35-50 images
-  - File-based storage (images stored in `/public/img/Cakes/`)
+  - Images stored in `/public/img/Cakes/`
+  - Image registry stored in Redis
 - **Content Management System**
   - **Home Page Content:**
     - Edit hero tagline and subtitle
@@ -66,12 +67,12 @@ I developed this site for a custom bakery business specializing in personalized 
     - Manage "What I Bake" items (add/edit/delete, max 20 items)
     - Manage FAQ questions (add/edit/delete, max 10 questions)
   - Per-section save buttons (no auto-save)
-  - All changes persist to JSON files on the server
+  - All changes persist to Redis database
 
 **Technical Highlights:**
 - Complete Next.js migration from Create React App
 - Server-side API routes for all admin operations
-- File-based data storage (JSON files in `/data/` directory)
+- Redis-based data storage (Upstash Redis/Vercel KV) for production
 - Secure admin authentication with session management
 - Mobile-responsive design with hamburger menu (768px breakpoint)
 - CSS animations using `react-intersection-observer` for scroll-triggered effects
@@ -98,14 +99,17 @@ I developed this site for a custom bakery business specializing in personalized 
 - formidable (for file uploads)
 - uuid (for generating unique file names)
 
+**Data Storage:**
+- @upstash/redis (Redis client for Vercel KV/Upstash)
+
 **UI Components & Animations:**
 - React DatePicker (for consultation form)
 - React Intersection Observer (for scroll-triggered animations)
 
 **Data Storage:**
-- File-based JSON storage (no database required)
+- Upstash Redis (Vercel KV) for persistent data storage
 - Images stored in `/public/img/` directory
-- Data files in `/data/` directory (admin credentials, images registry, content, reviews)
+- Data stored in Redis (admin credentials, images registry, content, reviews)
 
 [Back To The Top](#sweet-dreams-bakery)
 
@@ -143,13 +147,20 @@ I developed this site for a custom bakery business specializing in personalized 
 
 ### Environment Variables
 
-Create a `.env.local` file in the root directory (optional):
+Create a `.env.local` file in the root directory:
 
 ```env
 JWT_SECRET=your-secret-key-change-in-production
+KV_REST_API_URL=https://your-redis-instance.upstash.io
+KV_REST_API_TOKEN=your-redis-token
 ```
 
-If not provided, a default secret will be used (not recommended for production).
+**Required for Production (Vercel):**
+- `JWT_SECRET` - Secret key for JWT token signing (required)
+- `KV_REST_API_URL` - Upstash Redis REST API URL (required)
+- `KV_REST_API_TOKEN` - Upstash Redis REST API token (required)
+
+**Note:** This project uses Upstash Redis (Vercel KV) for persistent data storage. You'll need to create a Redis database in Upstash and add the credentials to your Vercel environment variables.
 
 ### Project Structure
 
@@ -168,25 +179,26 @@ nandos-cakes/
 │   └── styles/        # SCSS stylesheets
 ├── public/
 │   └── img/           # Static images (Cakes, reviews)
-├── data/              # JSON data files (auto-generated)
-│   ├── admin.json    # Admin credentials
-│   ├── images.json   # Image registry
-│   ├── content.json  # Site content
-│   └── reviews.json  # User reviews
+├── lib/               # Utility libraries
+│   ├── kv.ts         # Redis/KV helper functions
+│   ├── auth.ts       # Authentication utilities
+│   └── constants.ts  # Application constants
 └── package.json
 ```
 
 ### Deployment
 
-This project is ready for deployment on Vercel:
+**Live Site:** [bakery-ec.vercel.app](https://bakery-ec.vercel.app)
+
+This project is deployed on Vercel:
 
 1. Push your code to GitHub
 2. Import the project in Vercel
 3. Set Framework Preset to "Next.js"
-4. Add environment variable `JWT_SECRET` if using custom secret
+4. Add required environment variables (see below)
 5. Deploy!
 
-**Note:** The `/data/` directory is gitignored. On first deployment, the JSON files will be auto-generated with default values. Admin will need to log in and configure content/images.
+**Note:** On first deployment, data will be initialized with default values in Redis. Admin will need to log in and configure content/images.
 
 ## License
 
