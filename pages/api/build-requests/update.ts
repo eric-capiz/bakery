@@ -32,7 +32,7 @@ export default async function handler(
   }
 
   try {
-    const { id, name, email, phone, notes } = req.body ?? {};
+    const { id, name, email, phone, notes, design } = req.body ?? {};
 
     if (!isNonEmptyString(id)) {
       return res.status(400).json({ error: 'Id is required' });
@@ -80,12 +80,22 @@ export default async function handler(
     }
 
     const prev = list[idx] as StoredBuildEntry;
+    let designOut: unknown = prev.design;
+    if (design !== undefined) {
+      if (design != null && typeof design === 'object' && !Array.isArray(design)) {
+        designOut = design;
+      } else {
+        return res.status(400).json({ error: 'Design must be a JSON object' });
+      }
+    }
+
     list[idx] = {
       ...prev,
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
       notes: notesValue,
+      design: designOut,
     };
     await setData(BUILD_REQUESTS_KEY, JSON.stringify(list));
 

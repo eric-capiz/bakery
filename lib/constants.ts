@@ -14,6 +14,8 @@ export const MAX_REVIEW_DESCRIPTION_LENGTH = 500;
 
 // Custom build / lead form
 export const MAX_BUILD_NOTES_LENGTH = 3000;
+/** Inscription / topper text on cakes or cupcakes in the builder. */
+export const MAX_BUILD_CAKE_MESSAGE_LENGTH = 40;
 
 // Polling intervals (in milliseconds)
 export const ADMIN_STATUS_POLL_INTERVAL = 2000; // 2 seconds

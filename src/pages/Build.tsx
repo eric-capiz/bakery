@@ -97,6 +97,12 @@ const Build = () => {
 
   return (
     <div className="build-page">
+      <p className="build-page-wip-banner" role="status">
+        <strong>Work in progress.</strong> This custom build experience is still
+        under construction and is not the final way to order yet. When you are
+        ready to order, please use our{" "}
+        <Link href="/contact">contact form</Link>.
+      </p>
       <h1>Build</h1>
 
       {atRisk ? (
@@ -134,10 +140,12 @@ const Build = () => {
         buildRequestId && (
           <>
             <p className="build-page-lead build-page-lead-step2">
-              Step two is a placeholder for now. Your details stay on the
-              left; the real designer will go in the box on the right.
+              Design your order below. Your details stay above the step list;
+              start by choosing a pastry type (icons). More steps follow by
+              pastry.
             </p>
             <BuildDesigner
+              buildRequestId={buildRequestId}
               lead={leadSnapshot}
               onEditContact={handleEditContact}
             />
