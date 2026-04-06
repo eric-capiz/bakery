@@ -121,6 +121,11 @@ const Nav = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/build" className={isActive("/build") ? "active" : ""}>
+                  Build
+                </Link>
+              </li>
+              <li>
                 <Link href="/reviews" className={isActive("/reviews") ? "active" : ""}>
                   Reviews
                 </Link>

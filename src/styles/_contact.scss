@@ -30,6 +30,23 @@
         line-height: 1.6;
         font-style: italic;
       }
+
+      .contact-page-crosslink {
+        font-style: normal;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+
+        a {
+          color: #e8a87c;
+          font-weight: 600;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+
+          &:hover {
+            color: #d8956a;
+          }
+        }
+      }
     }
   }
 }

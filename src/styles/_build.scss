@@ -1,0 +1,232 @@
+.build-page {
+  min-height: 90vh;
+  padding: 8rem 1.5rem 5rem;
+  margin-top: 80px;
+  background: #fff8f0;
+  color: #8b4a3a;
+  text-align: center;
+  max-width: 52rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 1rem;
+  }
+
+  .build-page-lead {
+    color: #a85c4a;
+    line-height: 1.65;
+    font-size: 1.1rem;
+  }
+
+  .build-page-crosslink {
+    color: #a85c4a;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+
+    a {
+      color: #e8a87c;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: #d8956a;
+      }
+    }
+  }
+
+  .build-page-exit-warning {
+    max-width: 36rem;
+    margin: 0 auto 1.25rem;
+    padding: 0.9rem 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #7a3d2e;
+    background: rgba(232, 168, 124, 0.22);
+    border: 1px solid rgba(184, 90, 68, 0.45);
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 70px;
+    padding-top: 6rem;
+  }
+
+  .build-lead-form {
+    margin-top: 2rem;
+    text-align: left;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .build-field-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #a85c4a;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+
+    .build-field-legend-cake {
+      flex-shrink: 0;
+      color: #e8a87c;
+      font-size: 1.15rem;
+    }
+  }
+
+  .build-lead-form .build-field-row-for-reply {
+    padding-left: 0.75rem;
+    margin-left: -0.75rem;
+    border-left: 3px solid rgba(232, 168, 124, 0.75);
+    border-radius: 2px 0 0 2px;
+  }
+
+  .build-lead-form .icon-input--required-hint {
+    input {
+      padding-right: 3rem;
+    }
+
+    .field-required-cake {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e8a87c;
+      font-size: 1rem;
+      opacity: 0.95;
+      cursor: help;
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85));
+    }
+  }
+
+  .icon-input-textarea .input-icon {
+    top: 1.75rem;
+    transform: none;
+  }
+
+  .build-lead-char-count {
+    font-size: 0.85rem;
+    color: #a85c4a;
+    margin-top: 0.35rem;
+    padding-left: 0.25rem;
+  }
+
+  .build-lead-form-error {
+    color: #c44;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .build-lead-form-success {
+    color: #2a7a4b;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .build-page-lead-step2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .build-designer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .build-designer-summary {
+    background: #fff;
+    border: 2px solid rgba(255, 184, 154, 0.6);
+    border-radius: 1rem;
+    padding: 1.25rem 1.35rem;
+  }
+
+  .build-designer-summary-title {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    color: #8b4a3a;
+  }
+
+  .build-designer-dl {
+    margin: 0;
+  }
+
+  .build-designer-dl-row {
+    margin-bottom: 0.85rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    dt {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #a85c4a;
+      margin-bottom: 0.15rem;
+    }
+
+    dd {
+      margin: 0;
+      color: #8b4a3a;
+      word-break: break-word;
+    }
+
+    a {
+      color: #e8a87c;
+      font-weight: 600;
+    }
+  }
+
+  .build-designer-edit-contact {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    border: 2px solid #e8a87c;
+    background: transparent;
+    color: #8b4a3a;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+
+    &:hover {
+      background: rgba(232, 168, 124, 0.2);
+    }
+  }
+
+  .build-designer-canvas-wrap {
+    min-height: 14rem;
+    border: 2px dashed rgba(232, 168, 124, 0.75);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .build-designer-canvas-placeholder {
+    margin: 0;
+    color: #a85c4a;
+    font-size: 1rem;
+    line-height: 1.55;
+    text-align: center;
+    max-width: 22rem;
+  }
+}
+

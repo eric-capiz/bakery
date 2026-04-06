@@ -42,6 +42,8 @@ I developed this site for a custom bakery business specializing in personalized 
   - FAQ section with accordion-style layout
 - **Contact Page** - Consultation booking form with date/time picker
 
+**New feature:** A visual designer so visitors can assemble cakes and other custom pastries in the browser with a live preview while they change shapes, layers, colors, and similar options. A short lead form collects name, email, phone number, and a notes field where customers are asked to list any and all details. That form data is sent together with the structured data for what they built. The admin panel will gain an orders area so the baker can see each request as pending or completed along with the same contact and design information.
+
 **Admin Features:**
 - **Secure Authentication System**
   - JWT token-based authentication with HTTP-only cookies
