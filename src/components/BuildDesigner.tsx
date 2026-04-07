@@ -254,7 +254,7 @@ const BuildDesigner = ({
               disabled={!canSubmit}
               onClick={handleSubmitBuild}
             >
-              Submit my build
+              View my build
             </Button>
             {!flowComplete ? (
               <p className="build-designer-submit-hint">
