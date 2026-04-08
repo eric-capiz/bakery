@@ -30,7 +30,7 @@ export const CAKE_CUPCAKE_FLAVORS: FlavorOption[] = [
   { value: "carrot", label: "Carrot" },
 ];
 
-const COOKIE_VARIETIES: FlavorOption[] = [
+export const COOKIE_VARIETIES: FlavorOption[] = [
   { value: "chocolate_chip", label: "Chocolate chip" },
   { value: "sugar", label: "Sugar" },
   { value: "oatmeal_raisin", label: "Oatmeal raisin" },

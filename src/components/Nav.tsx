@@ -126,6 +126,11 @@ const Nav = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/preview" className={isActive("/preview") ? "active" : ""}>
+                  Preview
+                </Link>
+              </li>
+              <li>
                 <Link href="/reviews" className={isActive("/reviews") ? "active" : ""}>
                   Reviews
                 </Link>
