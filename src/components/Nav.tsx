@@ -29,13 +29,13 @@ const Nav = () => {
       await fetch("/api/auth/logout", { method: "POST" });
       setIsAdminLoggedIn(false);
       // Dispatch custom event to notify other components
-      window.dispatchEvent(new Event('adminLogout'));
+      window.dispatchEvent(new Event("adminLogout"));
       // Redirect to home page after logout
       router.push("/");
     } catch (err) {
       // Still logout locally even if API call fails
       setIsAdminLoggedIn(false);
-      window.dispatchEvent(new Event('adminLogout'));
+      window.dispatchEvent(new Event("adminLogout"));
       // Redirect to home page after logout
       router.push("/");
     }
@@ -44,7 +44,7 @@ const Nav = () => {
   const handleLoginSuccess = () => {
     setIsAdminLoggedIn(true);
     // Dispatch custom event to notify other components
-    window.dispatchEvent(new Event('adminLogin'));
+    window.dispatchEvent(new Event("adminLogin"));
   };
 
   const isActive = (path: string) => {
@@ -109,24 +109,51 @@ const Nav = () => {
               <span></span>
               <span></span>
             </button>
-            <ul className={`nav-links-rich ${isMobileMenuOpen ? "active" : ""}`}>
+            <ul
+              className={`nav-links-rich ${isMobileMenuOpen ? "active" : ""}`}
+            >
               <li>
-                <Link href="/about" className={isActive("/about") ? "active" : ""}>
+                <Link
+                  href="/about"
+                  className={isActive("/about") ? "active" : ""}
+                >
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/sample-cakes" className={isActive("/sample-cakes") ? "active" : ""}>
+                <Link
+                  href="/sample-cakes"
+                  className={isActive("/sample-cakes") ? "active" : ""}
+                >
                   Sample Cakes
                 </Link>
               </li>
+              {/* <li>
+                <Link href="/build" className={isActive("/build") ? "active" : ""}>
+                  Build
+                </Link>
+              </li> */}
               <li>
-                <Link href="/reviews" className={isActive("/reviews") ? "active" : ""}>
+                <Link
+                  href="/preview"
+                  className={isActive("/preview") ? "active" : ""}
+                >
+                  Preview
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/reviews"
+                  className={isActive("/reviews") ? "active" : ""}
+                >
                   Reviews
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className={isActive("/contact") ? "active" : ""}>
+                <Link
+                  href="/contact"
+                  className={isActive("/contact") ? "active" : ""}
+                >
                   Contact Me
                 </Link>
               </li>
@@ -143,15 +170,15 @@ const Nav = () => {
                   </button>
                 ) : (
                   <>
-                    <Link 
-                      href="/admin" 
+                    <Link
+                      href="/admin"
                       className="mobile-admin-panel-btn"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Admin Panel
                     </Link>
-                    <button 
-                      className="mobile-admin-logout-btn" 
+                    <button
+                      className="mobile-admin-logout-btn"
                       onClick={() => {
                         handleLogout();
                         setIsMobileMenuOpen(false);

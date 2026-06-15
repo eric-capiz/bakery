@@ -10,6 +10,7 @@
 
 - [Description](#description)
 - [Features](#features)
+- [Build steps](#build-steps)
 - [Technologies/Libraries](#technologieslibraries)
 - [How To Use](#how-to-use)
 - [Admin Access](#admin-access)
@@ -41,6 +42,8 @@ I developed this site for a custom bakery business specializing in personalized 
   - Working Hours & Contact information
   - FAQ section with accordion-style layout
 - **Contact Page** - Consultation booking form with date/time picker
+
+**New feature:** A visual designer so visitors can assemble cakes and other custom pastries in the browser with a live preview while they change shapes, layers, colors, and similar options. A short lead form collects name, email, phone number, and a notes field where customers are asked to list any and all details. That form data is sent together with the structured data for what they built. The admin panel will gain an orders area so the baker can see each request as pending or completed along with the same contact and design information.
 
 **Admin Features:**
 - **Secure Authentication System**
@@ -110,6 +113,71 @@ I developed this site for a custom bakery business specializing in personalized 
 - Upstash Redis (Vercel KV) for persistent data storage
 - Images stored in `/public/img/` directory
 - Data stored in Redis (admin credentials, images registry, content, reviews)
+
+[Back To The Top](#sweet-dreams-bakery)
+
+---
+
+## Build steps
+
+Planned customer flow for the **Build** designer after the lead form: pick a **pastry type**, then complete **substeps** that apply only to that type. Flavor and finish lists are **per type** (not one global menu).
+
+### Step 1: Pastry type
+
+Choose **one** of (max five): **Cake**, **Cookie**, **Pie**, **Cupcake**, **Brownie**.
+
+### Cake (substeps)
+
+1. **Layer flavor** (baked layers): vanilla, chocolate, red velvet, marble, funfetti, lemon, carrot.
+2. **Number of tiers** (numeric input; min/max set with the bakery).
+3. **Layers per tier** (numeric input; min/max set with the bakery).
+4. **Size or servings** (guest count and/or standard sizes; exact control TBD with the bakery).
+5. **Filling** between layers (dropdown; options TBD with the bakery).
+6. **Frosting**: buttercream, chocolate buttercream, cream cheese, whipped cream, fondant, ganache, naked/semi-naked.
+7. **Colors / theme** (short optional text).
+8. **Toppings and decorations** (curated checkboxes plus optional longer description).
+9. **Message on the cake** (short single line; character limit TBD).
+10. **Event / needed-by date** (and pickup or delivery note if needed).
+11. **Dietary / allergies** (compact checkboxes or text).
+
+If the type changes later in the flow, **reset** fields that no longer apply (e.g. flavor and shape-specific options).
+
+### Cookie (substeps)
+
+1. **Flavor or variety** (dropdown; options TBD with the bakery).
+2. **Quantity** (e.g. dozens or count; input style TBD).
+3. **Mix-ins, toppings, or finish** (curated options plus optional description; TBD).
+4. **Packaging** (optional, if offered).
+5. **Occasion note or short message** (optional).
+6. **Event / needed-by date**.
+7. **Dietary / allergies**.
+
+### Pie (substeps)
+
+1. **Pie flavor or variety** (dropdown; options TBD).
+2. **Size** (e.g. whole; options TBD).
+3. **Toppings or crust / finish style** (curated; TBD).
+4. **Colors / theme** (optional short text).
+5. **Event / needed-by date**.
+6. **Dietary / allergies**.
+
+### Cupcake (substeps)
+
+1. **Cupcake flavor** (dropdown; can align with cake layer flavors where it makes sense; final list TBD).
+2. **Quantity**.
+3. **Frosting** (same general categories as cake where applicable; list TBD).
+4. **Toppings and decorations** (curated plus optional description).
+5. **Message or topper text** (optional short line).
+6. **Event / needed-by date**.
+7. **Dietary / allergies**.
+
+### Brownie (substeps)
+
+1. **Brownie flavor or style** (dropdown; options TBD).
+2. **Quantity or batch / pan size** (TBD with the bakery).
+3. **Toppings or finish** (e.g. frosting, drizzle, nuts; curated; TBD).
+4. **Event / needed-by date**.
+5. **Dietary / allergies**.
 
 [Back To The Top](#sweet-dreams-bakery)
 
