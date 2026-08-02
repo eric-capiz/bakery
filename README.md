@@ -10,6 +10,7 @@
 
 - [Description](#description)
 - [Features](#features)
+- [Future Features](#future-features)
 - [Build steps](#build-steps)
 - [Technologies/Libraries](#technologieslibraries)
 - [How To Use](#how-to-use)
@@ -113,6 +114,29 @@ I developed this site for a custom bakery business specializing in personalized 
 - Upstash Redis (Vercel KV) for persistent data storage
 - Images stored in `/public/img/` directory
 - Data stored in Redis (admin credentials, images registry, content, reviews)
+
+[Back To The Top](#sweet-dreams-bakery)
+
+---
+
+## Future Features
+
+Planned additions that are realistic and high value for the bakery:
+
+1. **Admin orders for Build requests**
+   Finish saving the design, then show pending or completed requests in admin with contact and pastry details. Turns the work in progress builder into something the baker can actually use.
+
+2. **Email alerts for new leads**
+   Notify on consultation, review, and build submit. Fastest way to stop missing orders without building a full CRM.
+
+3. **Cloud image storage**
+   Move gallery and review uploads off local disk (for example Vercel Blob). Fixes a real production reliability problem and unlocks safer image management.
+
+4. **Review moderation**
+   Public submit goes to pending, then admin can approve or delete. Protects the brand while keeping social proof.
+
+5. **How ordering works and soft pricing bands**
+   A clear three to four step process and soft pricing ranges or simple quote tiers from Build options. Builds trust and cuts back and forth before the consult with no cart or payments required.
 
 [Back To The Top](#sweet-dreams-bakery)
 
