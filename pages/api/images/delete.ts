@@ -36,7 +36,7 @@ export default async function handler(
 
     const imagesData = JSON.parse(imagesDataStr);
 
-    // Prevent deleting hero image - must set a new one first
+    // Prevent deleting hero image: must set a new one first
     if (imagesData.heroImage === imageName) {
       return res.status(400).json({ 
         error: 'Cannot delete hero image. Please set a new hero image first.' 

@@ -1,6 +1,7 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import AdminShell from '../../src/components/AdminShell';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const AdminSettings = () => {
@@ -99,11 +100,7 @@ const AdminSettings = () => {
   };
 
   if (!mounted || isChecking) {
-    return (
-      <div style={{ marginTop: '80px', padding: '4rem 2rem', minHeight: '90vh', background: '#FFF8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: '#8B4A3A', fontSize: '1.2rem' }}>Loading...</p>
-      </div>
-    );
+    return <AdminShell title="Account Settings" loading />;
   }
 
   if (!isAuthenticated) {
@@ -111,18 +108,13 @@ const AdminSettings = () => {
   }
 
   return (
-    <div className="admin-panel" style={{ marginTop: '80px', padding: '4rem 2rem', minHeight: '90vh', background: '#FFF8F0' }}>
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <h1 style={{ fontFamily: '"DM Serif Display", serif', fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#8B4A3A', marginBottom: '1rem', textAlign: 'center' }}>
-          Admin Settings
-        </h1>
-        <p style={{ textAlign: 'center', color: '#A85C4A', fontSize: '1rem', marginBottom: '3rem' }}>
-          Update your username and/or password
-        </p>
-
-        <form onSubmit={handleSubmit} style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
+    <AdminShell
+      title="Account Settings"
+      subtitle="Update your admin username and password."
+    >
+        <form onSubmit={handleSubmit} style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="currentPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
+            <label htmlFor="currentPassword" style={{ display: 'block', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#3f3034', marginBottom: '0.5rem' }}>
               Current Password *
             </label>
             <div style={{ position: 'relative' }}>
@@ -132,7 +124,7 @@ const AdminSettings = () => {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
-                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #dfb6bd', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Outfit", "Avenir Next", sans-serif', color: '#3f3034', background: '#e9d6d2' }}
               />
               <button
                 type="button"
@@ -145,7 +137,7 @@ const AdminSettings = () => {
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#8B4A3A',
+                  color: '#3f3034',
                   fontSize: '1.1rem',
                   padding: '0.25rem',
                   display: 'flex',
@@ -159,7 +151,7 @@ const AdminSettings = () => {
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="newUsername" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
+            <label htmlFor="newUsername" style={{ display: 'block', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#3f3034', marginBottom: '0.5rem' }}>
               New Username (leave blank to keep current)
             </label>
             <input
@@ -167,12 +159,12 @@ const AdminSettings = () => {
               id="newUsername"
               value={newUsername}
               onChange={(e) => setNewUsername(e.target.value)}
-              style={{ width: '100%', padding: '0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+              style={{ width: '100%', padding: '0.875rem 1.25rem', border: '2px solid #dfb6bd', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Outfit", "Avenir Next", sans-serif', color: '#3f3034', background: '#e9d6d2' }}
             />
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <label htmlFor="newPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
+            <label htmlFor="newPassword" style={{ display: 'block', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#3f3034', marginBottom: '0.5rem' }}>
               New Password (leave blank to keep current)
             </label>
             <div style={{ position: 'relative' }}>
@@ -182,7 +174,7 @@ const AdminSettings = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 minLength={4}
-                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+                style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #dfb6bd', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Outfit", "Avenir Next", sans-serif', color: '#3f3034', background: '#e9d6d2' }}
               />
               <button
                 type="button"
@@ -195,7 +187,7 @@ const AdminSettings = () => {
                   background: 'transparent',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#8B4A3A',
+                  color: '#3f3034',
                   fontSize: '1.1rem',
                   padding: '0.25rem',
                   display: 'flex',
@@ -207,7 +199,7 @@ const AdminSettings = () => {
               </button>
             </div>
             {newPassword && (
-              <p style={{ fontSize: '0.85rem', color: '#A85C4A', marginTop: '0.25rem' }}>
+              <p style={{ fontSize: '0.85rem', color: '#6d5c60', marginTop: '0.25rem' }}>
                 Password must be at least 4 characters
               </p>
             )}
@@ -215,7 +207,7 @@ const AdminSettings = () => {
 
           {newPassword && (
             <div style={{ marginBottom: '1.5rem' }}>
-              <label htmlFor="confirmPassword" style={{ display: 'block', fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#8B4A3A', marginBottom: '0.5rem' }}>
+              <label htmlFor="confirmPassword" style={{ display: 'block', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '1rem', fontWeight: '600', color: '#3f3034', marginBottom: '0.5rem' }}>
                 Confirm New Password
               </label>
               <div style={{ position: 'relative' }}>
@@ -224,7 +216,7 @@ const AdminSettings = () => {
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #FFB89A', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Inter", sans-serif', color: '#8B4A3A', background: '#FFF8F0' }}
+                  style={{ width: '100%', padding: '0.875rem 3rem 0.875rem 1.25rem', border: '2px solid #dfb6bd', borderRadius: '12px', fontSize: '1rem', fontFamily: '"Outfit", "Avenir Next", sans-serif', color: '#3f3034', background: '#e9d6d2' }}
                 />
                 <button
                   type="button"
@@ -237,7 +229,7 @@ const AdminSettings = () => {
                     background: 'transparent',
                     border: 'none',
                     cursor: 'pointer',
-                    color: '#8B4A3A',
+                    color: '#3f3034',
                     fontSize: '1.1rem',
                     padding: '0.25rem',
                     display: 'flex',
@@ -252,13 +244,13 @@ const AdminSettings = () => {
           )}
 
           {error && (
-            <div style={{ background: '#FFE5D9', color: '#A85C4A', padding: '0.875rem 1.25rem', borderRadius: '12px', marginBottom: '1.5rem', border: '2px solid #FFB89A', textAlign: 'center', fontFamily: '"Inter", sans-serif', fontSize: '0.95rem' }}>
+            <div style={{ background: '#e8cfd3', color: '#6d5c60', padding: '0.875rem 1.25rem', borderRadius: '12px', marginBottom: '1.5rem', border: '2px solid #dfb6bd', textAlign: 'center', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '0.95rem' }}>
               {error}
             </div>
           )}
 
           {success && (
-            <div style={{ background: '#E8F5E9', color: '#2E7D32', padding: '0.875rem 1.25rem', borderRadius: '12px', marginBottom: '1.5rem', border: '2px solid #81C784', textAlign: 'center', fontFamily: '"Inter", sans-serif', fontSize: '0.95rem' }}>
+            <div style={{ background: '#E8F5E9', color: '#2E7D32', padding: '0.875rem 1.25rem', borderRadius: '12px', marginBottom: '1.5rem', border: '2px solid #81C784', textAlign: 'center', fontFamily: '"Outfit", "Avenir Next", sans-serif', fontSize: '0.95rem' }}>
               {success}
             </div>
           )}
@@ -268,11 +260,11 @@ const AdminSettings = () => {
             disabled={isLoading}
             style={{
               width: '100%',
-              fontFamily: '"Space Grotesk", sans-serif',
+              fontFamily: '"Outfit", "Avenir Next", sans-serif',
               fontSize: '1.1rem',
               fontWeight: '600',
-              color: '#FFFFFF',
-              background: isLoading ? '#A85C4A' : '#E8A87C',
+              color: '#f4e8e5',
+              background: isLoading ? '#6d5c60' : '#b56f7c',
               border: 'none',
               borderRadius: '12px',
               padding: '1rem 2rem',
@@ -289,7 +281,7 @@ const AdminSettings = () => {
             }}
             onMouseOut={(e) => {
               if (!isLoading) {
-                e.currentTarget.style.background = '#E8A87C';
+                e.currentTarget.style.background = '#b56f7c';
                 e.currentTarget.style.transform = 'translateY(0)';
               }
             }}
@@ -297,14 +289,7 @@ const AdminSettings = () => {
             {isLoading ? 'Updating...' : 'Update Credentials'}
           </button>
         </form>
-
-        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <Link href="/admin" style={{ color: '#E8A87C', textDecoration: 'none', fontSize: '1.1rem', fontFamily: '"Space Grotesk", sans-serif' }}>
-            ← Back to Admin Panel
-          </Link>
-        </div>
-      </div>
-    </div>
+    </AdminShell>
   );
 };
 

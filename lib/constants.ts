@@ -1,5 +1,5 @@
 /**
- * Application-wide constants
+ * Application wide constants
  */
 
 // Cookie expiration: 7 days in seconds

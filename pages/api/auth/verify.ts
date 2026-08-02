@@ -13,7 +13,7 @@ export default async function handler(
     const decoded = verifyAdminToken(req);
 
     if (!decoded) {
-      // 200 so the browser does not log a failed request for the normal logged-out state
+      // 200 so the browser does not log a failed request for the normal logged out state
       return res.status(200).json({ authenticated: false });
     }
 

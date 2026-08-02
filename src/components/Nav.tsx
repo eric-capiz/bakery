@@ -133,14 +133,14 @@ const Nav = () => {
                   Build
                 </Link>
               </li> */}
-              <li>
+              {/* <li>
                 <Link
                   href="/preview"
                   className={isActive("/preview") ? "active" : ""}
                 >
                   Preview
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/reviews"
