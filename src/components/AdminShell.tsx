@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 type AdminShellProps = {
   title: string;
   subtitle?: string;
-  children: ReactNode;
+  children?: ReactNode;
   loading?: boolean;
 };
 
