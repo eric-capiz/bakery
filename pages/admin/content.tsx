@@ -467,10 +467,15 @@ const AdminContent = () => {
 
                 {/* Features Section */}
                 <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Features Section
-                    </h2>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', gap: '1rem' }}>
+                    <div>
+                      <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A', margin: 0 }}>
+                        Features Section
+                      </h2>
+                      <p style={{ margin: '0.5rem 0 0', color: '#A85C4A', fontSize: '0.95rem' }}>
+                        Updates the &quot;Why Choose Us&quot; section on the Home page.
+                      </p>
+                    </div>
                     <button
                       onClick={saveFeatures}
                       disabled={saving === 'features'}
@@ -482,6 +487,7 @@ const AdminContent = () => {
                         borderRadius: '8px',
                         cursor: saving === 'features' ? 'not-allowed' : 'pointer',
                         fontWeight: '600',
+                        flexShrink: 0,
                       }}
                     >
                       {saving === 'features' ? 'Saving...' : 'Save Features'}
