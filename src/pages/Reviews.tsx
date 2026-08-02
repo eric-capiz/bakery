@@ -41,9 +41,7 @@ const placeOnTable = (index: number, total: number) => {
   const topMax = 74;
 
   const leftBase =
-    cols === 1
-      ? (leftMin + leftMax) / 2
-      : leftMin + (col / (cols - 1)) * (leftMax - leftMin);
+    leftMin + (col / Math.max(cols - 1, 1)) * (leftMax - leftMin);
 
   const topBase =
     rows === 1
