@@ -56,7 +56,7 @@ export default async function handler(
       { expiresIn: '7d' }
     );
 
-    // Set HTTP-only cookie
+    // Set HTTP only cookie
     res.setHeader(
       'Set-Cookie',
       `adminToken=${token}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${COOKIE_EXPIRATION_SECONDS}; ${

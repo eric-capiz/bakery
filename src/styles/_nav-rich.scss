@@ -4,53 +4,47 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255, 229, 217, 0.98);
-  backdrop-filter: blur(15px);
-  border-bottom: 3px solid #E8A87C;
-  transition: all 0.3s ease;
+  background: rgba(233, 214, 210, 0.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--s-line);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 
   &.scrolled {
-    background: rgba(255, 229, 217, 0.99);
-    box-shadow: 0 4px 30px rgba(139, 74, 58, 0.2);
+    background: rgba(244, 232, 229, 0.98);
+    box-shadow: 0 8px 24px rgba(143, 79, 92, 0.1);
   }
 }
 
 .nav-container-rich {
-  max-width: 1600px;
   width: 100%;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 1rem 1rem;
+  padding: 0.85rem 1.15rem;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 1rem;
-  position: relative;
+  gap: 0.75rem;
 
   @media (min-width: 769px) {
-    padding: 1.25rem 2rem;
-    gap: 1.5rem;
+    padding: 1.1rem 2rem;
+    gap: 1.25rem;
   }
 
   @media (min-width: 1024px) {
-    padding: 1.75rem 3rem;
-    gap: 2rem;
-  }
-
-  @media (min-width: 1200px) {
-    padding: 1.75rem 4rem;
-    gap: 2.5rem;
+    padding: 1.25rem 2.5rem;
   }
 }
 
 .admin-buttons-container {
-  display: flex;
+  display: none;
   align-items: center;
   z-index: 1001;
   grid-column: 1;
   justify-self: start;
 
-  @media (max-width: 768px) {
-    display: none;
+  @media (min-width: 769px) {
+    display: flex;
+    gap: 0.5rem;
   }
 }
 
@@ -60,92 +54,66 @@
   justify-self: center;
   grid-column: 2;
   white-space: nowrap;
-  flex-shrink: 1;
   min-width: 0;
-  
-  @media (max-width: 768px) {
-    .logo-text-rich {
-      font-size: clamp(1.5rem, 3vw, 1.75rem);
-    }
-  }
-
-  @media (min-width: 769px) and (max-width: 1023px) {
-    .logo-text-rich {
-      font-size: clamp(1.5rem, 2.5vw, 2rem);
-    }
-  }
 }
 
 .logo-text-rich {
-  font-family: "DM Serif Display", serif;
-  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-  font-weight: 400;
-  color: #8B4A3A;
-  letter-spacing: -0.02em;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-block;
+  font-family: var(--s-display);
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  font-weight: 600;
+  color: var(--s-text-strong);
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
 
   &:hover {
-    color: #E8A87C;
-    transform: scale(1.08) translateY(-2px);
+    color: var(--s-rose-deep);
   }
 }
 
 .nav-right-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   grid-column: 3;
   justify-self: end;
   z-index: 1001;
-  flex-shrink: 0;
-
-  @media (min-width: 769px) {
-    gap: 1.5rem;
-  }
 }
 
 .nav-links-rich {
-  display: flex;
+  display: none;
   list-style: none;
-  gap: 1.5rem;
   margin: 0;
   padding: 0;
   align-items: center;
-  flex-wrap: nowrap;
-  overflow: visible;
+  gap: 1.5rem;
 
   @media (min-width: 769px) {
-    gap: 2rem;
+    display: flex;
+    gap: 1.75rem;
   }
 
   @media (min-width: 1024px) {
-    gap: 2.5rem;
-  }
-
-  @media (min-width: 1200px) {
-    gap: 3rem;
+    gap: 2.25rem;
   }
 
   @media (max-width: 768px) {
+    display: flex;
     position: fixed;
     top: 0;
     right: -100%;
-    width: 100%;
-    max-width: 320px;
-    height: 100vh;
-    background: rgba(255, 229, 217, 0.98);
-    backdrop-filter: blur(15px);
+    width: min(100%, 20rem);
+    height: 100dvh;
+    background: var(--s-surface);
     flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
-    align-items: flex-start;
-    padding: 4.5rem 1.25rem 2rem;
+    padding: 5rem 1.35rem 2rem;
     gap: 0;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 3px solid #E8A87C;
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.4);
+    transition: right 0.35s ease;
+    border-left: 1px solid var(--s-line);
+    box-shadow: -12px 0 32px rgba(143, 79, 92, 0.12);
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-overflow-scrolling: touch;
 
     &.active {
@@ -157,23 +125,23 @@
 .nav-links-rich li {
   margin: 0;
   padding: 0;
-  
+
   @media (max-width: 768px) {
-    margin-bottom: 1rem; // Add spacing between nav links in mobile menu
+    border-bottom: 1px solid var(--s-line);
   }
 }
 
 .nav-links-rich a {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-family: var(--s-sans);
+  font-size: 0.82rem;
   font-weight: 500;
-  color: #8B4A3A;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s-text);
   text-decoration: none;
   position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0.5rem 0;
-  white-space: nowrap;
-  flex-shrink: 0;
+  padding: 0.4rem 0;
+  transition: color 0.3s ease;
 
   &::after {
     content: "";
@@ -181,15 +149,13 @@
     bottom: 0;
     left: 0;
     width: 0;
-    height: 4px;
-    background: #E8A87C;
-    border-radius: 2px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 1px;
+    background: var(--s-rose-deep);
+    transition: width 0.3s ease;
   }
 
   &:hover {
-    color: #E8A87C;
-    transform: translateY(-2px);
+    color: var(--s-rose-deep);
 
     &::after {
       width: 100%;
@@ -197,7 +163,7 @@
   }
 
   &.active {
-    color: #E8A87C;
+    color: var(--s-rose-deep);
     font-weight: 600;
 
     &::after {
@@ -206,278 +172,224 @@
   }
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    display: block;
     width: 100%;
+    font-size: 1rem;
     padding: 1rem 0;
-    white-space: normal;
-    border-bottom: none;
-    
-    // Remove underline for active links in mobile menu
-    &.active {
-      &::after {
-        display: none;
-      }
+    text-transform: none;
+    letter-spacing: 0.02em;
+
+    &.active::after,
+    &::after {
+      display: none;
     }
   }
 }
 
 .mobile-admin-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid rgba(232, 168, 124, 0.2);
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--s-line);
+  width: 100%;
 
   @media (min-width: 769px) {
     display: none;
-  }
-  
-  // Remove border between admin panel and logout
-  .mobile-admin-panel-btn {
-    border-bottom: none !important;
-    margin-bottom: 0;
-  }
-  
-  .mobile-admin-logout-btn {
-    border-top: none !important;
-    margin-top: 0;
   }
 }
 
 .mobile-admin-login-btn,
 .mobile-admin-panel-btn,
 .mobile-admin-logout-btn {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.2rem;
+  font-family: var(--s-sans);
+  font-size: 1rem;
   font-weight: 500;
-  color: #8B4A3A;
+  color: var(--s-text);
   background: transparent;
   border: none;
   padding: 1rem 0;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
-  display: block;
   text-align: left;
   width: 100%;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 4px;
-    background: #E8A87C;
-    border-radius: 2px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+  text-decoration: none;
 
   &:hover {
-    color: #E8A87C;
-    transform: translateY(-2px);
-
-    &::after {
-      width: 100%;
-    }
-  }
-}
-
-.mobile-admin-logout-btn {
-  &:hover {
-    color: #A85C4A;
-
-    &::after {
-      background: #A85C4A;
-    }
+    color: var(--s-rose-deep);
   }
 }
 
 .mobile-menu-toggle-rich {
-  display: none;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 30px;
-  height: 26px;
+  width: 1.75rem;
+  height: 1.35rem;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 1002;
-  position: relative;
 
-  @media (max-width: 768px) {
-    display: flex;
+  @media (min-width: 769px) {
+    display: none;
   }
 
   span {
     width: 100%;
-    height: 3px;
-    background: #8B4A3A;
+    height: 2px;
+    background: var(--s-text-strong);
     border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease, opacity 0.3s ease;
     transform-origin: center;
   }
 
   &.active {
     span:nth-child(1) {
-      transform: rotate(45deg) translate(9px, 9px);
+      transform: rotate(45deg) translate(5px, 5px);
     }
 
     span:nth-child(2) {
       opacity: 0;
-      transform: translateX(-10px);
     }
 
     span:nth-child(3) {
-      transform: rotate(-45deg) translate(9px, -9px);
+      transform: rotate(-45deg) translate(5px, -5px);
     }
   }
 }
 
-// Admin login button
 .admin-login-btn,
 .admin-panel-btn,
 .admin-logout-btn {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #8B4A3A;
+  font-family: var(--s-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s-rose-deep);
   background: transparent;
-  border: 2px solid #E8A87C;
-  border-radius: 20px;
-  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--s-rose);
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
-  margin-right: 0.75rem;
   white-space: nowrap;
+  transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background: #E8A87C;
-    color: #FFFFFF;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(232, 168, 124, 0.4);
+    background: var(--s-rose-deep);
+    color: #fffaf9;
+    border-color: var(--s-rose-deep);
   }
-
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-    padding: 0.35rem 0.85rem;
-    margin-right: 0.5rem;
-  }
-}
-
-.admin-panel-btn {
-  margin-right: 0.5rem;
 }
 
 .admin-logout-btn {
-  border-color: #A85C4A;
-  
+  border-color: var(--s-rose-soft);
+  color: var(--s-muted);
+
   &:hover {
-    background: #A85C4A;
-    box-shadow: 0 4px 12px rgba(168, 92, 74, 0.4);
+    background: var(--s-rose);
+    border-color: var(--s-rose);
+    color: #fffaf9;
   }
 }
 
-// Admin login modal
 .admin-login-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(63, 48, 52, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
+  padding: 1rem;
 }
 
 .admin-login-modal {
-  background: #FFFFFF;
-  border-radius: 24px;
-  padding: 3rem;
-  max-width: 450px;
-  width: 90%;
+  background: var(--s-surface);
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  max-width: 26rem;
+  width: 100%;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  border: 3px solid #FFB89A;
+  border: 1px solid var(--s-line);
+  box-shadow: 0 20px 48px rgba(143, 79, 92, 0.16);
+
+  @media (min-width: 480px) {
+    padding: 2.5rem;
+  }
 
   h2 {
-    font-family: "DM Serif Display", serif;
-    font-size: 2rem;
-    color: #8B4A3A;
-    margin-bottom: 2rem;
+    font-family: var(--s-display);
+    font-size: 1.85rem;
+    color: var(--s-text-strong);
+    margin-bottom: 1.5rem;
     text-align: center;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.15rem;
   }
 }
 
 .admin-login-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.75rem;
+  right: 0.75rem;
   background: transparent;
   border: none;
-  font-size: 2rem;
-  color: #8B4A3A;
+  font-size: 1.6rem;
+  color: var(--s-muted);
   cursor: pointer;
-  width: 35px;
-  height: 35px;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+  border-radius: 999px;
 
   &:hover {
-    background: #FFE5D9;
-    color: #A85C4A;
+    background: var(--s-blush);
+    color: var(--s-text-strong);
   }
 }
 
 .admin-login-field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 
   label {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 1rem;
+    font-family: var(--s-sans);
+    font-size: 0.85rem;
     font-weight: 600;
-    color: #8B4A3A;
+    color: var(--s-text-strong);
   }
 
   input {
-    font-family: "Inter", sans-serif;
+    font-family: var(--s-sans);
     font-size: 1rem;
-    padding: 0.875rem 1.25rem;
-    border: 2px solid #FFB89A;
-    border-radius: 12px;
-    color: #8B4A3A;
-    background: #FFF8F0;
-    transition: all 0.3s ease;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--s-line);
+    border-radius: 0.65rem;
+    color: var(--s-text);
+    background: #fffaf9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
     &:focus {
       outline: none;
-      border-color: #E8A87C;
-      box-shadow: 0 0 0 4px rgba(232, 168, 124, 0.2);
+      border-color: var(--s-rose);
+      box-shadow: 0 0 0 3px rgba(181, 111, 124, 0.18);
     }
 
     &::placeholder {
-      color: #A85C4A;
-      opacity: 0.6;
+      color: var(--s-muted);
+      opacity: 0.7;
     }
   }
 }
@@ -488,66 +400,56 @@
 
   .admin-login-password-input {
     width: 100%;
-    padding-right: 3rem;
+    padding-right: 2.75rem;
   }
 
   .admin-login-password-toggle {
     position: absolute;
-    right: 0.75rem;
+    right: 0.65rem;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
     cursor: pointer;
-    color: #8B4A3A;
-    font-size: 1.1rem;
+    color: var(--s-muted);
+    font-size: 1.05rem;
     padding: 0.25rem;
     display: flex;
     align-items: center;
-    transition: color 0.3s ease;
 
     &:hover {
-      color: #A85C4A;
-    }
-
-    &:focus {
-      outline: none;
+      color: var(--s-rose-deep);
     }
   }
 }
 
 .admin-login-error {
-  background: #FFE5D9;
-  color: #A85C4A;
-  padding: 0.875rem 1.25rem;
-  border-radius: 12px;
-  font-family: "Inter", sans-serif;
-  font-size: 0.95rem;
-  border: 2px solid #FFB89A;
+  background: var(--s-blush);
+  color: var(--s-rose-deep);
+  padding: 0.75rem 1rem;
+  border-radius: 0.65rem;
+  font-family: var(--s-sans);
+  font-size: 0.9rem;
+  border: 1px solid var(--s-line);
   text-align: center;
 }
 
 .admin-login-submit {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
+  font-family: var(--s-sans);
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #FFFFFF;
-  background: #E8A87C;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fffaf9;
+  background: var(--s-rose-deep);
   border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
+  border-radius: 999px;
+  padding: 0.95rem 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(232, 168, 124, 0.3);
+  transition: background 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background: #D97757;
+    background: var(--s-rose);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(232, 168, 124, 0.5);
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 }
-

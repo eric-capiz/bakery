@@ -17,7 +17,7 @@ export interface DecodedToken {
 
 /**
  * Verifies the admin authentication token from the request cookies
- * @param req - Next.js API request object
+ * @param req Next.js API request object
  * @returns Decoded token if valid, null if invalid or missing
  */
 export function verifyAdminToken(req: NextApiRequest): DecodedToken | null {
@@ -29,14 +29,14 @@ export function verifyAdminToken(req: NextApiRequest): DecodedToken | null {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET as string);
-    
+
     // Type guard to ensure decoded is an object with expected properties
     if (typeof decoded !== 'object' || decoded === null) {
       return null;
     }
-    
+
     const tokenData = decoded as DecodedToken;
-    
+
     // Ensure admin flag is present
     if (!tokenData.admin || !tokenData.username) {
       return null;
@@ -65,4 +65,3 @@ export function requireAdmin(
 
   return decoded;
 }
-

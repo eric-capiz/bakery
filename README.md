@@ -2,7 +2,7 @@
 
 ![Project Image](https://i.ibb.co/cPTphPC/s.jpg)
 
-> This project was done for a bakery start up business where users can look at sample cakes and contact the owner to place orders.
+> Custom bakery site for browsing sample cakes, reading reviews, and booking a consultation with the baker.
 
 ---
 
@@ -12,7 +12,7 @@
 - [Features](#features)
 - [Future Features](#future-features)
 - [Build steps](#build-steps)
-- [Technologies/Libraries](#technologieslibraries)
+- [Technologies and Libraries](#technologies-and-libraries)
 - [How To Use](#how-to-use)
 - [Admin Access](#admin-access)
 - [Project Structure](#project-structure)
@@ -24,96 +24,58 @@
 
 ## Description
 
-I developed this site for a custom bakery business specializing in personalized cakes for any occasion. The site features a gallery of sample cakes, customer reviews, and a consultation booking system to help customers place orders.
+Site for a custom bakery that specializes in personalized cakes for any occasion. Guests can explore a sample gallery, leave reviews, learn about the baker, and request a consultation. An admin panel manages images, page copy, and account credentials through Redis backed APIs.
 
 ### Features
 
-**Public Features:**
-- **Home Page** - Hero section with customizable tagline and subtitle, features showcase, and specialties section
-- **Sample Cakes Gallery** - Dynamic gallery displaying all available cake images (35-50 images supported)
-- **Reviews Page** - Public review submission system with optional image uploads and names
-  - Users can submit reviews with title, description (max 500 chars), optional name, and optional image
-  - Reviews auto-post without admin approval
-  - Displays newest reviews first
-  - Anonymous display for reviews without names
-- **About Page** - Detailed baker information including:
-  - Meet the Baker introduction
-  - Experience & Education section
-  - "What I Bake" items list
-  - Working Hours & Contact information
-  - FAQ section with accordion-style layout
-- **Contact Page** - Consultation booking form with date/time picker
+**Public**
+- **Home** Silk editorial layout with CMS driven hero copy, features, specialties, gallery highlights, and a closing call to action
+- **Sample Cakes** Desktop sugar orbit: every cake sits on a rotating ring and can be focused into a center lens. Mobile uses a compact carousel. Tap to enlarge
+- **Reviews** Desktop whisper table: sealed notes scattered on a tabletop; pick one up to read. Mobile uses a compact carousel. Guests can submit a title, description (max 500 characters), optional name, and optional image
+- **About** Baker story, services, working hours, contact details, and FAQ accordion
+- **Contact** Consultation form with date and time picker
 
-**New feature:** A visual designer so visitors can assemble cakes and other custom pastries in the browser with a live preview while they change shapes, layers, colors, and similar options. A short lead form collects name, email, phone number, and a notes field where customers are asked to list any and all details. That form data is sent together with the structured data for what they built. The admin panel will gain an orders area so the baker can see each request as pending or completed along with the same contact and design information.
+**Build and Preview (work in progress)**
+- Visual pastry designer and 3D preview pages exist in the repo (`/build`, `/preview`) and are still being finished. Lead capture and design payload wiring are partially in place. Keep this area as WIP
 
-**Admin Features:**
-- **Secure Authentication System**
-  - JWT token-based authentication with HTTP-only cookies
-  - Password hashing with bcryptjs
-  - Admin can update username and password
-  - Default credentials: admin/admin (changeable)
-- **Image Management**
-  - Hero image management (must always have an image, defaults to cake1.jpg)
-  - Gallery images management (upload, replace, delete)
-  - Supports 35-50 images
-  - Images stored in `/public/img/Cakes/`
-  - Image registry stored in Redis
-- **Content Management System**
-  - **Home Page Content:**
-    - Edit hero tagline and subtitle
-    - Manage features (with emoji selector for icons)
-    - Edit specialties descriptions
-  - **About Page Content:**
-    - Edit baker introduction text
-    - Update experience & education information
-    - Edit working hours (per day)
-    - Update contact email and phone
-    - Manage "What I Bake" items (add/edit/delete, max 20 items)
-    - Manage FAQ questions (add/edit/delete, max 10 questions)
-  - Per-section save buttons (no auto-save)
-  - All changes persist to Redis database
+**Admin**
+- JWT auth with HTTP only cookies and bcrypt password hashing
+- Shared admin shell with overview, images, content, and settings
+- Hero and gallery image upload, replace, and delete
+- Home and About content editing with per section save
+- Default credentials: `admin` / `admin` (change after first login)
 
-**Technical Highlights:**
-- Complete Next.js migration from Create React App
-- Server-side API routes for all admin operations
-- Redis-based data storage (Upstash Redis/Vercel KV) for production
-- Secure admin authentication with session management
-- Mobile-responsive design with hamburger menu (768px breakpoint)
-- CSS animations using `react-intersection-observer` for scroll-triggered effects
+**Technical notes**
+- Next.js Pages Router with API routes
+- Upstash Redis for credentials, image registry, content, and reviews
+- Mobile first responsive layout (768px breakpoint for several desktop only interactions)
+- Scroll triggered motion via `react-intersection-observer`
 
-### Technologies/Libraries
+### Technologies and Libraries
 
-**Core Framework:**
-- React 18.3.1
-- Next.js 15.1.3 (Pages Router)
-- TypeScript 5.9.3
+**Core**
+- React 18
+- Next.js 15 (Pages Router)
+- TypeScript
+- SASS
 
-**Styling & UI:**
-- SASS (SCSS)
-- Reactstrap (for form components)
-- React Icons (for icons)
-- FontAwesome (for service icons)
+**UI**
+- React Icons
+- Reactstrap (forms)
+- React DatePicker (consultation)
+- React Intersection Observer
 
-**Authentication & Security:**
-- jsonwebtoken (JWT tokens for admin sessions)
-- bcryptjs (password hashing)
-- HTTP-only cookies (secure session storage)
+**Auth and data**
+- jsonwebtoken
+- bcryptjs
+- @upstash/redis
+- formidable (uploads)
+- uuid (unique file and review ids)
 
-**File Handling:**
-- formidable (for file uploads)
-- uuid (for generating unique file names)
-
-**Data Storage:**
-- @upstash/redis (Redis client for Vercel KV/Upstash)
-
-**UI Components & Animations:**
-- React DatePicker (for consultation form)
-- React Intersection Observer (for scroll-triggered animations)
-
-**Data Storage:**
-- Upstash Redis (Vercel KV) for persistent data storage
-- Images stored in `/public/img/` directory
-- Data stored in Redis (admin credentials, images registry, content, reviews)
+**Build and Preview WIP**
+- three
+- @react-three/fiber
+- @react-three/drei
 
 [Back To The Top](#sweet-dreams-bakery)
 
@@ -153,36 +115,36 @@ Choose **one** of (max five): **Cake**, **Cookie**, **Pie**, **Cupcake**, **Brow
 ### Cake (substeps)
 
 1. **Layer flavor** (baked layers): vanilla, chocolate, red velvet, marble, funfetti, lemon, carrot.
-2. **Number of tiers** (numeric input; min/max set with the bakery).
-3. **Layers per tier** (numeric input; min/max set with the bakery).
+2. **Number of tiers** (numeric input; min and max set with the bakery).
+3. **Layers per tier** (numeric input; min and max set with the bakery).
 4. **Size or servings** (guest count and/or standard sizes; exact control TBD with the bakery).
 5. **Filling** between layers (dropdown; options TBD with the bakery).
-6. **Frosting**: buttercream, chocolate buttercream, cream cheese, whipped cream, fondant, ganache, naked/semi-naked.
+6. **Frosting**: buttercream, chocolate buttercream, cream cheese, whipped cream, fondant, ganache, naked or semi naked.
 7. **Colors / theme** (short optional text).
 8. **Toppings and decorations** (curated checkboxes plus optional longer description).
 9. **Message on the cake** (short single line; character limit TBD).
-10. **Event / needed-by date** (and pickup or delivery note if needed).
+10. **Event / needed by date** (and pickup or delivery note if needed).
 11. **Dietary / allergies** (compact checkboxes or text).
 
-If the type changes later in the flow, **reset** fields that no longer apply (e.g. flavor and shape-specific options).
+If the type changes later in the flow, **reset** fields that no longer apply (for example flavor and shape specific options).
 
 ### Cookie (substeps)
 
 1. **Flavor or variety** (dropdown; options TBD with the bakery).
-2. **Quantity** (e.g. dozens or count; input style TBD).
-3. **Mix-ins, toppings, or finish** (curated options plus optional description; TBD).
+2. **Quantity** (for example dozens or count; input style TBD).
+3. **Mix ins, toppings, or finish** (curated options plus optional description; TBD).
 4. **Packaging** (optional, if offered).
 5. **Occasion note or short message** (optional).
-6. **Event / needed-by date**.
+6. **Event / needed by date**.
 7. **Dietary / allergies**.
 
 ### Pie (substeps)
 
 1. **Pie flavor or variety** (dropdown; options TBD).
-2. **Size** (e.g. whole; options TBD).
+2. **Size** (for example whole; options TBD).
 3. **Toppings or crust / finish style** (curated; TBD).
 4. **Colors / theme** (optional short text).
-5. **Event / needed-by date**.
+5. **Event / needed by date**.
 6. **Dietary / allergies**.
 
 ### Cupcake (substeps)
@@ -192,15 +154,15 @@ If the type changes later in the flow, **reset** fields that no longer apply (e.
 3. **Frosting** (same general categories as cake where applicable; list TBD).
 4. **Toppings and decorations** (curated plus optional description).
 5. **Message or topper text** (optional short line).
-6. **Event / needed-by date**.
+6. **Event / needed by date**.
 7. **Dietary / allergies**.
 
 ### Brownie (substeps)
 
 1. **Brownie flavor or style** (dropdown; options TBD).
 2. **Quantity or batch / pan size** (TBD with the bakery).
-3. **Toppings or finish** (e.g. frosting, drizzle, nuts; curated; TBD).
-4. **Event / needed-by date**.
+3. **Toppings or finish** (for example frosting, drizzle, nuts; curated; TBD).
+4. **Event / needed by date**.
 5. **Dietary / allergies**.
 
 [Back To The Top](#sweet-dreams-bakery)
@@ -211,7 +173,7 @@ If the type changes later in the flow, **reset** fields that no longer apply (e.
 
 ### Installation
 
-1. Fork/Clone the repository
+1. Fork or clone the repository
 2. Navigate to the project folder: `cd nandos-cakes`
 3. Install dependencies: `npm install`
 4. Start development server: `npm run dev`
@@ -219,23 +181,23 @@ If the type changes later in the flow, **reset** fields that no longer apply (e.
 
 ### Development Commands
 
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Create production build
-- `npm start` - Run production build locally
-- `npm run lint` - Run ESLint
+- `npm run dev` Start development server with hot reload
+- `npm run build` Create production build
+- `npm start` Run production build locally
+- `npm run lint` Run ESLint
 
 ### Admin Access
 
-1. Navigate to any page and click "Admin Login" in the navigation
+1. Open any page and choose Admin Login in the navigation
 2. Default credentials:
    - Username: `admin`
    - Password: `admin`
-3. **Important:** Change the default credentials immediately after first login
-4. Access admin features:
-   - **Admin Panel** (`/admin`) - Main dashboard
-   - **Update Credentials** (`/admin/settings`) - Change username/password
-   - **Manage Images** (`/admin/images`) - Upload/replace/delete hero and gallery images
-   - **Manage Content** (`/admin/content`) - Edit all site content
+3. Change the default credentials right after first login
+4. Admin routes:
+   - `/admin` Overview
+   - `/admin/settings` Update username and password
+   - `/admin/images` Hero and gallery images
+   - `/admin/content` Home and About copy
 
 ### Environment Variables
 
@@ -247,50 +209,44 @@ KV_REST_API_URL=https://your-redis-instance.upstash.io
 KV_REST_API_TOKEN=your-redis-token
 ```
 
-**Required for Production (Vercel):**
-- `JWT_SECRET` - Secret key for JWT token signing (required)
-- `KV_REST_API_URL` - Upstash Redis REST API URL (required)
-- `KV_REST_API_TOKEN` - Upstash Redis REST API token (required)
+**Required for production (Vercel)**
+- `JWT_SECRET` Secret for signing JWT tokens
+- `KV_REST_API_URL` Upstash Redis REST API URL
+- `KV_REST_API_TOKEN` Upstash Redis REST API token
 
-**Note:** This project uses Upstash Redis (Vercel KV) for persistent data storage. You'll need to create a Redis database in Upstash and add the credentials to your Vercel environment variables.
+Create a Redis database in Upstash and add those values to Vercel environment variables.
 
 ### Project Structure
 
 ```
 nandos-cakes/
-├── pages/              # Next.js pages and API routes
-│   ├── api/           # API endpoints
-│   │   ├── auth/      # Authentication routes
-│   │   ├── images/    # Image management routes
-│   │   ├── content/   # Content management routes
-│   │   └── reviews/   # Review submission/deletion routes
-│   └── admin/         # Admin panel pages
+├── pages/                 Next.js pages and API routes
+│   ├── api/               Auth, images, content, reviews, build requests
+│   ├── admin/             Admin screens
+│   ├── build.tsx          WIP designer entry
+│   └── preview.tsx        WIP 3D preview entry
 ├── src/
-│   ├── components/    # React components
-│   ├── pages/         # Page components
-│   └── styles/        # SCSS stylesheets
-├── public/
-│   └── img/           # Static images (Cakes, reviews)
-├── lib/               # Utility libraries
-│   ├── kv.ts         # Redis/KV helper functions
-│   ├── auth.ts       # Authentication utilities
-│   └── constants.ts  # Application constants
+│   ├── components/        UI, admin shell, build designer, preview canvas
+│   ├── pages/             Page views (Home, Sample Cakes, Reviews, and more)
+│   └── styles/            SCSS partials
+├── public/img/            Cake and review images
+├── lib/                   Auth, Redis helpers, constants, build catalog
 └── package.json
 ```
 
 ### Deployment
 
-**Live Site:** [bakery-ec.vercel.app](https://bakery-ec.vercel.app)
+**Live site:** [bakery-ec.vercel.app](https://bakery-ec.vercel.app)
 
-This project is deployed on Vercel:
+Deployed on Vercel:
 
-1. Push your code to GitHub
+1. Push code to GitHub
 2. Import the project in Vercel
-3. Set Framework Preset to "Next.js"
-4. Add required environment variables (see below)
-5. Deploy!
+3. Set Framework Preset to Next.js
+4. Add the environment variables above
+5. Deploy
 
-**Note:** On first deployment, data will be initialized with default values in Redis. Admin will need to log in and configure content/images.
+On first deploy, Redis initializes with defaults. Log in as admin to set content and images.
 
 ## License
 
@@ -304,6 +260,6 @@ Copyright (c) [2026] [Eric Capiz]
 
 ## Author Info
 
-- LinkedIn - [@ericcapiz](https://www.linkedin.com/in/eric-capiz/)
+- LinkedIn [@ericcapiz](https://www.linkedin.com/in/eric-capiz/)
 
 [Back To The Top](#sweet-dreams-bakery)
