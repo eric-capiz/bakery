@@ -9,6 +9,8 @@
 ## Table of Contents
 
 - [Description](#description)
+- [Business Sites](#business-sites)
+- [Planned Features](#planned-features)
 - [Features](#features)
 - [Technologies/Libraries](#technologieslibraries)
 - [How To Use](#how-to-use)
@@ -23,6 +25,39 @@
 ## Description
 
 I developed this site for a custom bakery business specializing in personalized cakes for any occasion. The site features a gallery of sample cakes, customer reviews, and a consultation booking system to help customers place orders.
+
+The same codebase has been extended into additional small-business site variants on separate branches. Each is meant to deploy as its own Vercel project (own domain, env vars, and Redis/KV) so admin changes stay isolated per business.
+
+### Business Sites
+
+| Business | Branch | Notes |
+|----------|--------|--------|
+| Bakery | `main` | Original Sweet Dreams / bakery site |
+| Florist | `florist` | Flower shop (Brume) with gallery, about, reviews, booking |
+| Mechanic | `mechanic` | Auto shop + mobile service with shop/mobile pricing |
+| Landscaping | `landscape` | Outdoor care (ELLIS): grounds, power washing, mobile detailing |
+
+Default admin login on the florist, mechanic, and landscape branches is `breezy` / `breezy` (changeable in admin settings).
+
+**Deploy tip:** Create one Vercel project per branch, set that branch as the Production Branch, and use a separate Redis/KV database for each project.
+
+### Planned Features
+
+Interactive tools that turn each site from a brochure into a full product:
+
+**Bakery (`main`)**
+- Build-your-pastry flow (in progress): customers configure cake/pastry options and see a sample preview of what they are requesting, then submit for booking.
+
+**Florist (`florist`)**
+- Bouquet builder: choose size/style, custom vase, and add-ons (teddy bear, chocolate, card, etc.), with a composed preview and price range before booking.
+
+**Mechanic (`mechanic`)**
+- Service quote estimator: enter vehicle details and needed work, then show an estimate with parts, labor hours, and a clear non-binding total range (final price after inspection).
+
+**Landscaping (`landscape`)**
+- Grounds intake: grass type, approx lawn dimensions, weed pulling / gardening, flowers, fruits, veggies.
+- Power washing: enter surface dimensions (and surface type) for an estimate range.
+- Car detailing: car type/details plus optional photo upload so the admin can see condition and send a real quote (photos aid review; they do not auto-price dirtiness).
 
 ### Features
 
