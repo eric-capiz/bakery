@@ -1,0 +1,2 @@
+import Collection from "../src/pages/Collection";
+export default Collection;

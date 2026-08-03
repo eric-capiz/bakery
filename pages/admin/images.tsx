@@ -62,7 +62,7 @@ const AdminImages = () => {
       setError('Failed to load images');
       // Set default data to prevent crashes
       setImageData({
-        heroImage: 'cake1.jpg',
+        heroImage: 'arr1.jpg',
         galleryImages: [],
         allImages: [],
       });
@@ -214,7 +214,7 @@ const AdminImages = () => {
   return (
     <AdminShell
       title="Image Management"
-      subtitle="Upload, replace, and organize hero and gallery images."
+      subtitle="Upload, replace, and organize hero and arrangement gallery images under /img/Arrangements/."
     >
 
         {error && (
@@ -239,15 +239,15 @@ const AdminImages = () => {
                 Hero Image
               </h2>
               <p style={{ color: '#6d5c60', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                This image appears in the hero section on the home page. There must always be a hero image (defaults to cake1.jpg if none is set).
+                This image can be used as a featured arrangement visual. There must always be a hero image (defaults to arr1.jpg in /img/Arrangements/ if none is set). The home page also uses dedicated studio photography under /img/home/.
               </p>
 
               {imageData.heroImage && (
                 <div style={{ marginBottom: '2rem' }}>
                   <div style={{ maxWidth: '400px', margin: '0 auto', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
                     <img 
-                      src={`/img/Cakes/${imageData.heroImage}`} 
-                      alt="Hero" 
+                      src={`/img/Arrangements/${imageData.heroImage}`} 
+                      alt="Hero arrangement" 
                       style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                   </div>
@@ -257,10 +257,10 @@ const AdminImages = () => {
                 </div>
               )}
 
-              <form onSubmit={handleReplace.bind(null, imageData.heroImage || 'cake1.jpg')} style={{ marginBottom: '1.5rem' }}>
+              <form onSubmit={handleReplace.bind(null, imageData.heroImage || 'arr1.jpg')} style={{ marginBottom: '1.5rem' }}>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                   <input
-                    ref={(el) => { replaceInputRefs.current[imageData.heroImage || 'cake1.jpg'] = el; }}
+                    ref={(el) => { replaceInputRefs.current[imageData.heroImage || 'arr1.jpg'] = el; }}
                     type="file"
                     accept="image/*"
                     required
@@ -312,7 +312,7 @@ const AdminImages = () => {
                           }}
                         >
                           <img 
-                            src={`/img/Cakes/${img}`} 
+                            src={`/img/Arrangements/${img}`} 
                             alt={img}
                             style={{ width: '100%', height: 'auto', borderRadius: '4px' }}
                           />
@@ -329,10 +329,10 @@ const AdminImages = () => {
             {/* Gallery Images Section */}
             <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
               <h2 style={{ fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: '2rem', color: '#3f3034', marginBottom: '1.5rem' }}>
-                Gallery Images
+                Arrangement Gallery
               </h2>
               <p style={{ color: '#6d5c60', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                These images appear in the Sample Cakes gallery page. You can add, replace, or delete images.
+                These images appear on the Arrangements gallery page (route /sample-cakes). Files live under /img/Arrangements/ (arr1–arr8 by default). You can add, replace, or delete images.
               </p>
 
               {/* Upload New Images */}
@@ -389,7 +389,7 @@ const AdminImages = () => {
                     >
                       <div style={{ marginBottom: '1rem', borderRadius: '8px', overflow: 'hidden', aspectRatio: '1', background: '#f4e8e5' }}>
                         <img 
-                          src={`/img/Cakes/${img}`} 
+                          src={`/img/Arrangements/${img}`} 
                           alt={img}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         />

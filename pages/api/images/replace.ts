@@ -6,7 +6,7 @@ import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 import { MAX_FILE_SIZE_BYTES } from '../../../lib/constants';
 
-const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
+const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Arrangements');
 const IMAGES_KEY = 'images';
 
 export const config = {

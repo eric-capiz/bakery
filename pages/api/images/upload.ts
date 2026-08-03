@@ -6,7 +6,7 @@ import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 import { MAX_FILE_SIZE_BYTES } from '../../../lib/constants';
 
-const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
+const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Arrangements');
 const IMAGES_KEY = 'images';
 
 export const config = {
@@ -80,7 +80,7 @@ export default async function handler(
 
         // Update images registry in Redis
         const imagesDataStr = await getData(IMAGES_KEY);
-        const imagesData = imagesDataStr ? JSON.parse(imagesDataStr) : { heroImage: 'cake1.jpg', galleryImages: [] };
+        const imagesData = imagesDataStr ? JSON.parse(imagesDataStr) : { heroImage: 'arr1.jpg', galleryImages: [] };
         uploadedFiles.forEach((fileName) => {
           if (!imagesData.galleryImages.includes(fileName)) {
             imagesData.galleryImages.push(fileName);

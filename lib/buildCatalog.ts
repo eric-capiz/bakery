@@ -7,17 +7,17 @@ export type FlavorOption = {
 
 /**
  * Once per step: checkboxes + detail textarea below.
- * Explains that blank detail = bakery may choose.
+ * Explains that blank detail = studio may choose.
  */
 export const CHECKBOX_WITH_DETAIL_TEXTAREA_NOTICE =
-  "Add specifics in the detail box below when you care about brand, type, or look. If you leave it blank, the bakery may use their usual choice or any fitting option—for example, white chocolate chunks could be any white-chocolate style they stock, and candy-coated chocolates could be any similar candy.";
+  "Add specifics in the detail box below when you care about stem, palette, or look. If you leave it blank, the studio may use their usual choice or any fitting seasonal option.";
 
 /**
  * Once per step: checkboxes only—no text area in this section.
  * Points to lead notes; same “may vary if unspecified” idea.
  */
 export const CHECKBOX_LEAD_NOTES_SECTION_NOTICE =
-  'If something needs to be exact, say so under “Your details” notes or when you edit contact. Otherwise the bakery may use any suitable option for what you checked.';
+  'If something needs to be exact, say so under “Your details” notes or when you edit contact. Otherwise the studio may use any suitable option for what you checked.';
 
 /** Cake layer flavors and cupcake flavors (README). */
 export const CAKE_CUPCAKE_FLAVORS: FlavorOption[] = [

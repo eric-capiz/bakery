@@ -4,10 +4,14 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta name="theme-color" content="#e9d6d2" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta name="theme-color" content="#121016" />
         <meta
           name="description"
-          content="Custom cakes for any occasion. Sweet Dreams Bakery"
+          content="BRUME — floral design for evenings that matter. Bridal bouquets, tables, and private celebrations."
         />
         <link rel="icon" type="image/png" href="/logo3.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +21,7 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
       </Head>

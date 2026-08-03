@@ -11,8 +11,8 @@ import {
   FaEnvelope,
   FaPhone,
   FaComments,
+  FaLeaf,
 } from "react-icons/fa";
-import { BsCake } from "react-icons/bs";
 
 interface ConsultationData {
   name: string;
@@ -194,7 +194,7 @@ const ConsultationForm = () => {
 
       <FormGroup className="input-group">
         <div className="icon-input">
-          <BsCake className="input-icon" />
+          <FaLeaf className="input-icon" />
           <Input
             type="select"
             name="eventType"
@@ -204,11 +204,13 @@ const ConsultationForm = () => {
             }
             required
           >
-            <option value="">Select Event Type</option>
-            <option value="birthday">Birthday</option>
+            <option value="">Select Occasion</option>
             <option value="wedding">Wedding</option>
+            <option value="birthday">Birthday</option>
             <option value="anniversary">Anniversary</option>
-            <option value="corporate">Corporate</option>
+            <option value="corporate">Corporate / Event</option>
+            <option value="sympathy">Sympathy</option>
+            <option value="everyday">Everyday Bouquet</option>
             <option value="other">Other</option>
           </Input>
         </div>
@@ -264,19 +266,19 @@ const ConsultationForm = () => {
             onChange={(e) =>
               handleConsultationChange("message", e.target.value)
             }
-            placeholder="Additional Details or Questions"
+            placeholder="Palette, venue, date, stem preferences, or other arrangement details"
             required
           />
         </div>
       </FormGroup>
 
       <Button type="submit" color="primary" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Submit Consultation Request"}
+        {isSubmitting ? "Sending..." : "Submit Floral Consultation"}
       </Button>
 
       {submitStatus === "success" && (
         <div className="success-message">
-          Thank you! Your consultation request has been sent successfully.
+          Thank you! Your floral consultation request has been sent successfully.
         </div>
       )}
       {submitStatus === "error" && (

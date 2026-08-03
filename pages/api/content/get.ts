@@ -9,104 +9,104 @@ function getDefaultContent() {
     const defaultContent = {
       home: {
         hero: {
-          tagline: "The More",
-          taglineAccent: "Cake",
-          taglineEnd: "The Batter",
-          subtitle: "Contact me for all your sweet tooth needs!"
+          tagline: "Blooms shaped",
+          taglineAccent: "with intention",
+          taglineEnd: "",
+          subtitle: "Luxurious botanical design for weddings, seasons, and quiet celebrations."
         },
         features: [
           {
-            icon: "⚡",
-            title: "Fast Service",
-            description: "Within 24hrs in most cases!"
+            icon: "🌿",
+            title: "Seasonal First",
+            description: "Every stem is chosen for peak season beauty and lasting presence."
           },
           {
-            icon: "💰",
-            title: "Affordable",
-            description: "Competitive pricing with promotional discounts available!"
+            icon: "✨",
+            title: "Bespoke Design",
+            description: "Arrangements composed around your palette, space, and story."
           },
           {
-            icon: "🎨",
-            title: "Custom Made",
-            description: "Dream big! We bring your vision to life."
+            icon: "🪴",
+            title: "Studio Craft",
+            description: "Quiet precision from sketch to finished botanical form."
           },
           {
-            icon: "👨‍🍳",
-            title: "Professional",
-            description: "8+ years of professional baking experience."
+            icon: "💐",
+            title: "Thoughtful Care",
+            description: "Guidance on longevity, placement, and seasonal refresh."
           }
         ],
         specialties: [
           {
-            title: "Birthday Cakes",
-            description: "Make every birthday unforgettable with our custom designs."
+            title: "Wedding Florals",
+            description: "Ceremony and reception designs that feel intentional, soft, and unforgettable."
           },
           {
-            title: "Wedding Cakes",
-            description: "Elegant and delicious cakes for your special day."
+            title: "Seasonal Bouquets",
+            description: "Hand-tied arrangements that celebrate what the garden offers now."
           },
           {
-            title: "Anniversary Cakes",
-            description: "Celebrate your milestones with style."
+            title: "Event Installations",
+            description: "Architectural blooms for dinners, launches, and private gatherings."
           },
           {
-            title: "Corporate Events",
-            description: "Professional cakes for your business occasions."
+            title: "Editorial Styling",
+            description: "Botanical direction for photography, brand stories, and intimate sets."
           }
         ]
       },
       about: {
         baker: {
-          intro: "Hi, I'm Eric! I've been passionate about baking since I was young, and I've been creating custom cakes professionally for over 8 years. What started as a childhood hobby has grown into a dedicated craft where I bring your sweetest dreams to life, one cake at a time.",
+          intro: "Hi, I'm the floral designer behind Liora Atelier. For over a decade I've composed botanical work for weddings, private homes, and editorial spaces — always guided by seasonality, restraint, and the quiet luxury of well-chosen stems.",
           experience: {
-            main: "With over 8 years of professional baking experience, I've dedicated my career to perfecting the art of custom cake creation.",
-            education: "Culinary Institute of Pastry Arts, Certificate in Advanced Baking & Pastry",
-            specialization: "Custom Cake Design, Sugar Art, Fondant Work",
-            years: "8+ years professional, 15+ years total",
-            certifications: "ServSafe Certified, Advanced Cake Decorating Certification"
+            main: "With over 10 years of professional floral design experience, I've dedicated my practice to refined botanical composition for celebrations and everyday beauty.",
+            education: "Floral Design Institute, Advanced Botanical Composition Certificate",
+            specialization: "Wedding Florals, Seasonal Arrangements, Event Installations",
+            years: "10+ years professional floral design",
+            certifications: "Certified Floral Designer, Sustainable Sourcing Practices"
           },
           whatIBake: [
-            "Custom Cakes",
-            "Cupcakes",
-            "Cookies",
-            "Brownies",
-            "Pies & Tarts",
-            "Cheesecakes",
-            "Birthday Cakes",
-            "Wedding Cakes",
-            "Anniversary Cakes",
-            "Corporate Cakes"
+            "Wedding Florals",
+            "Bridal Bouquets",
+            "Seasonal Arrangements",
+            "Event Installations",
+            "Centerpieces",
+            "Editorial Styling",
+            "Sympathy Tributes",
+            "Subscription Blooms",
+            "Workshop Experiences",
+            "Private Consultations"
           ],
           hours: {
-            monday: "9:00 AM - 6:00 PM",
-            tuesday: "9:00 AM - 6:00 PM",
-            wednesday: "9:00 AM - 6:00 PM",
-            thursday: "9:00 AM - 6:00 PM",
-            friday: "9:00 AM - 6:00 PM",
-            saturday: "10:00 AM - 4:00 PM",
+            monday: "9:00 AM - 5:00 PM",
+            tuesday: "9:00 AM - 5:00 PM",
+            wednesday: "9:00 AM - 5:00 PM",
+            thursday: "9:00 AM - 5:00 PM",
+            friday: "9:00 AM - 5:00 PM",
+            saturday: "10:00 AM - 3:00 PM",
             sunday: "Closed"
           },
           contact: {
-            email: "info@sweetdreamsbakery.com",
-            phone: "(555) 123-4567"
+            email: "hello@lioraatelier.com",
+            phone: "(555) 014-8820"
           }
         },
         faq: [
           {
-            question: "How Long Does Delivery Take?",
-            answer: "Delivery is available within 24hrs in most cases!"
+            question: "How far in advance should I book?",
+            answer: "Weddings and large events are best booked 4–8 weeks ahead. Everyday bouquets can often be arranged within a few days."
           },
           {
-            question: "What's Your Specialty?",
-            answer: "I specialize in custom cakes for any occasion!"
+            question: "What's your specialty?",
+            answer: "Seasonal, bespoke floral design — from intimate bouquets to full wedding and event installations."
           },
           {
-            question: "What Forms Of Payment Do You Accept?",
-            answer: "Cash, Venmo, Zelle, and Cash App."
+            question: "What forms of payment do you accept?",
+            answer: "Cash, Venmo, Zelle, and major cards."
           },
           {
-            question: "Do You Deliver?",
-            answer: "Yes! Delivery is available within a 25 mile radius."
+            question: "Do you deliver?",
+            answer: "Yes. Local delivery is available within a 25 mile radius, with studio pickup by arrangement."
           }
         ]
       }
@@ -148,6 +148,24 @@ export default async function handler(
       content = getDefaultContent();
     }
 
+    // Migrate leftover bakery CMS payloads to florist defaults
+    const accent = content?.home?.hero?.taglineAccent;
+    const subtitle = content?.home?.hero?.subtitle || '';
+    const intro = content?.about?.baker?.intro || '';
+    const looksLikeBakery =
+      accent === 'Cake' ||
+      /sweet tooth|custom cakes|baking/i.test(subtitle) ||
+      /Eric!|baking since|custom cakes/i.test(intro);
+
+    if (looksLikeBakery) {
+      content = getDefaultContent();
+      try {
+        await setData(CONTENT_KEY, JSON.stringify(content));
+      } catch (saveError) {
+        console.error('Failed to migrate bakery content to florist defaults:', saveError);
+      }
+    }
+
     return res.status(200).json(content);
   } catch (error) {
     console.error('Get content error:', error);
@@ -160,4 +178,3 @@ export default async function handler(
     }
   }
 }
-

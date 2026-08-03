@@ -207,7 +207,7 @@ export function CakeSubsteps({ state, patch }: Props) {
         <BuildSubstepBlock
           step={11}
           title="Event or needed-by date"
-          lead="Pickup or delivery timing can be finalized with the bakery."
+          lead="Pickup or delivery timing can be finalized with the studio."
         >
           <BuildTextField
             id="cake-event-date"
@@ -223,7 +223,7 @@ export function CakeSubsteps({ state, patch }: Props) {
         <BuildSubstepBlock
           step={12}
           title="Dietary and allergies"
-          lead="Important for safety; add anything the bakery should know."
+          lead="Important for planning; add anything the studio should know."
         >
           <BuildTextField
             id="cake-dietary"

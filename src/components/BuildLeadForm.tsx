@@ -131,7 +131,7 @@ const BuildLeadForm = ({
       <p className="build-field-legend">
         <BsCake className="build-field-legend-cake" aria-hidden />
         <span>
-          A cake marks each line we use to know who you are and how to reach
+          A bloom marks each line we use to know who you are and how to reach
           you once you send this.
         </span>
       </p>
@@ -219,7 +219,7 @@ const BuildLeadForm = ({
               setNotes(ev.target.value);
               onDirtyChange?.(true);
             }}
-            placeholder="Optional: list any and all details (flavors, date needed, allergies, inspiration links, etc.)"
+            placeholder="Optional: palette, date needed, venue, stem preferences, inspiration links, etc."
             maxLength={MAX_BUILD_NOTES_LENGTH}
             rows={5}
           />

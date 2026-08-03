@@ -5,7 +5,7 @@ import { getData, setData } from '../../../lib/kv';
 import { requireAdmin } from '../../../lib/auth';
 
 const IMAGES_KEY = 'images';
-const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
+const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Arrangements');
 
 export default async function handler(
   req: NextApiRequest,

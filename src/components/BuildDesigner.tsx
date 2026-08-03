@@ -132,15 +132,15 @@ const BuildDesigner = ({
       </div>
 
       <div className="build-designer-work">
-        <h3 className="build-designer-step-title">Step 1: Pastry type</h3>
+        <h3 className="build-designer-step-title">Step 1: Arrangement style</h3>
         <p className="build-designer-step-lead">
-          Choose what you are ordering. Next you will pick flavors and add
-          details step by step.
+          Choose a starting style for your bouquet or arrangement. Next you will
+          add details step by step.
         </p>
         <div
           className="build-pastry-grid"
           role="group"
-          aria-label="Pastry type"
+          aria-label="Arrangement style"
         >
           {PASTRY_TYPES.map((id) => {
             const Icon = PASTRY_ICONS[id];
@@ -210,7 +210,7 @@ const BuildDesigner = ({
             }
             role="status"
           >
-            Selected pastry: <strong>{PASTRY_LABELS[pastryType]}</strong>
+            Selected style: <strong>{PASTRY_LABELS[pastryType]}</strong>
             {primaryLabel ? (
               <>
                 {" · "}
@@ -219,7 +219,7 @@ const BuildDesigner = ({
             ) : (
               <span className="build-designer-selection-hint-muted">
                 {" "}
-                — pick a flavor or variety in step 2 to continue.
+                — pick a variety in step 2 to continue.
               </span>
             )}
           </p>
@@ -244,8 +244,8 @@ const BuildDesigner = ({
         {showSubmitArea ? (
           <div className="build-designer-submit-area build-designer-submit-area--with-last-step">
             <p className="build-designer-submit-lead">
-              Finish the step above, then send your pastry choices with the
-              same contact details we have for this build.
+              Finish the step above, then send your arrangement choices with the
+              same contact details we have for this design.
             </p>
             <Button
               type="button"

@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import AdminShell from '../../src/components/AdminShell';
 
 const FEATURE_EMOJIS = [
-  '⚡', '💰', '🎨', '👨‍🍳', '⭐', '❤️', '🎂', '🍰', '🧁', '🍪',
-  '🥧', '🍩', '🎁', '🎉', '✨', '🔥', '💎', '🏆', '🎯', '🚀',
-  '💪', '🌟', '💫', '🎊', '🎈', '🎀', '🍓', '🍒', '🍇', '🍊',
-  '🍋', '🍌', '🍉', '🍑', '🍍', '🥭', '🍎', '🍏', '🍐',
+  '🌿', '💐', '🌸', '🌷', '🌹', '🌺', '🌻', '🌼', '🍃', '🪴',
+  '✨', '💫', '⭐', '💎', '🎁', '🎉', '🎀', '🤍', '💚', '🕊️',
+  '⚡', '🎨', '🏆', '🎯', '🌟', '🎊', '🎈', '🌾', '🌱',
+  '🍀', '🪻', '🌳', '🌲', '🌴', '🌵', '🍋', '🍊', '🍑',
 ];
 
 interface ContentData {
@@ -263,10 +263,10 @@ const AdminContent = () => {
     setSaving('baker-intro');
     try {
       await updateContent('about', 'baker.intro', bakerIntro);
-      setSuccess('Baker intro saved successfully!');
+      setSuccess('Florist intro saved successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError('Failed to save baker intro');
+      setError('Failed to save florist intro');
     } finally {
       setSaving(null);
     }
@@ -325,10 +325,10 @@ const AdminContent = () => {
       for (const item of whatIBakeData) {
         await updateArrayItem('about', 'baker.whatIBake', 'add', undefined, item, 20);
       }
-      setSuccess('What I Bake section saved successfully!');
+      setSuccess('What I Create section saved successfully!');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
-      setError('Failed to save What I Bake section');
+      setError('Failed to save What I Create section');
     } finally {
       setSaving(null);
     }
@@ -367,7 +367,7 @@ const AdminContent = () => {
   return (
     <AdminShell
       title="Content Management"
-      subtitle="Edit home and about page copy in one place."
+      subtitle="Edit Brume home and practice page copy in one place."
     >
 
         {/* Section Tabs */}
@@ -480,7 +480,7 @@ const AdminContent = () => {
                     <div className="admin-panel-heading">
                       <h2>Features Section</h2>
                       <p className="admin-panel-desc">
-                        Updates the &quot;Why Choose Us&quot; section on the Home page.
+                        Updates the approach / features section on the Home page.
                       </p>
                     </div>
                     <button
@@ -516,7 +516,7 @@ const AdminContent = () => {
                                 aria-haspopup="listbox"
                               >
                                 <span className="admin-emoji-preview" aria-hidden="true">
-                                  {feature.icon || '🎂'}
+                                  {feature.icon || '🌿'}
                                 </span>
                                 <span className="admin-emoji-trigger-copy">
                                   <span className="admin-emoji-trigger-label">
@@ -607,6 +607,9 @@ const AdminContent = () => {
                   <div className="admin-panel-header">
                     <div className="admin-panel-heading">
                       <h2>Specialties Section</h2>
+                      <p className="admin-panel-desc">
+                        Floral specialties shown on the Home page (weddings, seasonal bouquets, installations, and more).
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -663,11 +666,11 @@ const AdminContent = () => {
 
             {activeSection === 'about' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                {/* Meet the Baker */}
+                {/* Meet the Florist (CMS key: baker) */}
                 <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
                   <div className="admin-panel-header">
                     <div className="admin-panel-heading">
-                      <h2>Meet the Baker</h2>
+                      <h2>Meet the Florist</h2>
                     </div>
                     <button
                       type="button"
@@ -766,13 +769,13 @@ const AdminContent = () => {
                   </div>
                 </div>
 
-                {/* What I Bake */}
+                {/* What I Create (CMS key: whatIBake) */}
                 <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
                   <div className="admin-panel-header">
                     <div className="admin-panel-heading">
-                      <h2>What I Bake</h2>
+                      <h2>What I Create</h2>
                       <p className="admin-panel-desc">
-                        Maximum 20 items allowed. You can add, edit, or delete items. Click &quot;Save Items&quot; to save changes.
+                        Arrangement and service tags (maximum 20). Add floral specialties such as bridal bouquets or event installations. Click &quot;Save Items&quot; to save changes.
                       </p>
                     </div>
                     <button
@@ -826,7 +829,7 @@ const AdminContent = () => {
                       <input
                         type="text"
                         id="new-bake-item"
-                        placeholder="Enter new item name"
+                        placeholder="Enter arrangement or service name"
                         style={{ flex: 1, padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {

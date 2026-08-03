@@ -21,13 +21,29 @@ export default async function handler(
     
     if (!adminDataStr) {
       // Initialize with defaults
-      const defaultHash = bcrypt.hashSync('admin', 10);
+      const defaultHash = bcrypt.hashSync('breezy', 10);
       const defaultAdmin = {
-        username: 'admin',
+        username: 'breezy',
         passwordHash: defaultHash,
       };
       adminDataStr = JSON.stringify(defaultAdmin);
       await setData(ADMIN_KEY, adminDataStr);
+    } else {
+      // Migrate legacy admin credentials to breezy/breezy
+      try {
+        const existing = JSON.parse(adminDataStr);
+        if (existing.username === 'admin') {
+          const breezyHash = bcrypt.hashSync('breezy', 10);
+          const migratedAdmin = {
+            username: 'breezy',
+            passwordHash: breezyHash,
+          };
+          adminDataStr = JSON.stringify(migratedAdmin);
+          await setData(ADMIN_KEY, adminDataStr);
+        }
+      } catch (migrateError) {
+        console.error('Failed to migrate admin credentials:', migrateError);
+      }
     }
     
     const adminData = JSON.parse(adminDataStr);
@@ -76,4 +92,3 @@ export default async function handler(
     });
   }
 }
-

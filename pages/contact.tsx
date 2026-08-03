@@ -1,4 +1,12 @@
-import Contact from '../src/pages/Contact'
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-export default Contact
+export default function ContactRedirect() {
+  const router = useRouter();
 
+  useEffect(() => {
+    router.replace("/reserve");
+  }, [router]);
+
+  return null;
+}

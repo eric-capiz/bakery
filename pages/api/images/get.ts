@@ -4,7 +4,18 @@ import path from 'path';
 import { getData, setData } from '../../../lib/kv';
 
 const IMAGES_KEY = 'images';
-const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Cakes');
+const IMAGES_DIR = path.join(process.cwd(), 'public', 'img', 'Arrangements');
+const DEFAULT_GALLERY = [
+  'arr1.jpg',
+  'arr2.jpg',
+  'arr3.jpg',
+  'arr4.jpg',
+  'arr5.jpg',
+  'arr6.jpg',
+  'arr7.jpg',
+  'arr8.jpg',
+];
+const DEFAULT_HERO = 'arr1.jpg';
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,10 +31,10 @@ export default async function handler(
     let imagesData: { heroImage: string; galleryImages: string[] };
     
     if (!imagesDataStr) {
-      // Initialize with defaults
+      // Initialize with Arrangements defaults
       imagesData = {
-        heroImage: 'cake1.jpg',
-        galleryImages: [],
+        heroImage: DEFAULT_HERO,
+        galleryImages: [...DEFAULT_GALLERY],
       };
     } else {
       imagesData = JSON.parse(imagesDataStr);
@@ -33,7 +44,17 @@ export default async function handler(
       }
       // Ensure heroImage exists
       if (!imagesData.heroImage) {
-        imagesData.heroImage = 'cake1.jpg';
+        imagesData.heroImage = DEFAULT_HERO;
+      }
+      // Migrate bakery cake filenames to florist arrangements
+      const cakeLike =
+        /^cake/i.test(imagesData.heroImage || '') ||
+        imagesData.galleryImages.some((img) => /^cake/i.test(img));
+      if (cakeLike) {
+        imagesData = {
+          heroImage: DEFAULT_HERO,
+          galleryImages: [...DEFAULT_GALLERY],
+        };
       }
     }
 
@@ -44,15 +65,24 @@ export default async function handler(
       allImages.push(...files.filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file)));
     }
 
-    // Ensure hero image exists, default to cake1.jpg if not
+    // Ensure hero image exists, default to arr1.jpg if not
     if (!imagesData.heroImage || !allImages.includes(imagesData.heroImage)) {
-      imagesData.heroImage = allImages.includes('cake1.jpg') ? 'cake1.jpg' : (allImages[0] || 'cake1.jpg');
+      imagesData.heroImage = allImages.includes(DEFAULT_HERO)
+        ? DEFAULT_HERO
+        : (allImages[0] || DEFAULT_HERO);
     }
 
     // Ensure gallery images only include files that exist
     imagesData.galleryImages = imagesData.galleryImages.filter((img: string) => 
       allImages.includes(img) && img !== imagesData.heroImage
     );
+
+    // Seed empty gallery with default arrangements when available
+    if (imagesData.galleryImages.length === 0) {
+      imagesData.galleryImages = DEFAULT_GALLERY.filter(
+        (img) => allImages.includes(img) && img !== imagesData.heroImage
+      );
+    }
 
     // Add any new images from directory that aren't in gallery yet
     allImages.forEach((img) => {
@@ -77,4 +107,3 @@ export default async function handler(
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
-

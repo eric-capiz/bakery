@@ -1,4 +1,3 @@
-import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import Toggle from "./Toggle";
 
@@ -7,8 +6,29 @@ interface FAQ {
   answer: string;
 }
 
+const DEFAULT_FAQS: FAQ[] = [
+  {
+    question: "How far in advance should I book?",
+    answer:
+      "Weddings and large events are best booked 4–8 weeks ahead. Everyday bouquets can often be arranged within a few days.",
+  },
+  {
+    question: "What's your specialty?",
+    answer:
+      "Seasonal, bespoke floral design — from intimate bouquets to full wedding and event installations.",
+  },
+  {
+    question: "What forms of payment do you accept?",
+    answer: "Cash, Venmo, Zelle, and major cards.",
+  },
+  {
+    question: "Do you deliver?",
+    answer:
+      "Yes. Local delivery is available within a 25 mile radius, with studio pickup by arrangement.",
+  },
+];
+
 const FaqSection = () => {
-  const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
   const [faqs, setFaqs] = useState<FAQ[]>([]);
 
   useEffect(() => {
@@ -19,44 +39,28 @@ const FaqSection = () => {
         if (data.about?.faq && Array.isArray(data.about.faq)) {
           setFaqs(data.about.faq);
         } else {
-          // Fallback to default FAQs
-          setFaqs([
-            { question: "How Long Does Delivery Take?", answer: "Delivery is available within 24hrs in most cases!" },
-            { question: "What's Your Specialty?", answer: "I specialize in custom cakes for any occasion!" },
-            { question: "What Forms Of Payment Do You Accept?", answer: "Cash, Venmo, Zelle, and Cash App." },
-            { question: "Do You Deliver?", answer: "Yes! Delivery is available within a 25 mile radius." }
-          ]);
+          setFaqs(DEFAULT_FAQS);
         }
       } catch (err) {
         console.error("Failed to fetch FAQ content:", err);
-        // Fallback to default FAQs
-        setFaqs([
-          { question: "How Long Does Delivery Take?", answer: "Delivery is available within 24hrs in most cases!" },
-          { question: "What's Your Specialty?", answer: "I specialize in custom cakes for any occasion!" },
-          { question: "What Forms Of Payment Do You Accept?", answer: "Cash, Venmo, Zelle, and Cash App." },
-          { question: "Do You Deliver?", answer: "Yes! Delivery is available within a 25 mile radius." }
-        ]);
+        setFaqs(DEFAULT_FAQS);
       }
     };
     fetchContent();
   }, []);
 
   return (
-    <div
-      className={`faq ${inView ? "animate-in" : ""}`}
-      ref={ref}
-    >
-      <h2>
-        <span>FAQ</span>
-      </h2>
-      <div className="faq-grid">
+    <section className="lx-faq">
+      <p className="lx-eyebrow">Questions</p>
+      <h2>FAQ</h2>
+      <div className="lx-faq-list">
         {faqs.map((faq, index) => (
           <Toggle key={index} title={faq.question}>
             <p>{faq.answer}</p>
           </Toggle>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

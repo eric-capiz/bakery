@@ -1,198 +1,180 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import AdminLogin from "./AdminLogin";
 
+const LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/practice", label: "Practice" },
+  { href: "/praise", label: "Praise" },
+  { href: "/commission", label: "Commission" },
+];
+
 const Nav = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    // Check if admin is logged in on mount
-    const checkAuth = async () => {
+    (async () => {
       try {
-        const response = await fetch("/api/auth/verify");
-        const data = await response.json();
-        setIsAdminLoggedIn(data.authenticated || false);
-      } catch (err) {
-        setIsAdminLoggedIn(false);
+        const res = await fetch("/api/auth/verify");
+        const data = await res.json();
+        setIsAdmin(!!data.authenticated);
+      } catch {
+        setIsAdmin(false);
       }
-    };
-    checkAuth();
+    })();
   }, []);
 
-  const handleLogout = async () => {
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (router.isReady) setOpen(false);
+  }, [router.isReady, router.pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const logout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
-      setIsAdminLoggedIn(false);
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new Event("adminLogout"));
-      // Redirect to home page after logout
-      router.push("/");
-    } catch (err) {
-      // Still logout locally even if API call fails
-      setIsAdminLoggedIn(false);
-      window.dispatchEvent(new Event("adminLogout"));
-      // Redirect to home page after logout
-      router.push("/");
+    } catch {
+      /* ignore */
     }
+    setIsAdmin(false);
+    window.dispatchEvent(new Event("adminLogout"));
+    router.push("/");
   };
 
-  const handleLoginSuccess = () => {
-    setIsAdminLoggedIn(true);
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new Event("adminLogin"));
-  };
-
-  const isActive = (path: string) => {
-    if (!router.isReady) return false;
-    return router.pathname === path;
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (router.isReady) {
-      setIsMobileMenuOpen(false);
-    }
-  }, [router.isReady, router.pathname]);
+  const isActive = (href: string) =>
+    href === "/"
+      ? router.pathname === "/"
+      : router.pathname.startsWith(href);
 
   return (
     <>
-      {showLoginModal && (
+      {showLogin ? (
         <AdminLogin
-          onLogin={handleLoginSuccess}
-          onClose={() => setShowLoginModal(false)}
+          onLogin={() => {
+            setIsAdmin(true);
+            window.dispatchEvent(new Event("adminLogin"));
+          }}
+          onClose={() => setShowLogin(false)}
         />
-      )}
-      <nav className={`nav-rich ${isScrolled ? "scrolled" : ""}`}>
-        <div className="nav-container-rich">
-          <div className="admin-buttons-container">
-            {!isAdminLoggedIn ? (
-              <button
-                className="admin-login-btn"
-                onClick={() => setShowLoginModal(true)}
+      ) : null}
+
+      <header className={`br-nav ${scrolled ? "is-scrolled" : ""}`}>
+        <div className="br-nav-inner">
+          <Link href="/" className="br-nav-brand">
+            Brume
+          </Link>
+
+          <nav className="br-nav-links" aria-label="Primary">
+            {LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={isActive(link.href) ? "is-active" : ""}
               >
-                Admin Login
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="br-nav-end">
+            {!isAdmin ? (
+              <button
+                type="button"
+                className="br-nav-admin"
+                onClick={() => setShowLogin(true)}
+              >
+                Admin
               </button>
             ) : (
               <>
-                <Link href="/admin" className="admin-panel-btn">
-                  Admin Panel
+                <Link href="/admin" className="br-nav-admin">
+                  Panel
                 </Link>
-                <button className="admin-logout-btn" onClick={handleLogout}>
-                  Logout
+                <button type="button" className="br-nav-admin" onClick={logout}>
+                  Log out
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              className="br-nav-menu"
+              aria-expanded={open}
+              aria-controls="br-drawer"
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? "Close" : "Menu"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {open ? (
+        <div
+          id="br-drawer"
+          className="br-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          {LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={isActive(link.href) ? "is-active" : ""}
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="br-drawer-admin">
+            {!isAdmin ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  setShowLogin(true);
+                }}
+              >
+                Admin
+              </button>
+            ) : (
+              <>
+                <Link href="/admin" onClick={() => setOpen(false)}>
+                  Panel
+                </Link>
+                <button type="button" onClick={logout}>
+                  Log out
                 </button>
               </>
             )}
           </div>
-          <Link href="/" className="nav-logo-rich">
-            <span className="logo-text-rich">Sweet Dreams Bakery</span>
-          </Link>
-          <div className="nav-right-container">
-            <button
-              className={`mobile-menu-toggle-rich ${isMobileMenuOpen ? "active" : ""}`}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-            <ul
-              className={`nav-links-rich ${isMobileMenuOpen ? "active" : ""}`}
-            >
-              <li>
-                <Link
-                  href="/about"
-                  className={isActive("/about") ? "active" : ""}
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/sample-cakes"
-                  className={isActive("/sample-cakes") ? "active" : ""}
-                >
-                  Sample Cakes
-                </Link>
-              </li>
-              {/* <li>
-                <Link href="/build" className={isActive("/build") ? "active" : ""}>
-                  Build
-                </Link>
-              </li> */}
-              {/* <li>
-                <Link
-                  href="/preview"
-                  className={isActive("/preview") ? "active" : ""}
-                >
-                  Preview
-                </Link>
-              </li> */}
-              <li>
-                <Link
-                  href="/reviews"
-                  className={isActive("/reviews") ? "active" : ""}
-                >
-                  Reviews
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className={isActive("/contact") ? "active" : ""}
-                >
-                  Contact Me
-                </Link>
-              </li>
-              <li className="mobile-admin-section">
-                {!isAdminLoggedIn ? (
-                  <button
-                    className="mobile-admin-login-btn"
-                    onClick={() => {
-                      setShowLoginModal(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    Admin Login
-                  </button>
-                ) : (
-                  <>
-                    <Link
-                      href="/admin"
-                      className="mobile-admin-panel-btn"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Admin Panel
-                    </Link>
-                    <button
-                      className="mobile-admin-logout-btn"
-                      onClick={() => {
-                        handleLogout();
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      Logout
-                    </button>
-                  </>
-                )}
-              </li>
-            </ul>
-          </div>
+          <button
+            type="button"
+            className="br-drawer-dismiss"
+            onClick={() => setOpen(false)}
+          >
+            Close menu
+          </button>
         </div>
-      </nav>
+      ) : null}
     </>
   );
 };

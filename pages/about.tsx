@@ -1,4 +1,2 @@
-import About from '../src/components/AboutSection'
-
-export default About
-
+import About from "../src/pages/About";
+export default About;

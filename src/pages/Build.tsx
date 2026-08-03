@@ -98,12 +98,12 @@ const Build = () => {
   return (
     <div className="build-page">
       <p className="build-page-wip-banner" role="status">
-        <strong>Work in progress.</strong> This custom build experience is still
-        under construction and is not the final way to order yet. When you are
-        ready to order, please use our{" "}
-        <Link href="/contact">contact form</Link>.
+        <strong>Work in progress.</strong> This floral design studio is still
+        under construction and is not the final way to inquire yet. When you are
+        ready to book arrangements, please use our{" "}
+        <Link href="/consult">consultation form</Link>.
       </p>
-      <h1>Build</h1>
+      <h1>Design Studio</h1>
 
       {atRisk ? (
         <p className="build-page-exit-warning" role="status">
@@ -116,13 +116,13 @@ const Build = () => {
       {phase === "lead" ? (
         <>
           <p className="build-page-lead">
-            Start by telling us how to reach you. The visual designer opens
+            Start by telling us how to reach you. The bouquet designer opens
             right after, and your details stay visible beside it.
           </p>
           <p className="build-page-crosslink">
-            Prefer not to use the builder? You can still reach out with the
+            Prefer not to use the design studio? You can still reach out with the
             regular{" "}
-            <Link href="/contact">contact and consultation form</Link> instead.
+            <Link href="/consult">floral consultation form</Link> instead.
           </p>
           <BuildLeadForm
             onLeadComplete={handleLeadComplete}
@@ -140,9 +140,9 @@ const Build = () => {
         buildRequestId && (
           <>
             <p className="build-page-lead build-page-lead-step2">
-              Design your order below. Your details stay above the step list;
-              start by choosing a pastry type (icons). More steps follow by
-              pastry.
+              Sketch your arrangement below. Your details stay above the step
+              list; start by choosing a style (icons). More steps follow from
+              there.
             </p>
             <BuildDesigner
               buildRequestId={buildRequestId}
