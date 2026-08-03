@@ -219,7 +219,7 @@ const BuildDesigner = ({
             ) : (
               <span className="build-designer-selection-hint-muted">
                 {" "}
-                — pick a variety in step 2 to continue.
+               , pick a variety in step 2 to continue.
               </span>
             )}
           </p>

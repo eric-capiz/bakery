@@ -56,7 +56,7 @@ export function CakeSubsteps({ state, patch }: Props) {
         <BuildSubstepBlock
           step={4}
           title="Layers per tier"
-          lead="Layers are the horizontal cake sheets inside each tier, with filling between—what you see when the cake is sliced. Different from tiers: tier count was step 3."
+          lead="Layers are the horizontal cake sheets inside each tier, with filling between: what you see when the cake is sliced. Different from tiers: tier count was step 3."
         >
           <BuildTextField
             id="cake-layers"
@@ -131,7 +131,7 @@ export function CakeSubsteps({ state, patch }: Props) {
             placeholder="e.g. blush pink and gold"
           />
           <BuildOptionalContinue
-            label="No specific colors or theme — continue"
+            label="No specific colors or theme, continue"
             onContinue={() =>
               patch({ cakeAckNoTheme: true, cakeColorsTheme: "" })
             }
@@ -166,7 +166,7 @@ export function CakeSubsteps({ state, patch }: Props) {
             placeholder="Extra detail, inspiration, or ideas"
           />
           <BuildOptionalContinue
-            label="No extra decorations — continue"
+            label="No extra decorations, continue"
             onContinue={() =>
               patch({
                 cakeAckNoDecor: true,
@@ -195,7 +195,7 @@ export function CakeSubsteps({ state, patch }: Props) {
             placeholder="e.g. Happy 30th Alex"
           />
           <BuildOptionalContinue
-            label="No message on the cake — continue"
+            label="No message on the cake, continue"
             onContinue={() =>
               patch({ cakeAckNoMessage: true, cakeMessage: "" })
             }
@@ -236,7 +236,7 @@ export function CakeSubsteps({ state, patch }: Props) {
             placeholder="e.g. nut-free, gluten-free request"
           />
           <BuildOptionalContinue
-            label="Nothing to note — continue"
+            label="Nothing to note, continue"
             onContinue={() =>
               patch({ cakeAckNoDietary: true, cakeDietary: "" })
             }

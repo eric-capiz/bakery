@@ -4,11 +4,11 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>PIT — Shop bay &amp; mobile mechanic</title>
-        <meta name="theme-color" content="#3E4654" />
+        <title>ELLIS Outdoor Care</title>
+        <meta name="theme-color" content="#F0F2F5" />
         <meta
           name="description"
-          content="PIT — shop bay and mobile mechanic. Straight talk. Posted prices. We show up."
+          content="ELLIS: refined lawn care, exterior washing, and mobile detailing for the modern property."
         />
         <link rel="icon" type="image/png" href="/logo3.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,7 +18,7 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Sora:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
       </Head>

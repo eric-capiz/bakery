@@ -1,78 +1,61 @@
-.pt-about-block {
-  width: min(1000px, calc(100% - 1.5rem));
-  margin: 0 auto;
+.el-about-story {
+  width: min(1000px, calc(100% - 2rem));
+  margin: 0 auto 3.5rem;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
-  background: var(--pt-iron);
-  border: 1px solid var(--pt-line);
-  padding: 1.25rem;
+  gap: 2rem;
 
-  @media (min-width: 800px) {
-    grid-template-columns: 1.1fr 1fr;
-    gap: 2.5rem;
+  @media (min-width: 860px) {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3.5rem;
     align-items: center;
-    padding: 1.5rem;
   }
 
   img {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 5 / 4;
     object-fit: cover;
   }
 
   p {
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-    max-width: 36ch;
+    font-size: 1.08rem;
+    font-weight: 300;
+    margin-bottom: 1.15rem;
+    max-width: 34ch;
+    color: var(--el-mute);
   }
 }
 
-.pt-pillars {
+.el-principles {
   width: 100%;
-  margin: 2.5rem 0 0;
-  padding: 2.5rem 1.5rem;
+  padding: 3.5rem 1.5rem;
+  background: var(--el-white);
+  border-top: 1px solid var(--el-line);
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0;
-  background: var(--pt-bench);
+  gap: 2rem;
 
-  @media (min-width: 760px) {
-    grid-template-columns: repeat(3, minmax(0, 333px));
+  @media (min-width: 800px) {
+    grid-template-columns: repeat(3, minmax(0, 280px));
     justify-content: center;
-    gap: 0;
-    padding: 2.75rem 1.5rem;
+    gap: 3rem;
+    padding: 4rem 2rem;
   }
 
   article {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--pt-line);
-
-    @media (min-width: 760px) {
-      padding: 0.5rem 1.5rem;
-      border-bottom: none;
-      border-right: 1px solid var(--pt-line);
-
-      &:first-child {
-        padding-left: 0;
-      }
-
-      &:last-child {
-        border-right: none;
-        padding-right: 0;
-      }
-    }
+    text-align: center;
 
     h2 {
-      font-size: 3rem;
-      color: var(--pt-hazard);
+      font-size: 2rem;
+      font-weight: 500;
       margin-bottom: 0.65rem;
     }
 
     p {
       max-width: 22ch;
-      font-size: 1rem;
-      color: var(--pt-fog);
+      margin-inline: auto;
+      font-weight: 300;
+      font-size: 0.98rem;
     }
   }
 }

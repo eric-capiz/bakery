@@ -1,0 +1,10 @@
+---
+description: Never use em dashes in content or comments
+alwaysApply: true
+---
+
+# No em dashes
+
+Never use the em dash character (Unicode U+2014) in user-facing copy, code comments, commit messages, or documentation written for this project.
+
+Prefer commas, periods, colons, parentheses, or a plain hyphen with spaces (` - `) instead.

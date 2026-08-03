@@ -1,113 +1,122 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-const TAPE = [
-  "Oil & filter",
-  "Brakes",
-  "Battery",
-  "Diagnostics",
-  "Coolant",
-  "Spark plugs",
-  "A/C",
-  "Mobile service",
-];
-
 const Home = () => {
   return (
-    <div className="pt-home">
-      <section className="pt-hero" aria-label="PIT hero">
+    <div className="el-home">
+      <section className="el-hero" aria-label="Ellis hero">
         <img
-          src="/img/pit/home/hero.jpg"
-          alt="Mechanic working under a vehicle in the bay"
+          src="/img/ellis/home/hero.jpg"
+          alt="Modern residence with composed landscape"
         />
-        <div className="pt-hero-shade" aria-hidden="true" />
+        <div className="el-hero-veil" aria-hidden="true" />
         <motion.div
-          className="pt-hero-copy"
-          initial={{ opacity: 0, y: 28 }}
+          className="el-hero-copy"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1>Pit</h1>
-          <p className="pt-hero-line">Bay work. Driveway saves.</p>
-          <p className="pt-hero-sub">
-            Shop lift or mobile van — posted prices, straight answers, no
-            mystery invoice.
+          <p className="el-eyebrow">Outdoor care</p>
+          <h1>Ellis</h1>
+          <p className="el-hero-line">Property, finished.</p>
+          <p className="el-hero-sub">
+            Refined lawn care, exterior washing, and mobile detailing with quiet
+            standards for the modern property.
           </p>
-          <div className="pt-actions">
-            <Link href="/book" className="pt-btn">
-              Book a slot
+          <div className="el-actions">
+            <Link href="/book" className="el-btn">
+              Reserve a visit
             </Link>
-            <Link href="/services" className="pt-btn pt-btn--ghost">
-              Price board
+            <Link href="/services" className="el-btn el-btn--light">
+              View services
             </Link>
           </div>
         </motion.div>
       </section>
 
-      <div className="pt-tape" aria-hidden="true">
-        <div className="pt-tape-track">
-          {[...TAPE, ...TAPE].map((item, i) => (
-            <span key={`${item}-${i}`}>{item}</span>
-          ))}
-        </div>
-      </div>
-
-      <section className="pt-lanes">
-        <article>
-          <img src="/img/pit/home/bay.jpg" alt="PIT service bay" />
-          <div>
-            <p className="pt-kicker">Shop</p>
-            <h2>Full bay.</h2>
-            <p>Lift jobs, deep diagnostics, anything that needs the floor.</p>
-          </div>
-        </article>
-        <article>
-          <img src="/img/pit/home/mobile.jpg" alt="PIT mobile van" />
-          <div>
-            <p className="pt-kicker">Mobile</p>
-            <h2>We roll.</h2>
-            <p>Oil, batteries, pads, roadside — priced by zone on services.</p>
-          </div>
-        </article>
-      </section>
-
-      <section className="pt-order">
-        <div className="pt-shell">
-          <p className="pt-kicker">Work order</p>
-          <h2>Starting rates</h2>
-          <div className="pt-order-grid">
-            <div>
-              <span>Oil change</span>
-              <strong>$69 / $99</strong>
-              <small>Shop / Mobile</small>
-            </div>
-            <div>
-              <span>Brake pads</span>
-              <strong>$189 / $249</strong>
-              <small>Shop / Mobile</small>
-            </div>
-            <div>
-              <span>Battery install</span>
-              <strong>$149 / $189</strong>
-              <small>Shop / Mobile</small>
-            </div>
-            <div>
-              <span>Diagnostic</span>
-              <strong>$129 / $159</strong>
-              <small>Shop / Mobile</small>
-            </div>
-          </div>
+      <section className="el-intro">
+        <div className="el-shell">
+          <div className="el-rule" aria-hidden="true" />
+          <h2>Stewardship with restraint.</h2>
+          <p>
+            Ellis tends the grounds and the driveway with the same calm
+            precision: clear communication, considered pricing, and a finish
+            that feels intentional.
+          </p>
         </div>
       </section>
 
-      <section className="pt-punch">
-        <div className="pt-shell">
-          <p className="pt-kicker">Ready</p>
-          <h2>Get on the board.</h2>
-          <p>Tell us shop or mobile, what&apos;s wrong, and when you need it.</p>
-          <div className="pt-actions">
-            <Link href="/book" className="pt-btn">
-              Book now
+      <section className="el-chapter">
+        <div className="el-chapter-media">
+          <img
+            src="/img/ellis/home/grounds.jpg"
+            alt="Manicured lawn and garden beds"
+          />
+        </div>
+        <div className="el-chapter-copy">
+          <p className="el-eyebrow">Grounds</p>
+          <h2>Lawn, edge, and bed.</h2>
+          <p>
+            Regular cuts, clean lines, and seasonal care that keep the property
+            reading composed, never overworked.
+          </p>
+          <Link href="/services#grounds" className="el-link">
+            See grounds pricing
+          </Link>
+        </div>
+      </section>
+
+      <section className="el-chapter is-flip">
+        <div className="el-chapter-media">
+          <img
+            src="/img/ellis/work/06.jpg"
+            alt="Clean exterior surfaces after washing"
+          />
+        </div>
+        <div className="el-chapter-copy">
+          <p className="el-eyebrow">Surface</p>
+          <h2>Wash without noise.</h2>
+          <p>
+            Driveways, stone, and façades restored with care, soft where it
+            matters, thorough where it counts.
+          </p>
+          <Link href="/services#surface" className="el-link">
+            See wash pricing
+          </Link>
+        </div>
+      </section>
+
+      <section className="el-chapter">
+        <div className="el-chapter-media">
+          <img
+            src="/img/ellis/work/05.jpg"
+            alt="Vehicle after mobile detailing"
+          />
+        </div>
+        <div className="el-chapter-copy">
+          <p className="el-eyebrow">Vehicle</p>
+          <h2>Detail at your door.</h2>
+          <p>
+            Hand wash and interior detailing in your driveway, discreet,
+            punctual, and finished to a quiet shine.
+          </p>
+          <Link href="/services#vehicle" className="el-link">
+            See detailing pricing
+          </Link>
+        </div>
+      </section>
+
+      <section className="el-invite">
+        <div className="el-shell">
+          <p className="el-eyebrow">Begin</p>
+          <h2>A visit, arranged.</h2>
+          <p>
+            Share what you need: grounds, wash, detail, or all three. We reply
+            with timing and a clear range.
+          </p>
+          <div className="el-actions">
+            <Link href="/book" className="el-btn">
+              Contact Ellis
             </Link>
           </div>
         </div>

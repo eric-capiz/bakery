@@ -1,3 +1,3 @@
-import Services from "../src/pages/Gallery";
+import Services from "../src/pages/Work";
 
 export default Services;

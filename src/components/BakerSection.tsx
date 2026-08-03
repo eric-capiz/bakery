@@ -71,7 +71,7 @@ const BakerSection = () => {
         <h2>A practice rooted in season and silhouette</h2>
         <p>
           {content?.intro ||
-            "Hi, I'm the floral designer behind Liora Atelier. For over a decade I've composed botanical work for weddings, private homes, and editorial spaces — always guided by seasonality, restraint, and the quiet luxury of well-chosen stems."}
+            "Hi, I'm the floral designer behind Liora Atelier. For over a decade I've composed botanical work for weddings, private homes, and editorial spaces, always guided by seasonality, restraint, and the quiet luxury of well-chosen stems."}
         </p>
       </div>
 

@@ -93,7 +93,7 @@ export function BrownieSubsteps({ state, patch }: Props) {
             placeholder="e.g. dark chocolate drizzle, buttercream not ganache, pecans only"
           />
           <BuildOptionalContinue
-            label="Plain / no toppings — continue"
+            label="Plain / no toppings, continue"
             onContinue={() =>
               patch({
                 brownieAckNoToppings: true,
@@ -130,7 +130,7 @@ export function BrownieSubsteps({ state, patch }: Props) {
             placeholder="e.g. nut-free"
           />
           <BuildOptionalContinue
-            label="Nothing to note — continue"
+            label="Nothing to note, continue"
             onContinue={() =>
               patch({ brownieAckNoDietary: true, brownieDietary: "" })
             }

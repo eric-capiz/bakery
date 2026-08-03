@@ -60,7 +60,7 @@ export function PieSubsteps({ state, patch }: Props) {
             onToggle={toggleFinish}
           />
           <BuildOptionalContinue
-            label="No preference — continue"
+            label="No preference, continue"
             onContinue={() =>
               patch({ pieAckNoFinish: true, pieFinish: [] })
             }
@@ -84,7 +84,7 @@ export function PieSubsteps({ state, patch }: Props) {
             placeholder="e.g. rustic fall"
           />
           <BuildOptionalContinue
-            label="No theme — continue"
+            label="No theme, continue"
             onContinue={() =>
               patch({ pieAckNoTheme: true, pieColorsTheme: "" })
             }
@@ -121,7 +121,7 @@ export function PieSubsteps({ state, patch }: Props) {
             placeholder="e.g. gluten-free request"
           />
           <BuildOptionalContinue
-            label="Nothing to note — continue"
+            label="Nothing to note, continue"
             onContinue={() =>
               patch({ pieAckNoDietary: true, pieDietary: "" })
             }

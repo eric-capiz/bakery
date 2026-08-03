@@ -1,168 +1,166 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { getData, setData } from '../../../lib/kv';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getData, setData } from "../../../lib/kv";
 
-const CONTENT_KEY = 'content';
+const CONTENT_KEY = "content";
 
 function getDefaultContent() {
-  const defaultContent = {
+  return {
     home: {
       hero: {
-        tagline: "Bay work.",
-        taglineAccent: "Driveway saves.",
+        tagline: "Property,",
+        taglineAccent: "finished.",
         taglineEnd: "",
-        subtitle: "Shop lift or mobile van — posted prices, straight answers, no mystery invoice."
+        subtitle:
+          "Refined lawn care, exterior washing, and mobile detailing for the modern property.",
       },
       features: [
         {
-          icon: "🔧",
-          title: "Shop Bay",
-          description: "Full lift, deep diagnostics, and the jobs that need the floor."
+          icon: "◇",
+          title: "Grounds",
+          description: "Lawn, edge, and bed care with quiet precision.",
         },
         {
-          icon: "🚐",
-          title: "Mobile Van",
-          description: "Oil, batteries, pads, and roadside saves — priced by zone."
+          icon: "◇",
+          title: "Surface",
+          description: "Driveways, stone, and façades restored with care.",
         },
         {
-          icon: "📋",
-          title: "Posted Prices",
-          description: "Shop and mobile rates on the board before we turn a wrench."
+          icon: "◇",
+          title: "Vehicle",
+          description: "Hand wash and detailing at your address.",
         },
         {
-          icon: "⏱️",
-          title: "On Time",
-          description: "Book a slot. We show up. Text when it's ready."
-        }
+          icon: "◇",
+          title: "Clarity",
+          description: "A clear range before work begins.",
+        },
       ],
       specialties: [
         {
-          title: "Oil & Filter",
-          description: "Blend oil, new filter, top-offs, quick walkaround."
+          title: "Lawn & Edge",
+          description:
+            "Regular cuts and clean lines that keep the property composed.",
         },
         {
-          title: "Brakes",
-          description: "Pads, hardware check, rotor measure — quote before work."
+          title: "Beds & Season",
+          description: "Cleanup, mulch, and hedge shaping by measured care.",
         },
         {
-          title: "Diagnostics",
-          description: "Scan, live data, plain-English write-up."
+          title: "Exterior Wash",
+          description: "Soft wash and surface cleaning without spectacle.",
         },
         {
-          title: "Battery & Electrical",
-          description: "Test, swap, clean terminals. Parts billed at cost."
-        }
-      ]
+          title: "Mobile Detail",
+          description: "Cabin and finish work completed in the driveway.",
+        },
+      ],
     },
     about: {
       baker: {
-        intro: "PIT runs a real bay and a mobile van for people tired of waiting rooms and vague invoices. Clear diagnosis, price before the work, text when it's ready.",
+        intro:
+          "Ellis is an outdoor care studio for properties that prefer calm execution: grounds, wash, and vehicle detailing under one quiet standard.",
         experience: {
-          main: "Years on the floor and on the road — shop jobs that need a lift, mobile jobs that shouldn't wreck your day.",
-          education: "ASE-minded shop practice, manufacturer service info",
-          specialization: "Maintenance, brakes, diagnostics, mobile service",
-          years: "10+ years turning wrenches",
-          certifications: "Shop bay + mobile fleet service"
+          main: "Property care paced with clarity: clear ranges, careful finishes, and appointments kept.",
+          education: "Landscape maintenance and exterior care practice",
+          specialization: "Grounds, exterior washing, mobile detailing",
+          years: "Local outdoor studio",
+          certifications: "Insured outdoor & mobile service",
         },
         whatIBake: [
-          "Oil & Filter",
-          "Brake Service",
-          "Battery Install",
-          "Full Diagnostic",
-          "Coolant Flush",
-          "Spark Plugs",
-          "A/C Recharge",
-          "Tire Rotate & Balance",
-          "Pre-Purchase Inspect",
-          "Mobile Roadside"
+          "Lawn Cut & Edge",
+          "Bed Cleanup & Mulch",
+          "Hedge Shaping",
+          "Seasonal Clear",
+          "Driveway Wash",
+          "Façade Soft Wash",
+          "Mobile Hand Wash",
+          "Interior Detail",
+          "Complete Detail",
         ],
         hours: {
-          monday: "8:00 AM - 6:00 PM",
-          tuesday: "8:00 AM - 6:00 PM",
-          wednesday: "8:00 AM - 6:00 PM",
-          thursday: "8:00 AM - 6:00 PM",
-          friday: "8:00 AM - 6:00 PM",
-          saturday: "8:00 AM - 6:00 PM",
-          sunday: "Closed"
+          monday: "7:00 AM - 5:00 PM",
+          tuesday: "7:00 AM - 5:00 PM",
+          wednesday: "7:00 AM - 5:00 PM",
+          thursday: "7:00 AM - 5:00 PM",
+          friday: "7:00 AM - 5:00 PM",
+          saturday: "7:00 AM - 5:00 PM",
+          sunday: "Closed",
         },
         contact: {
-          email: "hello@pitgarage.com",
-          phone: "(555) 014-4820"
-        }
+          email: "hello@ellisoutdoor.com",
+          phone: "(555) 014-3390",
+        },
       },
       faq: [
         {
-          question: "How far in advance should I book?",
-          answer: "Same-week slots are common. Mobile zones fill faster — book early if you need a driveway visit."
+          question: "How do visits work?",
+          answer:
+            "Share what you need. We confirm timing and a clear range before we arrive.",
         },
         {
-          question: "What's your specialty?",
-          answer: "Honest maintenance and diagnostics — shop bay for lift work, mobile for the quick saves."
+          question: "Can grounds and detailing be combined?",
+          answer:
+            "Yes. Combined visits are common. We sequence the work so both finish cleanly.",
         },
         {
-          question: "What forms of payment do you accept?",
-          answer: "Cash, Venmo, Zelle, and major cards."
+          question: "What payments do you accept?",
+          answer: "Cards, Venmo, Zelle, and cash.",
         },
         {
-          question: "Do you come to me?",
-          answer: "Yes. Mobile covers Zone A–C with trip fees listed on the services page."
-        }
-      ]
-    }
+          question: "Where do you serve?",
+          answer:
+            "The city and nearby neighborhoods. Farther travel is noted up front if needed.",
+        },
+      ],
+    },
   };
-
-  return defaultContent;
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     let contentStr = await getData(CONTENT_KEY);
-
     if (!contentStr) {
       const defaultContent = getDefaultContent();
       contentStr = JSON.stringify(defaultContent);
       try {
         await setData(CONTENT_KEY, contentStr);
-      } catch (saveError) {
-        console.error('Failed to save default content to Redis:', saveError);
+      } catch (e) {
+        console.error("Failed to save default content:", e);
       }
     }
 
     let content;
     try {
       content = JSON.parse(contentStr);
-    } catch (parseError) {
-      console.error('Failed to parse content:', parseError);
+    } catch {
       content = getDefaultContent();
     }
 
-    const accent = content?.home?.hero?.taglineAccent;
-    const subtitle = content?.home?.hero?.subtitle || '';
-    const intro = content?.about?.baker?.intro || '';
+    const blob = JSON.stringify(content);
     const looksLikeOld =
-      accent === 'Cake' ||
-      accent === 'with intention' ||
-      /sweet tooth|custom cakes|baking|botanical|florist|atelier/i.test(subtitle) ||
-      /Eric!|baking since|custom cakes|floral designer|Liora/i.test(intro);
+      /SWATH|PIT|Clutch|Haul|Liora|florist|mechanic|Bay work|citrus|Swath/i.test(
+        blob
+      );
 
     if (looksLikeOld) {
       content = getDefaultContent();
       try {
         await setData(CONTENT_KEY, JSON.stringify(content));
-      } catch (saveError) {
-        console.error('Failed to migrate content:', saveError);
+      } catch (e) {
+        console.error("Failed to migrate content:", e);
       }
     }
 
     return res.status(200).json(content);
   } catch (error) {
-    console.error('Content get error:', error);
+    console.error("Content get error:", error);
     return res.status(200).json(getDefaultContent());
   }
 }

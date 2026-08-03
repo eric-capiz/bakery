@@ -13,7 +13,7 @@ export const CHECKBOX_WITH_DETAIL_TEXTAREA_NOTICE =
   "Add specifics in the detail box below when you care about stem, palette, or look. If you leave it blank, the studio may use their usual choice or any fitting seasonal option.";
 
 /**
- * Once per step: checkboxes only—no text area in this section.
+ * Once per step: checkboxes only: no text area in this section.
  * Points to lead notes; same “may vary if unspecified” idea.
  */
 export const CHECKBOX_LEAD_NOTES_SECTION_NOTICE =

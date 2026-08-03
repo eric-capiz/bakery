@@ -18,7 +18,7 @@ import type { PastryType } from "../../../lib/pastryTypes";
 import { MAX_BUILD_CAKE_MESSAGE_LENGTH } from "../../../lib/constants";
 
 const FONT_ICING = "/fonts/helvetiker_bold.typeface.json";
-/** White / eggshell fluted liner — strong shadow between pleats */
+/** White / eggshell fluted liner, strong shadow between pleats */
 function createCupcakeLinerTexture(): THREE.CanvasTexture {
   const w = 200;
   const h = 400;
@@ -145,7 +145,7 @@ function IcingMessage3D({
   position: [number, number, number];
   size?: number;
   lineHeight?: number;
-  /** Thinner extrusion / bevel — reads less like pink bricks on shallow pies */
+  /** Thinner extrusion / bevel, reads less like pink bricks on shallow pies */
   slim?: boolean;
 }) {
   const raw = text.trim() || "Preview";
@@ -284,13 +284,13 @@ const PiePastryBlock = forwardRef<
   const bottomCrustH = 0.03;
   const bottomCrustCenterY = panBottomY + bottomCrustH / 2 + 0.006;
   const fillBottomY = panBottomY + 0.006 + bottomCrustH;
-  /** Tall fruit layer — deep-dish read (~3″–ish vs ~9–10″ pan in these units). */
+  /** Tall fruit layer, deep-dish read (~3″–ish vs ~9–10″ pan in these units). */
   const fillH = 0.118;
   const fillCenterY = fillBottomY + fillH / 2;
   const fillTopY = fillBottomY + fillH;
   /** Pastry wall to same height as fill so we don’t step down short of the fruit top. */
   const sideCrustH = fillTopY - fillBottomY + 0.004;
-  /** Strips reach almost to crimp (was too tight — read as “floating” on a white dish). */
+  /** Strips reach almost to crimp (was too tight: read as “floating” on a white dish). */
   const latticeClearR = topR - 0.026;
 
   const sideCrustGeo = useMemo(() => {
@@ -360,7 +360,7 @@ const PiePastryBlock = forwardRef<
   }, [rimY, topR]);
   useEffect(() => () => crimpTube.dispose(), [crimpTube]);
 
-  /** Warm cream ceramic — grey-blue reads as a metal tin in side view. */
+  /** Warm cream ceramic, grey-blue reads as a metal tin in side view. */
   const ceramic = {
     color: "#efe6da" as const,
     roughness: 0.58,
@@ -419,7 +419,7 @@ const PiePastryBlock = forwardRef<
         />
       </mesh>
       {/**
-       * One continuous pastry lid under the fruit top — rings + partial radii still let
+       * One continuous pastry lid under the fruit top, rings + partial radii still let
        * top-down rays hit the ceramic bowl. This disc spans the whole dish opening.
        */}
       <mesh

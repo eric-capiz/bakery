@@ -15,6 +15,7 @@ const nextConfig = {
       { source: "/work", destination: "/services", permanent: true },
       { source: "/sample-cakes", destination: "/services", permanent: true },
       { source: "/collection", destination: "/services", permanent: true },
+      { source: "/contact", destination: "/book", permanent: true },
       { source: "/atelier", destination: "/about", permanent: true },
       { source: "/studio", destination: "/about", permanent: true },
       { source: "/practice", destination: "/about", permanent: true },
@@ -31,7 +32,6 @@ const nextConfig = {
       { source: "/commission", destination: "/book", permanent: true },
       { source: "/visit", destination: "/book", permanent: true },
       { source: "/reserve", destination: "/book", permanent: true },
-      { source: "/contact", destination: "/book", permanent: true },
     ];
   },
 };

@@ -77,7 +77,7 @@ export function CookieSubsteps({ state, patch }: Props) {
             placeholder="Half with nuts, half plain, etc."
           />
           <BuildOptionalContinue
-            label="No mix-ins — continue"
+            label="No mix-ins, continue"
             onContinue={() =>
               patch({
                 cookieAckNoMixins: true,
@@ -121,7 +121,7 @@ export function CookieSubsteps({ state, patch }: Props) {
             placeholder="e.g. Office party Friday"
           />
           <BuildOptionalContinue
-            label="No occasion note — continue"
+            label="No occasion note, continue"
             onContinue={() =>
               patch({ cookieAckNoOccasion: true, cookieOccasionNote: "" })
             }
@@ -162,7 +162,7 @@ export function CookieSubsteps({ state, patch }: Props) {
             placeholder="e.g. nut-free"
           />
           <BuildOptionalContinue
-            label="Nothing to note — continue"
+            label="Nothing to note, continue"
             onContinue={() =>
               patch({ cookieAckNoDietary: true, cookieDietary: "" })
             }

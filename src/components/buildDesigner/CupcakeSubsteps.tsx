@@ -90,7 +90,7 @@ export function CupcakeSubsteps({ state, patch }: Props) {
             placeholder="Extra detail"
           />
           <BuildOptionalContinue
-            label="No extra decorations — continue"
+            label="No extra decorations, continue"
             onContinue={() =>
               patch({
                 cupcakeAckNoDecor: true,
@@ -119,7 +119,7 @@ export function CupcakeSubsteps({ state, patch }: Props) {
             placeholder="e.g. Team Sarah"
           />
           <BuildOptionalContinue
-            label="No message — continue"
+            label="No message, continue"
             onContinue={() =>
               patch({ cupcakeAckNoMessage: true, cupcakeMessage: "" })
             }
@@ -152,7 +152,7 @@ export function CupcakeSubsteps({ state, patch }: Props) {
             placeholder="e.g. nut-free"
           />
           <BuildOptionalContinue
-            label="Nothing to note — continue"
+            label="Nothing to note, continue"
             onContinue={() =>
               patch({ cupcakeAckNoDietary: true, cupcakeDietary: "" })
             }

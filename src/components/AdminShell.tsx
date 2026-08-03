@@ -39,7 +39,7 @@ const AdminShell = ({
       <div className="admin-shell-inner">
         <header className="admin-shell-header">
           <div>
-            <p className="admin-shell-kicker">Pit</p>
+            <p className="admin-shell-kicker">Ellis</p>
             <h1>{title}</h1>
             {subtitle ? <p className="admin-shell-subtitle">{subtitle}</p> : null}
           </div>

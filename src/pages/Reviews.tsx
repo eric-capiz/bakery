@@ -3,31 +3,31 @@ import Link from "next/link";
 const NOTES = [
   {
     id: "1",
-    name: "Marcus T.",
-    text: "Mobile oil change in my driveway before work. Clean, on time, done.",
+    name: "Amelia H.",
+    text: "The grounds look composed every week: edges sharp, beds quiet. Exactly what we wanted.",
   },
   {
     id: "2",
-    name: "Dana K.",
-    text: "Shop found a misfire two other places missed. Explained it like a person.",
+    name: "Noah K.",
+    text: "Driveway wash and a mobile detail the same morning. Discreet, on time, immaculate.",
   },
   {
     id: "3",
-    name: "Luis R.",
-    text: "Dead battery at the office — van was there fast. Worth it.",
+    name: "Grace L.",
+    text: "Clear quote, careful work on the façade. The house feels lighter.",
   },
 ];
 
 const Reviews = () => {
   return (
-    <div className="pt-page pt-reviews">
-      <header className="pt-page-head">
-        <p className="pt-kicker">Reviews</p>
-        <h1>From the lot</h1>
-        <p>Short notes from the bay and the driveway.</p>
+    <div className="el-page el-reviews">
+      <header className="el-page-head">
+        <p className="el-eyebrow">Reviews</p>
+        <h1>Kind words</h1>
+        <p>Notes from properties we tend.</p>
       </header>
 
-      <div className="pt-quotes">
+      <div className="el-quotes">
         {NOTES.map((n) => (
           <blockquote key={n.id}>
             <p>“{n.text}”</p>
@@ -36,10 +36,10 @@ const Reviews = () => {
         ))}
       </div>
 
-      <div className="pt-page-foot">
-        <p>Your turn.</p>
-        <Link href="/book" className="pt-btn">
-          Book now
+      <div className="el-page-foot">
+        <p>Your property next.</p>
+        <Link href="/book" className="el-btn">
+          Reserve
         </Link>
       </div>
     </div>

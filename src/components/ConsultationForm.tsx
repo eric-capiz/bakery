@@ -5,13 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
   FaCalendar,
   FaClock,
-  FaCar,
-  FaWrench,
+  FaLeaf,
+  FaMapMarkerAlt,
   FaUser,
   FaEnvelope,
   FaPhone,
   FaComments,
-  FaMapMarkerAlt,
+  FaHome,
 } from "react-icons/fa";
 
 interface ConsultationData {
@@ -38,30 +38,22 @@ const ConsultationForm = () => {
     budget: "",
     message: "",
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
 
   useEffect(() => {
-    if (submitStatus !== "idle") {
-      const timer = setTimeout(() => {
-        setSubmitStatus("idle");
-      }, 5000);
-
-      return () => clearTimeout(timer);
-    }
+    if (submitStatus === "idle") return;
+    const timer = setTimeout(() => setSubmitStatus("idle"), 5000);
+    return () => clearTimeout(timer);
   }, [submitStatus]);
 
   const handleConsultationChange = (
     field: keyof ConsultationData,
     value: string | Date | null
   ) => {
-    setConsultation((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setConsultation((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -78,24 +70,21 @@ const ConsultationForm = () => {
       consultation.date ? consultation.date.toLocaleDateString() : ""
     );
     formData.append("time", consultation.time);
-    formData.append("serviceType", consultation.eventType);
-    formData.append("location", consultation.guestCount);
-    formData.append("vehicle", consultation.budget);
+    formData.append("service", consultation.eventType);
+    formData.append("scope", consultation.guestCount);
+    formData.append("address", consultation.budget);
     formData.append("message", consultation.message);
     formData.append(
       "_subject",
-      `PIT booking request from ${consultation.name}`
+      `ELLIS visit request from ${consultation.name}`
     );
 
     try {
       const response = await fetch("https://formsubmit.co/ericcapiz@gmail.com", {
         method: "POST",
         body: formData,
-        headers: {
-          Accept: "application/json",
-        },
+        headers: { Accept: "application/json" },
       });
-
       if (response.ok) {
         setSubmitStatus("success");
         setConsultation({
@@ -110,10 +99,9 @@ const ConsultationForm = () => {
           message: "",
         });
       } else {
-        throw new Error("Form submission failed");
+        throw new Error("failed");
       }
-    } catch (error) {
-      console.error("Error sending email:", error);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -127,21 +115,18 @@ const ConsultationForm = () => {
           <FaUser className="input-icon" />
           <Input
             type="text"
-            name="name"
             value={consultation.name}
             onChange={(e) => handleConsultationChange("name", e.target.value)}
-            placeholder="Your name"
+            placeholder="Name"
             required
           />
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaEnvelope className="input-icon" />
           <Input
             type="email"
-            name="email"
             value={consultation.email}
             onChange={(e) => handleConsultationChange("email", e.target.value)}
             placeholder="Email"
@@ -149,13 +134,11 @@ const ConsultationForm = () => {
           />
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaPhone className="input-icon" />
           <Input
             type="text"
-            name="phone"
             value={consultation.phone}
             onChange={(e) => handleConsultationChange("phone", e.target.value)}
             placeholder="Phone"
@@ -163,7 +146,6 @@ const ConsultationForm = () => {
           />
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaCalendar className="input-icon" />
@@ -177,116 +159,97 @@ const ConsultationForm = () => {
           />
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaClock className="input-icon" />
           <Input
             type="select"
-            name="time"
             value={consultation.time}
             onChange={(e) => handleConsultationChange("time", e.target.value)}
             required
           >
-            <option value="">Preferred time</option>
-            <option value="08:00">8:00 AM</option>
-            <option value="09:00">9:00 AM</option>
-            <option value="10:00">10:00 AM</option>
-            <option value="11:00">11:00 AM</option>
-            <option value="13:00">1:00 PM</option>
-            <option value="14:00">2:00 PM</option>
-            <option value="15:00">3:00 PM</option>
-            <option value="16:00">4:00 PM</option>
+            <option value="">Preferred window</option>
+            <option value="morning">Morning</option>
+            <option value="midday">Midday</option>
+            <option value="afternoon">Afternoon</option>
           </Input>
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
-          <FaWrench className="input-icon" />
+          <FaLeaf className="input-icon" />
           <Input
             type="select"
-            name="eventType"
             value={consultation.eventType}
             onChange={(e) =>
               handleConsultationChange("eventType", e.target.value)
             }
             required
           >
-            <option value="">Service needed</option>
-            <option value="oil">Oil & filter</option>
-            <option value="brakes">Brakes</option>
-            <option value="battery">Battery</option>
-            <option value="diag">Diagnostic</option>
-            <option value="tires">Tires</option>
-            <option value="other">Other / not sure</option>
+            <option value="">Interest</option>
+            <option value="grounds">Grounds / lawn</option>
+            <option value="surface">Exterior wash</option>
+            <option value="vehicle">Mobile detailing</option>
+            <option value="combined">Combined care</option>
           </Input>
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaMapMarkerAlt className="input-icon" />
           <Input
             type="select"
-            name="guestCount"
             value={consultation.guestCount}
             onChange={(e) =>
               handleConsultationChange("guestCount", e.target.value)
             }
             required
           >
-            <option value="">Shop or mobile?</option>
-            <option value="shop">Shop bay</option>
-            <option value="mobile-a">Mobile · Zone A</option>
-            <option value="mobile-b">Mobile · Zone B</option>
-            <option value="mobile-c">Mobile · Zone C</option>
+            <option value="">Property scale</option>
+            <option value="compact">Compact lot</option>
+            <option value="standard">Standard lot</option>
+            <option value="estate">Larger property</option>
+            <option value="vehicles">Vehicles only</option>
           </Input>
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
-          <FaCar className="input-icon" />
+          <FaHome className="input-icon" />
           <Input
             type="text"
-            name="budget"
             value={consultation.budget}
             onChange={(e) => handleConsultationChange("budget", e.target.value)}
-            placeholder="Year / make / model"
+            placeholder="Address or ZIP"
             required
           />
         </div>
       </FormGroup>
-
       <FormGroup className="input-group">
         <div className="icon-input">
           <FaComments className="input-icon" />
           <Input
             type="textarea"
-            name="message"
             value={consultation.message}
             onChange={(e) =>
               handleConsultationChange("message", e.target.value)
             }
-            placeholder="What's going on? Symptoms, noises, warning lights…"
+            placeholder="Notes for the visit"
             required
           />
         </div>
       </FormGroup>
-
       <Button type="submit" color="primary" disabled={isSubmitting}>
-        {isSubmitting ? "Sending…" : "Request booking"}
+        {isSubmitting ? "Sending…" : "Send request"}
       </Button>
-
       {submitStatus === "success" && (
         <div className="success-message">
-          Got it — we&apos;ll confirm time and a price range shortly.
+          Received. We will confirm timing and a range shortly.
         </div>
       )}
       {submitStatus === "error" && (
         <div className="error-message">
-          Something went wrong. Try again or call the shop.
+          Something went wrong. Please try again or call the studio.
         </div>
       )}
     </Form>

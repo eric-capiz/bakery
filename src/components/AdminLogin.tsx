@@ -53,9 +53,9 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
   };
 
   return (
-    <div className="pt-auth" onClick={onClose} role="presentation">
+    <div className="el-auth" onClick={onClose} role="presentation">
       <div
-        className="pt-auth-panel"
+        className="el-auth-panel"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -63,17 +63,17 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
       >
         <button
           type="button"
-          className="pt-auth-close"
+          className="el-auth-close"
           onClick={onClose}
           aria-label="Close"
         >
           Close
         </button>
-        <p className="pt-kicker">Shop access</p>
-        <h2 id={titleId}>Pit admin</h2>
-        <p className="pt-auth-lede">Sign in to manage the site.</p>
-        <form className="pt-auth-form" onSubmit={handleSubmit}>
-          <label className="pt-auth-field">
+        <p className="el-eyebrow">Access</p>
+        <h2 id={titleId}>Ellis admin</h2>
+        <p className="el-auth-lede">Sign in to manage the site.</p>
+        <form className="el-auth-form" onSubmit={handleSubmit}>
+          <label className="el-auth-field">
             <span>Username</span>
             <input
               ref={userRef}
@@ -85,9 +85,9 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
               required
             />
           </label>
-          <label className="pt-auth-field">
+          <label className="el-auth-field">
             <span>Password</span>
-            <div className="pt-auth-password">
+            <div className="el-auth-password">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -106,13 +106,13 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
             </div>
           </label>
           {error ? (
-            <p className="pt-auth-error" role="alert">
+            <p className="el-auth-error" role="alert">
               {error}
             </p>
           ) : null}
           <button
             type="submit"
-            className="pt-btn pt-auth-submit"
+            className="el-btn el-auth-submit"
             disabled={isLoading}
           >
             {isLoading ? "Signing in…" : "Sign in"}

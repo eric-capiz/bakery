@@ -40,7 +40,7 @@ const AdminPanel = () => {
   return (
     <AdminShell
       title="Admin Panel"
-      subtitle="Manage PIT content, images, and account settings."
+      subtitle="Manage ELLIS content, images, and account settings."
     >
       <div className="admin-card">
         <div className="admin-home-links">

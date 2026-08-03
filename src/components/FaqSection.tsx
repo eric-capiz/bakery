@@ -15,7 +15,7 @@ const DEFAULT_FAQS: FAQ[] = [
   {
     question: "What's your specialty?",
     answer:
-      "Seasonal, bespoke floral design — from intimate bouquets to full wedding and event installations.",
+      "Seasonal, bespoke floral design, from intimate bouquets to full wedding and event installations.",
   },
   {
     question: "What forms of payment do you accept?",

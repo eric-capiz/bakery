@@ -1,10 +1,10 @@
 .admin-shell {
-  /* PIT admin — mid bay, hazard controls */
-  --admin-text: #e8ebf0;
-  --admin-muted: #a8b0bd;
-  --admin-fill: #f5c400;
-  --admin-fill-hover: #ffd84a;
-  --admin-on-fill: #1a1e26;
+  /* ELLIS admin: porcelain page, ink/copper controls */
+  --admin-text: #121820;
+  --admin-muted: #6b7280;
+  --admin-fill: #121820;
+  --admin-fill-hover: #243040;
+  --admin-on-fill: #f0f2f5;
 
   min-height: 100vh;
   padding: 2rem 1rem 6rem;
@@ -48,7 +48,7 @@
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--pt-hazard, #f5c400);
+  color: var(--el-copper, #a67c52);
   margin-bottom: 0.45rem;
 }
 
@@ -82,7 +82,7 @@
     transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 
     &:hover {
-      border-color: var(--pt-hazard, #f5c400);
+      border-color: var(--el-copper, #a67c52);
       color: var(--admin-text);
     }
 
@@ -105,7 +105,7 @@
     margin-bottom: 1rem !important;
     border-width: 1px !important;
     border-radius: 4px !important;
-    box-shadow: 0 10px 24px rgba(20, 38, 29, 0.08) !important;
+    box-shadow: 0 10px 24px rgba(18, 24, 32, 0.06) !important;
 
     @media (min-width: 768px) {
       padding: 1.5rem !important;
@@ -134,7 +134,6 @@
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 
     &.is-active {
       background: var(--admin-fill);
@@ -182,12 +181,10 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
-    transition: background 0.25s ease, transform 0.25s ease;
 
     &:hover {
       background: var(--admin-fill-hover);
       color: var(--admin-on-fill);
-      transform: translateY(-2px);
     }
   }
 }
@@ -223,7 +220,7 @@
     font-family: var(--f-display);
     font-size: clamp(1.35rem, 4.5vw, 1.75rem);
     font-weight: 600;
-    color: var(--admin-text, #f4ebe4);
+    color: var(--admin-text);
     margin: 0;
     line-height: 1.2;
   }
@@ -231,7 +228,7 @@
 
 .admin-panel-desc {
   margin: 0.45rem 0 0;
-  color: var(--admin-muted, #c4b8ad);
+  color: var(--admin-muted);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -240,8 +237,8 @@
   flex: 0 0 auto;
   width: 100%;
   padding: 0.8rem 1.15rem;
-  background: var(--admin-fill, #7a3e52);
-  color: var(--admin-on-fill, #f4ebe4);
+  background: var(--admin-fill);
+  color: var(--admin-on-fill);
   border: none;
   border-radius: 2px;
   font-family: var(--f-sans);
@@ -249,7 +246,6 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s ease, opacity 0.2s ease;
 
   @media (min-width: 640px) {
     width: auto;
@@ -257,13 +253,13 @@
   }
 
   &:hover:not(:disabled) {
-    background: var(--admin-fill-hover, #a3546c);
-    color: var(--admin-on-fill, #f4ebe4);
+    background: var(--admin-fill-hover);
+    color: var(--admin-on-fill);
   }
 
   &:disabled {
-    background: #4a4450;
-    color: #c4b8ad;
+    background: #9aa3ad;
+    color: #f0f2f5;
     cursor: not-allowed;
     opacity: 0.85;
   }
@@ -285,16 +281,11 @@
   border-radius: 2px;
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 
   &:hover,
   &.is-open {
-    border-color: var(--f-sage);
+    border-color: var(--el-copper, #a67c52);
     background: var(--f-bone);
-  }
-
-  &.is-open {
-    box-shadow: 0 0 0 3px rgba(92, 122, 104, 0.18);
   }
 }
 
@@ -324,13 +315,13 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--f-sage);
+  color: var(--el-copper, #a67c52);
 }
 
 .admin-emoji-trigger-value {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--admin-text, #f4ebe4);
+  color: var(--admin-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -343,7 +334,6 @@
   border-right: 2px solid var(--f-muted);
   border-bottom: 2px solid var(--f-muted);
   transform: rotate(45deg);
-  transition: transform 0.2s ease;
   margin-right: 0.2rem;
 
   .admin-emoji-trigger.is-open & {
@@ -362,19 +352,7 @@
   background: var(--f-surface);
   border: 1.5px solid var(--f-line);
   border-radius: 4px;
-  box-shadow: 0 14px 32px rgba(20, 38, 29, 0.14);
-  animation: adminEmojiMenuIn 0.18s ease-out;
-}
-
-@keyframes adminEmojiMenuIn {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  box-shadow: 0 14px 32px rgba(18, 24, 32, 0.12);
 }
 
 .admin-emoji-picker {
@@ -400,7 +378,6 @@
   border: 1.5px solid transparent;
   border-radius: 2px;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 
   @media (min-width: 480px) {
     font-size: 1.3rem;
@@ -408,11 +385,7 @@
 
   &:hover {
     background: var(--f-bone);
-    border-color: var(--f-champagne);
-  }
-
-  &:active {
-    transform: scale(0.94);
+    border-color: var(--el-copper, #a67c52);
   }
 
   &.is-selected {
@@ -427,19 +400,19 @@
   padding: 0.65rem 0.75rem;
   border: 1.5px solid var(--f-line);
   border-radius: 2px;
-  background: var(--pt-asphalt, #0e1014);
+  background: var(--el-porcelain, #f0f2f5);
   font-size: 0.95rem;
-  color: var(--admin-text, #f4ebe4);
+  color: var(--admin-text);
 
   &:focus {
     outline: none;
-    border-color: var(--pt-hazard, #f5c400);
-    box-shadow: 0 0 0 3px rgba(245, 196, 0, 0.2);
+    border-color: var(--el-copper, #a67c52);
+    box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.2);
   }
 }
 
-/* PIT admin sign-in */
-.pt-auth {
+/* ELLIS admin sign-in */
+.el-auth {
   position: fixed;
   inset: 0;
   z-index: 80;
@@ -447,91 +420,92 @@
   align-items: flex-end;
   justify-content: center;
   padding: 0;
-  background: rgba(14, 16, 20, 0.82);
-  backdrop-filter: blur(8px);
+  background: rgba(18, 24, 32, 0.62);
+  backdrop-filter: blur(10px);
 }
 
-.pt-auth-panel {
+.el-auth-panel {
   width: 100%;
   max-height: min(92vh, 640px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background: var(--pt-bay, #3e4654);
-  border-top: 4px solid var(--pt-hazard, #f5c400);
-  padding: 1.5rem 1.35rem 2rem;
+  background: var(--el-porcelain, #f0f2f5);
+  border-top: 1px solid var(--el-copper, #a67c52);
+  padding: 1.75rem 1.5rem 2.15rem;
   position: relative;
-  animation: pt-auth-up 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: el-auth-up 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 
   h2 {
     margin: 0.45rem 0 0.55rem;
-    font-size: clamp(2.4rem, 10vw, 3.4rem);
-    color: var(--pt-fog, #e8ebf0);
+    font-size: clamp(2.4rem, 9vw, 3.4rem);
+    font-weight: 500;
+    color: var(--el-ink, #121820);
   }
 }
 
-.pt-auth-lede {
+.el-auth-lede {
   font-size: 0.95rem;
+  font-weight: 300;
   max-width: 34ch;
   margin-bottom: 1.5rem;
-  color: var(--pt-mute, #a8b0bd);
+  color: var(--el-mute, #6b7280);
 }
 
-.pt-auth-close {
+.el-auth-close {
   position: absolute;
-  top: 1.1rem;
-  right: 1.1rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  top: 1.2rem;
+  right: 1.2rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--pt-mute, #a8b0bd);
+  color: var(--el-mute, #6b7280);
   min-height: 2.5rem;
 
   &:hover,
   &:focus-visible {
-    color: var(--pt-hazard, #f5c400);
+    color: var(--el-ink, #121820);
   }
 }
 
-.pt-auth-form {
+.el-auth-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.pt-auth-field {
+.el-auth-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 
   span {
     font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--pt-hazard, #f5c400);
+    color: var(--el-copper, #a67c52);
   }
 
   input {
     width: 100%;
     min-height: 3rem;
-    border: 1px solid var(--pt-line, rgba(232, 235, 240, 0.14));
-    background: var(--pt-iron, #2a303a);
-    color: var(--pt-fog, #e8ebf0);
+    border: 1px solid var(--el-line, rgba(18, 24, 32, 0.12));
+    background: #ffffff;
+    color: var(--el-ink, #121820);
     padding: 0.75rem 0.9rem;
-    font-family: var(--pt-sans, sans-serif);
+    font-family: var(--el-sans, sans-serif);
     font-size: 1rem;
-    border-radius: 0;
-    -webkit-appearance: none;
+    font-weight: 300;
 
     &:focus {
       outline: none;
-      border-color: var(--pt-hazard, #f5c400);
+      border-color: var(--el-copper, #a67c52);
     }
   }
 }
 
-.pt-auth-password {
+.el-auth-password {
   position: relative;
   display: flex;
   align-items: center;
@@ -545,31 +519,32 @@
     right: 0.35rem;
     min-height: 2.4rem;
     padding: 0.4rem 0.7rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--pt-mute, #a8b0bd);
+    color: var(--el-mute, #6b7280);
 
     &:hover,
     &:focus-visible {
-      color: var(--pt-hazard, #f5c400);
+      color: var(--el-ink, #121820);
     }
   }
 }
 
-.pt-auth-error {
+.el-auth-error {
   margin: 0;
   padding: 0.75rem 0.85rem;
-  background: rgba(245, 196, 0, 0.14);
-  border: 1px solid rgba(245, 196, 0, 0.4);
-  color: var(--pt-fog, #e8ebf0);
+  background: rgba(166, 124, 82, 0.12);
+  border: 1px solid rgba(166, 124, 82, 0.35);
+  color: var(--el-ink, #121820);
   font-size: 0.9rem;
+  font-weight: 300;
 }
 
-.pt-auth-submit {
+.el-auth-submit {
   width: 100%;
-  min-height: 3.1rem;
+  min-height: 3rem;
   margin-top: 0.35rem;
 
   &:disabled {
@@ -578,10 +553,10 @@
   }
 }
 
-@keyframes pt-auth-up {
+@keyframes el-auth-up {
   from {
     opacity: 0;
-    transform: translateY(1.25rem);
+    transform: translateY(1rem);
   }
   to {
     opacity: 1;
@@ -590,20 +565,20 @@
 }
 
 @media (min-width: 640px) {
-  .pt-auth {
+  .el-auth {
     align-items: center;
     padding: 1.5rem;
   }
 
-  .pt-auth-panel {
+  .el-auth-panel {
     width: min(420px, 100%);
     max-height: none;
-    border: 1px solid var(--pt-line, rgba(20, 23, 29, 0.12));
-    border-top: 4px solid var(--pt-hazard, #f5c400);
-    padding: 2rem 1.75rem 2.15rem;
+    border: 1px solid var(--el-line, rgba(18, 24, 32, 0.12));
+    border-top: 1px solid var(--el-copper, #a67c52);
+    padding: 2.15rem 1.85rem 2.25rem;
   }
 
-  .pt-auth-submit {
+  .el-auth-submit {
     width: auto;
     align-self: flex-start;
   }

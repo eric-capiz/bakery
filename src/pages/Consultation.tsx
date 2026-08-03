@@ -3,39 +3,40 @@ import ConsultationForm from "../components/ConsultationForm";
 
 const Book = () => {
   return (
-    <div className="pt-page pt-book">
-      <header className="pt-page-head">
-        <p className="pt-kicker">Book</p>
-        <h1>Grab a slot</h1>
+    <div className="el-page el-book">
+      <header className="el-page-head">
+        <p className="el-eyebrow">Contact</p>
+        <h1>Arrange a visit</h1>
         <p>
-          Shop or mobile, what&apos;s wrong, and when you need it. We confirm
-          time and a range before we turn a wrench.
+          Tell us about the property and what you need. We respond with timing
+          and a clear range.
         </p>
       </header>
 
-      <div className="pt-book-grid">
+      <div className="el-book-grid">
         <aside>
-          <img src="/img/pit/work/03.jpg" alt="Service in progress" />
+          <p className="el-eyebrow">Studio</p>
           <ul>
             <li>
-              <span>Phone</span>
-              <strong>(555) 014-4820</strong>
+              <span>Telephone</span>
+              <strong>(555) 014-3390</strong>
             </li>
             <li>
-              <span>Shop</span>
-              <strong>418 Ironworks Ave</strong>
+              <span>Area</span>
+              <strong>City &amp; nearby</strong>
             </li>
             <li>
               <span>Hours</span>
-              <strong>Mon–Sat · 8–6</strong>
+              <strong>Mon–Sat · 7–5</strong>
             </li>
           </ul>
-          <p>
-            Price list first? <Link href="/services">Services</Link>
+          <p className="el-aside-note">
+            Prefer to browse first?{" "}
+            <Link href="/services">View services &amp; pricing</Link>
           </p>
         </aside>
-        <div className="pt-book-form">
-          <h2>Request form</h2>
+        <div className="el-book-form">
+          <h2>Request</h2>
           <ConsultationForm />
         </div>
       </div>

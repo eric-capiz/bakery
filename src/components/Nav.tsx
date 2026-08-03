@@ -8,7 +8,7 @@ const LINKS = [
   { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
   { href: "/reviews", label: "Reviews" },
-  { href: "/book", label: "Book" },
+  { href: "/book", label: "Contact" },
 ];
 
 const Nav = () => {
@@ -68,13 +68,13 @@ const Nav = () => {
         />
       ) : null}
 
-      <header className="pt-nav">
-        <div className="pt-nav-inner">
-          <Link href="/" className="pt-nav-brand">
-            Pit
+      <header className="el-nav">
+        <div className="el-nav-inner">
+          <Link href="/" className="el-nav-brand">
+            Ellis
           </Link>
 
-          <nav className="pt-nav-links" aria-label="Primary">
+          <nav className="el-nav-links" aria-label="Primary">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -86,30 +86,30 @@ const Nav = () => {
             ))}
           </nav>
 
-          <div className="pt-nav-end">
+          <div className="el-nav-end">
             {!isAdmin ? (
               <button
                 type="button"
-                className="pt-nav-admin"
+                className="el-nav-admin"
                 onClick={() => setShowLogin(true)}
               >
                 Admin
               </button>
             ) : (
               <>
-                <Link href="/admin" className="pt-nav-admin">
+                <Link href="/admin" className="el-nav-admin">
                   Panel
                 </Link>
-                <button type="button" className="pt-nav-admin" onClick={logout}>
+                <button type="button" className="el-nav-admin" onClick={logout}>
                   Log out
                 </button>
               </>
             )}
             <button
               type="button"
-              className="pt-nav-menu"
+              className="el-nav-menu"
               aria-expanded={open}
-              aria-controls="pt-drawer"
+              aria-controls="el-drawer"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? "Close" : "Menu"}
@@ -120,8 +120,8 @@ const Nav = () => {
 
       {open ? (
         <div
-          id="pt-drawer"
-          className="pt-drawer"
+          id="el-drawer"
+          className="el-drawer"
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
@@ -136,7 +136,7 @@ const Nav = () => {
               {link.label}
             </Link>
           ))}
-          <div className="pt-drawer-admin">
+          <div className="el-drawer-admin">
             {!isAdmin ? (
               <button
                 type="button"

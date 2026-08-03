@@ -2,49 +2,55 @@ import Link from "next/link";
 
 const About = () => {
   return (
-    <div className="pt-page pt-about">
-      <header className="pt-page-head">
-        <p className="pt-kicker">About</p>
-        <h1>Built for the pit.</h1>
+    <div className="el-page el-about">
+      <header className="el-page-head">
+        <p className="el-eyebrow">About</p>
+        <h1>A quieter standard</h1>
         <p>
-          PIT runs a real bay and a mobile van — same honesty either place.
+          Ellis is an outdoor care studio for properties that prefer calm
+          execution over spectacle.
         </p>
       </header>
 
-      <section className="pt-about-block">
-        <img src="/img/pit/work/02.jpg" alt="Tools on the workbench" />
+      <section className="el-about-story">
+        <img
+          src="/img/ellis/work/04.jpg"
+          alt="Residence with maintained grounds"
+        />
         <div>
           <p>
-            We built PIT for people tired of waiting rooms and vague invoices.
-            You get a clear diagnosis, a price before the work, and a text when
-            it&apos;s ready.
+            We built Ellis around a simple idea: the lawn, the stone, and the
+            car should feel like one finished place, tended by people who notice
+            the edges.
           </p>
           <p>
-            Shop for the jobs that need a lift. Mobile for the ones that
-            shouldn&apos;t wreck your day.
+            Appointments are paced. Pricing is spoken plainly. The work leaves
+            quietly.
           </p>
         </div>
       </section>
 
-      <section className="pt-pillars">
+      <section className="el-principles">
         <article>
-          <h2>01</h2>
-          <p>Say it straight — if it can wait, we say so.</p>
+          <h2>Clarity</h2>
+          <p>A range before we begin. No surprises after the visit.</p>
         </article>
         <article>
-          <h2>02</h2>
-          <p>Post the price — shop and mobile, up front.</p>
+          <h2>Pace</h2>
+          <p>
+            We arrive when we say, and move through the property with care.
+          </p>
         </article>
         <article>
-          <h2>03</h2>
-          <p>Show up — bay or driveway, on the time we book.</p>
+          <h2>Finish</h2>
+          <p>Blow-off, rinse, and a last look before we leave the curb.</p>
         </article>
       </section>
 
-      <div className="pt-page-foot">
-        <p>Ready to get on the board?</p>
-        <Link href="/book" className="pt-btn">
-          Book now
+      <div className="el-page-foot">
+        <p>Speak with Ellis.</p>
+        <Link href="/book" className="el-btn">
+          Contact
         </Link>
       </div>
     </div>
