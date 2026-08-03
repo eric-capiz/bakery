@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { MAX_REVIEW_DESCRIPTION_LENGTH, ADMIN_STATUS_POLL_INTERVAL, MODAL_AUTO_CLOSE_DELAY } from '../../lib/constants';
+import { useEffect, useMemo, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import {
+  MAX_REVIEW_DESCRIPTION_LENGTH,
+  ADMIN_STATUS_POLL_INTERVAL,
+  MODAL_AUTO_CLOSE_DELAY,
+} from "../../lib/constants";
 
 interface Review {
   id: string;
@@ -11,23 +15,78 @@ interface Review {
   date: string;
 }
 
+const useViewportMode = () => {
+  const [mode, setMode] = useState<"pending" | "mobile" | "desktop">("pending");
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const sync = () => setMode(media.matches ? "mobile" : "desktop");
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  return mode;
+};
+
+const placeOnTable = (index: number, total: number) => {
+  const cols = total <= 4 ? 2 : total <= 9 ? 3 : 4;
+  const rows = Math.max(1, Math.ceil(total / cols));
+  const col = index % cols;
+  const row = Math.floor(index / cols);
+
+  const leftMin = 2;
+  const leftMax = 74;
+  const topMin = 11;
+  const topMax = 74;
+
+  const leftBase =
+    leftMin + (col / Math.max(cols - 1, 1)) * (leftMax - leftMin);
+
+  const topBase =
+    rows === 1
+      ? (topMin + topMax) / 2
+      : topMin + (row / (rows - 1)) * (topMax - topMin);
+
+  // Offset odd rows so columns don't form rigid lines
+  const stagger = row % 2 === 1 ? (leftMax - leftMin) / (cols * 2.4) : 0;
+
+  const jitterX = ((index * 41) % 9) - 4;
+  const jitterY = ((index * 29) % 9) - 4;
+  const rot = ((index * 19) % 13) - 6;
+
+  const left = Math.min(leftMax, Math.max(leftMin, leftBase + stagger + jitterX));
+  const top = Math.min(topMax, Math.max(topMin, topBase + jitterY));
+
+  return {
+    left: `${left}%`,
+    top: `${top}%`,
+    rotate: `${rot * 0.55}deg`,
+    z: 1 + (index % 5),
+  };
+};
+
 const Reviews = () => {
+  const mode = useViewportMode();
+  const isMobile = mode === "mobile";
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Form state
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    name: '',
+    title: "",
+    description: "",
+    name: "",
     image: null as File | null,
   });
 
@@ -36,31 +95,25 @@ const Reviews = () => {
   useEffect(() => {
     loadReviews();
     checkAdminStatus();
-    
-    // Listen for admin login/logout events
-    const handleAdminChange = () => {
-      checkAdminStatus();
-    };
-    
-    window.addEventListener('adminLogin', handleAdminChange);
-    window.addEventListener('adminLogout', handleAdminChange);
-    
-    // Also check periodically and on focus
+
+    const handleAdminChange = () => checkAdminStatus();
+    window.addEventListener("adminLogin", handleAdminChange);
+    window.addEventListener("adminLogout", handleAdminChange);
     const interval = setInterval(checkAdminStatus, ADMIN_STATUS_POLL_INTERVAL);
     const handleFocus = () => checkAdminStatus();
-    window.addEventListener('focus', handleFocus);
-    
+    window.addEventListener("focus", handleFocus);
+
     return () => {
-      window.removeEventListener('adminLogin', handleAdminChange);
-      window.removeEventListener('adminLogout', handleAdminChange);
-      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener("adminLogin", handleAdminChange);
+      window.removeEventListener("adminLogout", handleAdminChange);
+      window.removeEventListener("focus", handleFocus);
       clearInterval(interval);
     };
   }, []);
 
   const checkAdminStatus = async () => {
     try {
-      const response = await fetch('/api/auth/verify');
+      const response = await fetch("/api/auth/verify");
       const data = await response.json();
       setIsAdmin(data.authenticated || false);
     } catch (err) {
@@ -70,19 +123,19 @@ const Reviews = () => {
 
   const loadReviews = async () => {
     try {
-      const response = await fetch('/api/reviews/get');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await fetch("/api/reviews/get");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      // Ensure data is an array
       if (Array.isArray(data)) {
         setReviews(data);
+        setSelectedId(null);
+        setMobileIndex(0);
+        setMobileOpen(false);
       } else {
         setReviews([]);
       }
     } catch (err) {
-      console.error('Failed to load reviews:', err);
+      console.error("Failed to load reviews:", err);
       setReviews([]);
     } finally {
       setLoading(false);
@@ -90,599 +143,400 @@ const Reviews = () => {
   };
 
   const handleOpenModal = () => {
-    // Scroll to top first
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    // Then open modal
+    window.scrollTo({ top: 0, behavior: "instant" });
     setIsModalOpen(true);
-    setError('');
+    setError("");
     setSuccess(false);
-    setFormData({ title: '', description: '', name: '', image: null });
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
+    setFormData({ title: "", description: "", name: "", image: null });
+    document.body.style.overflow = "hidden";
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setError('');
+    setError("");
     setSuccess(false);
-    setFormData({ title: '', description: '', name: '', image: null });
-    // Restore body scroll
-    document.body.style.overflow = 'unset';
+    setFormData({ title: "", description: "", name: "", image: null });
+    document.body.style.overflow = "";
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, image: e.target.files![0] }));
+      setFormData((prev) => ({ ...prev, image: e.target.files![0] }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setSubmitting(true);
-
     const formDataToSend = new FormData();
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('description', formData.description);
-    if (formData.name.trim()) {
-      formDataToSend.append('name', formData.name.trim());
-    }
-    if (formData.image) {
-      formDataToSend.append('image', formData.image);
-    }
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("description", formData.description);
+    if (formData.name.trim()) formDataToSend.append("name", formData.name.trim());
+    if (formData.image) formDataToSend.append("image", formData.image);
 
     try {
-      const response = await fetch('/api/reviews/submit', {
-        method: 'POST',
+      const response = await fetch("/api/reviews/submit", {
+        method: "POST",
         body: formDataToSend,
       });
-
       const data = await response.json();
-
       if (response.ok) {
         setSuccess(true);
-        // Close modal after delay and reload reviews
         setTimeout(() => {
           handleCloseModal();
           loadReviews();
         }, MODAL_AUTO_CLOSE_DELAY);
       } else {
-        setError(data.error || 'Failed to submit review. Please try again.');
+        setError(data.error || "Failed to submit review. Please try again.");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDeleteClick = (reviewId: string) => {
-    setReviewToDelete(reviewId);
-  };
-
-  const handleDeleteCancel = () => {
-    setReviewToDelete(null);
-  };
-
   const handleDeleteConfirm = async () => {
     if (!reviewToDelete) return;
-    const reviewIdToDelete = reviewToDelete;
-
+    const id = reviewToDelete;
     try {
-      const response = await fetch(`/api/reviews/delete?id=${reviewIdToDelete}`, {
-        method: 'DELETE',
+      const response = await fetch(`/api/reviews/delete?id=${id}`, {
+        method: "DELETE",
       });
-
       if (response.ok) {
         loadReviews();
         setReviewToDelete(null);
+        if (selectedId === id) setSelectedId(null);
       } else {
-        setAlertMessage('Failed to delete review');
+        setAlertMessage("Failed to delete review");
         setShowAlert(true);
         setReviewToDelete(null);
       }
     } catch (err) {
-      setAlertMessage('An error occurred while deleting the review');
+      setAlertMessage("An error occurred while deleting the review");
       setShowAlert(true);
       setReviewToDelete(null);
     }
   };
 
-  const handleAlertClose = () => {
-    setShowAlert(false);
-    setAlertMessage('');
-  };
+  const reviewImageSrc = (image: string) =>
+    image.startsWith("http") ? image : `/img/reviews/${image}`;
+
+  const seal = (name: string | null, title: string) =>
+    ((name && name.trim()) || title || "A").trim().charAt(0).toUpperCase();
+
+  const tableReviews = useMemo(() => reviews.slice(0, 12), [reviews]);
+  const selected = reviews.find((r) => r.id === selectedId) || null;
+  const mobileReview = reviews[mobileIndex] || null;
+  const count = reviews.length;
 
   return (
-    <div className={`reviews-page ${inView ? 'animate-in' : ''}`} ref={ref}>
-      <div className="reviews-header">
-        <h2>Customer Reviews</h2>
-        <p>See what our customers have to say</p>
-        <button
-          onClick={handleOpenModal}
-          className="btn-add-review"
-          style={{
-            marginTop: '1.5rem',
-            padding: '0.75rem 2rem',
-            background: '#E8A87C',
-            color: '#FFFFFF',
-            border: 'none',
-            borderRadius: '12px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            boxShadow: '0 4px 15px rgba(232, 168, 124, 0.3)',
-            transition: 'all 0.3s ease',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#D97757';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = '#E8A87C';
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
-        >
-          Add Review
+    <div className={`reviews-page ${inView ? "animate-in" : ""}`} ref={ref}>
+      <header className="reviews-header">
+        <p className="reviews-kicker">Whisper table</p>
+        <h1>Customer Reviews</h1>
+        <p className="reviews-lead">
+          {mode === "mobile"
+            ? "Swipe through notes left for the bakery."
+            : "Notes scattered across the bakery table. Pick any one up to read it."}
+        </p>
+        <button type="button" onClick={handleOpenModal} className="btn-add-review">
+          Leave a review
         </button>
-      </div>
+      </header>
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: '#8B4A3A' }}>
-          Loading reviews...
+      {loading || mode === "pending" ? (
+        <p className="reviews-status">Loading reviews...</p>
+      ) : count === 0 ? (
+        <p className="reviews-status">
+          No reviews yet. Be the first to leave one.
+        </p>
+      ) : isMobile ? (
+        <div className="review-mobile-carousel">
+          <div className={`review-mobile-card ${mobileOpen ? "is-open" : ""}`}>
+            {!mobileOpen ? (
+              <button
+                type="button"
+                className="review-mobile-seal"
+                onClick={() => setMobileOpen(true)}
+              >
+                <span className="whisper-seal">{seal(mobileReview?.name || null, mobileReview?.title || "")}</span>
+                <span>
+                  <strong>{mobileReview?.title}</strong>
+                  <em>{mobileReview?.name || "Anonymous"}</em>
+                </span>
+                <span className="review-mobile-cue">Open</span>
+              </button>
+            ) : (
+              <div className="review-mobile-body">
+                <div className="review-mobile-toolbar">
+                  <strong>{mobileReview?.title}</strong>
+                  <button type="button" onClick={() => setMobileOpen(false)}>
+                    Seal
+                  </button>
+                </div>
+                <div className="review-mobile-scroll">
+                  <p>{mobileReview?.description}</p>
+                  <cite>{mobileReview?.name || "Anonymous"}</cite>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="cake-mobile-controls">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setMobileIndex((i) => (i - 1 + count) % count);
+              }}
+              aria-label="Previous"
+            >
+              ‹
+            </button>
+            <p>
+              {mobileIndex + 1} / {count}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setMobileIndex((i) => (i + 1) % count);
+              }}
+              aria-label="Next"
+            >
+              ›
+            </button>
+          </div>
         </div>
       ) : (
-        <div className="reviews-grid">
-          {reviews.map((review) => (
-            <div 
-              key={review.id} 
-              className="review-card" 
-              style={{ 
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                minHeight: '480px',
-              }}
-            >
-              {/* Delete Confirmation Overlay */}
-              {isAdmin && reviewToDelete === review.id && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0, 0, 0, 0.85)',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 100,
-                    padding: '1.5rem',
-                  }}
-                >
-                  <h3 style={{
-                    color: '#FFFFFF',
-                    fontFamily: '"DM Serif Display", serif',
-                    fontSize: '1.5rem',
-                    marginTop: 0,
-                    marginBottom: '1rem',
-                    textAlign: 'center',
-                  }}>
-                    Delete Review?
-                  </h3>
-                  <p style={{
-                    color: '#FFFFFF',
-                    marginBottom: '1.5rem',
-                    textAlign: 'center',
-                    fontSize: '0.95rem',
-                    lineHeight: '1.6',
-                  }}>
-                    This action cannot be undone.
-                  </p>
-                  <div style={{
-                    display: 'flex',
-                    gap: '1rem',
-                  }}>
+        <div className="whisper-table" aria-label="Reviews on the bakery table">
+          <div className="whisper-table-cloth" aria-hidden="true" />
+          <p className="whisper-table-hint">Pick up a note</p>
+
+          {tableReviews.map((review, i) => {
+            const spot = placeOnTable(i, tableReviews.length);
+            const active = selectedId === review.id;
+            return (
+              <button
+                type="button"
+                key={review.id}
+                className={`whisper-note ${active ? "is-active" : ""}`}
+                style={{
+                  left: spot.left,
+                  top: spot.top,
+                  transform: `rotate(${spot.rotate})`,
+                  zIndex: active ? 20 : spot.z,
+                }}
+                onClick={() =>
+                  setSelectedId((current) =>
+                    current === review.id ? null : review.id
+                  )
+                }
+                aria-pressed={active}
+              >
+                <span className="whisper-seal" aria-hidden="true">
+                  {seal(review.name, review.title)}
+                </span>
+                <span className="whisper-note-text">
+                  <strong>{review.title}</strong>
+                  <em>{review.name || "Anonymous"}</em>
+                </span>
+              </button>
+            );
+          })}
+
+          {reviews.length > tableReviews.length ? (
+            <p className="whisper-table-more">
+              Showing {tableReviews.length} of {reviews.length} notes on the table
+            </p>
+          ) : null}
+
+          {selected ? (
+            <div className="whisper-reader" role="dialog" aria-label="Opened review">
+              <div className="whisper-reader-head">
+                <div>
+                  <p className="whisper-reader-kicker">Opened note</p>
+                  <h2>{selected.title}</h2>
+                </div>
+                <div className="whisper-reader-actions">
+                  {isAdmin ? (
                     <button
-                      onClick={handleDeleteCancel}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: '#FFFFFF',
-                        color: '#8B4A3A',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                      }}
+                      type="button"
+                      className="is-danger-text"
+                      onClick={() => setReviewToDelete(selected.id)}
                     >
+                      Delete
+                    </button>
+                  ) : null}
+                  <button type="button" onClick={() => setSelectedId(null)}>
+                    Put back
+                  </button>
+                </div>
+              </div>
+              <div className="whisper-reader-body">
+                <p className="whisper-reader-greeting">Dear Sweet Dreams,</p>
+                <p>{selected.description}</p>
+                <cite>{selected.name || "A happy guest"}</cite>
+                {selected.image &&
+                selected.image !== "null" &&
+                selected.image.trim() ? (
+                  <img
+                    src={reviewImageSrc(selected.image)}
+                    alt=""
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                ) : null}
+              </div>
+
+              {reviewToDelete === selected.id ? (
+                <div className="review-delete-overlay">
+                  <h3>Delete this review?</h3>
+                  <p>This cannot be undone.</p>
+                  <div className="review-delete-actions">
+                    <button type="button" onClick={() => setReviewToDelete(null)}>
                       Cancel
                     </button>
                     <button
+                      type="button"
+                      className="is-danger"
                       onClick={handleDeleteConfirm}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: '#A85C4A',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       Delete
                     </button>
                   </div>
                 </div>
-              )}
-              
-              {isAdmin && reviewToDelete !== review.id && (
-                <button
-                  onClick={() => handleDeleteClick(review.id)}
-                  style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: '#A85C4A',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    borderRadius: '8px',
-                    width: '36px',
-                    height: '36px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '1.2rem',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-                    transition: 'all 0.2s ease',
-                    zIndex: 10,
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = '#8B4A3A';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = '#A85C4A';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                  title="Delete Review"
-                >
-                  🗑️
-                </button>
-              )}
-              <div style={{ 
-                width: '100%', 
-                height: '200px', 
-                marginBottom: '1rem',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                background: review.image ? 'transparent' : '#FFF8F0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                {review.image && review.image !== 'null' && review.image.trim() !== '' ? (
-                  <img
-                    src={review.image.startsWith('http') ? review.image : `/img/reviews/${review.image}`}
-                    alt="Review"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                    onError={(e) => {
-                      // Fallback if image doesn't exist - show emoji placeholder
-                      const img = e.target as HTMLImageElement;
-                      img.style.display = 'none';
-                      const parent = img.parentElement;
-                      if (parent && !parent.querySelector('.emoji-placeholder')) {
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'emoji-placeholder';
-                        placeholder.style.cssText = 'width: 100%; height: 100%; background: linear-gradient(135deg, #FFE5D9 0%, #FFF8F0 100%); display: flex; align-items: center; justify-content: center; color: #E8A87C; font-size: 5rem; opacity: 0.6; font-weight: bold;';
-                        placeholder.textContent = '🎂';
-                        parent.appendChild(placeholder);
-                      }
-                    }}
-                  />
-                ) : (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    background: 'linear-gradient(135deg, #FFE5D9 0%, #FFF8F0 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#E8A87C',
-                    fontSize: '5rem',
-                    opacity: 0.6,
-                    fontWeight: 'bold',
-                  }}>
-                    🎂
-                  </div>
-                )}
-              </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{review.title}</h3>
-                <p style={{ flex: 1, marginBottom: '1rem' }}>{review.description}</p>
-                <div style={{ marginTop: 'auto', color: '#A85C4A', fontStyle: 'italic', fontSize: '0.9rem' }}>
-                  — {review.name || 'Anonymous'}
-                </div>
-              </div>
+              ) : null}
             </div>
-          ))}
+          ) : null}
         </div>
       )}
 
-      {/* Review Submission Modal */}
-      {isModalOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.6)',
-            display: 'flex',
-            justifyContent: 'center',
-            zIndex: 10000,
-            padding: '2rem',
-            overflowY: 'auto',
-            paddingTop: '4rem',
-          }}
-          onClick={handleCloseModal}
-        >
+      {isModalOpen ? (
+        <div className="reviews-modal-overlay" onClick={handleCloseModal}>
           <div
-            style={{
-              background: '#FFFFFF',
-              borderRadius: '16px',
-              padding: '1.5rem 1.5rem 1rem 1.5rem',
-              maxWidth: '600px',
-              width: '100%',
-              marginTop: '2rem',
-              marginBottom: '2rem',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              height: 'fit-content',
-            }}
+            className="reviews-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="review-modal-title"
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.5rem', color: '#8B4A3A', margin: 0 }}>
-                Leave a Review
-              </h2>
+            <div className="reviews-modal-head">
+              <h2 id="review-modal-title">Leave a review</h2>
               <button
+                type="button"
+                className="reviews-modal-close"
                 onClick={handleCloseModal}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  color: '#8B4A3A',
-                  padding: '0.5rem',
-                }}
+                aria-label="Close"
               >
                 ×
               </button>
             </div>
-
-            {error && (
-              <div style={{ background: '#FFE5D9', color: '#A85C4A', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', border: '2px solid #FFB89A', fontSize: '0.9rem' }}>
-                {error}
+            {error ? <div className="reviews-banner is-error">{error}</div> : null}
+            {success ? (
+              <div className="reviews-banner is-success">
+                Thank you. Your review has been submitted.
               </div>
-            )}
-
-            {success && (
-              <div style={{ background: '#E8F5E9', color: '#2E7D32', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', border: '2px solid #81C784', textAlign: 'center', fontSize: '0.9rem' }}>
-                Thank you! Your review has been submitted successfully.
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
-                    Title <span style={{ color: '#A85C4A' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    required
-                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600', fontSize: '0.95rem' }}>
-                    Review Details <span style={{ color: '#A85C4A' }}>*</span>
-                    <span style={{ fontSize: '0.85rem', fontWeight: '400', color: '#A85C4A', marginLeft: '0.5rem' }}>
-                      (Max {MAX_REVIEW_DESCRIPTION_LENGTH} characters)
-                    </span>
-                  </label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={MAX_REVIEW_DESCRIPTION_LENGTH}
-                    rows={4}
-                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '0.95rem', fontFamily: 'inherit' }}
-                  />
-                  <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#A85C4A', marginTop: '0.25rem' }}>
+            ) : null}
+            <form onSubmit={handleSubmit} className="reviews-form">
+              <label>
+                Title
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </label>
+              <label>
+                <span className="reviews-form-label-row">
+                  Review details
+                  <span>
                     {formData.description.length}/{MAX_REVIEW_DESCRIPTION_LENGTH}
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600', fontSize: '0.95rem' }}>
-                    Your Name (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="First name only"
-                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '0.95rem' }}
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600', fontSize: '0.95rem' }}>
-                    Image (Optional)
-                  </label>
-                  <input
-                    type="file"
-                    name="image"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    onChange={handleImageChange}
-                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '0.95rem' }}
-                  />
-                  <div style={{ fontSize: '0.8rem', color: '#A85C4A', marginTop: '0.25rem' }}>
-                    Maximum file size: 10MB. Accepted formats: JPG, PNG, WebP
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '0.5rem', marginBottom: 0 }}>
-                  <button
-                    type="button"
-                    onClick={handleCloseModal}
-                    disabled={submitting}
-                    style={{
-                      padding: '0.75rem 1.5rem',
-                      background: '#FFFFFF',
-                      color: '#8B4A3A',
-                      border: '2px solid #E8A87C',
-                      borderRadius: '8px',
-                      cursor: submitting ? 'not-allowed' : 'pointer',
-                      fontWeight: '600',
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    style={{
-                      padding: '0.75rem 1.5rem',
-                      background: submitting ? '#A85C4A' : '#E8A87C',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      borderRadius: '8px',
-                      cursor: submitting ? 'not-allowed' : 'pointer',
-                      fontWeight: '600',
-                    }}
-                  >
-                    {submitting ? 'Submitting...' : 'Submit Review'}
-                  </button>
-                </div>
+                  </span>
+                </span>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                  maxLength={MAX_REVIEW_DESCRIPTION_LENGTH}
+                  rows={4}
+                />
+              </label>
+              <label>
+                Your name (optional)
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="First name only"
+                />
+              </label>
+              <label>
+                Image (optional)
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handleImageChange}
+                />
+              </label>
+              <div className="reviews-form-actions">
+                <button
+                  type="button"
+                  className="is-ghost"
+                  onClick={handleCloseModal}
+                  disabled={submitting}
+                >
+                  Cancel
+                </button>
+                <button type="submit" disabled={submitting}>
+                  {submitting ? "Submitting..." : "Submit review"}
+                </button>
               </div>
             </form>
           </div>
         </div>
-      )}
+      ) : null}
 
-
-      {/* Alert Modal */}
-      {showAlert && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.6)',
-            zIndex: 99999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem',
-          }}
-          onClick={handleAlertClose}
-        >
+      {showAlert ? (
+        <div className="reviews-modal-overlay" onClick={() => setShowAlert(false)}>
           <div
-            style={{
-              background: '#FFFFFF',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              maxWidth: '500px',
-              width: '100%',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              position: 'relative',
-            }}
+            className="reviews-modal reviews-modal--alert"
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
-              marginBottom: '1rem' 
-            }}>
-              <h3 style={{ 
-                fontFamily: '"DM Serif Display", serif', 
-                fontSize: '1.5rem', 
-                color: '#A85C4A', 
-                margin: 0 
-              }}>
-                Error
-              </h3>
+            <div className="reviews-modal-head">
+              <h2>Something went wrong</h2>
               <button
-                onClick={handleAlertClose}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  color: '#8B4A3A',
-                  padding: '0.5rem',
-                }}
+                type="button"
+                className="reviews-modal-close"
+                onClick={() => setShowAlert(false)}
+                aria-label="Close"
               >
                 ×
               </button>
             </div>
-            <p style={{ 
-              color: '#5C3A2A', 
-              marginBottom: '1rem',
-              lineHeight: '1.6',
-              fontSize: '0.95rem'
-            }}>
-              {alertMessage}
-            </p>
-            <div style={{ 
-              display: 'flex', 
-              justifyContent: 'flex-end',
-              marginTop: '0.5rem'
-            }}>
-              <button
-                onClick={handleAlertClose}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  background: '#E8A87C',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                }}
-              >
+            <p className="reviews-alert-copy">{alertMessage}</p>
+            <div className="reviews-form-actions">
+              <button type="button" onClick={() => setShowAlert(false)}>
                 OK
               </button>
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

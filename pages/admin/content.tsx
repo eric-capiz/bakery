@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import AdminShell from '../../src/components/AdminShell';
+
+const FEATURE_EMOJIS = [
+  '⚡', '💰', '🎨', '👨‍🍳', '⭐', '❤️', '🎂', '🍰', '🧁', '🍪',
+  '🥧', '🍩', '🎁', '🎉', '✨', '🔥', '💎', '🏆', '🎯', '🚀',
+  '💪', '🌟', '💫', '🎊', '🎈', '🎀', '🍓', '🍒', '🍇', '🍊',
+  '🍋', '🍌', '🍉', '🍑', '🍍', '🥭', '🍎', '🍏', '🍐',
+];
 
 interface ContentData {
   home: {
@@ -64,8 +71,34 @@ const AdminContent = () => {
   const [contactData, setContactData] = useState<ContentData['about']['baker']['contact'] | null>(null);
   const [whatIBakeData, setWhatIBakeData] = useState<string[]>([]);
   const [faqData, setFaqData] = useState<ContentData['about']['faq']>([]);
+  const [openEmojiPicker, setOpenEmojiPicker] = useState<number | null>(null);
+  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   
   const [saving, setSaving] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (openEmojiPicker === null) return;
+
+    const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(target)) {
+        setOpenEmojiPicker(null);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenEmojiPicker(null);
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('touchstart', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('touchstart', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [openEmojiPicker]);
 
   useEffect(() => {
     setMounted(true);
@@ -324,11 +357,7 @@ const AdminContent = () => {
   };
 
   if (!mounted || isChecking) {
-    return (
-      <div style={{ marginTop: '80px', padding: '4rem 2rem', minHeight: '90vh', background: '#FFF8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: '#8B4A3A', fontSize: '1.2rem' }}>Loading...</p>
-      </div>
-    );
+    return <AdminShell title="Content Management" loading />;
   }
 
   if (!isAuthenticated) {
@@ -336,48 +365,35 @@ const AdminContent = () => {
   }
 
   return (
-    <div className="admin-panel" style={{ marginTop: '80px', padding: '4rem 2rem', minHeight: '90vh', background: '#FFF8F0' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <h1 style={{ fontFamily: '"DM Serif Display", serif', fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#8B4A3A', marginBottom: '1rem', textAlign: 'center' }}>
-          Content Management
-        </h1>
+    <AdminShell
+      title="Content Management"
+      subtitle="Edit home and about page copy in one place."
+    >
 
         {/* Section Tabs */}
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '2rem', flexWrap: 'wrap' }}>
+        <div className="admin-section-tabs" role="tablist" aria-label="Content sections">
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeSection === 'home'}
+            className={activeSection === 'home' ? 'is-active' : undefined}
             onClick={() => setActiveSection('home')}
-            style={{
-              padding: '0.75rem 2rem',
-              background: activeSection === 'home' ? '#E8A87C' : '#FFFFFF',
-              color: activeSection === 'home' ? '#FFFFFF' : '#8B4A3A',
-              border: '2px solid #E8A87C',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '1rem',
-            }}
           >
             Home Page
           </button>
           <button
+            type="button"
+            role="tab"
+            aria-selected={activeSection === 'about'}
+            className={activeSection === 'about' ? 'is-active' : undefined}
             onClick={() => setActiveSection('about')}
-            style={{
-              padding: '0.75rem 2rem',
-              background: activeSection === 'about' ? '#E8A87C' : '#FFFFFF',
-              color: activeSection === 'about' ? '#FFFFFF' : '#8B4A3A',
-              border: '2px solid #E8A87C',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '1rem',
-            }}
           >
             About Page
           </button>
         </div>
 
         {error && (
-          <div style={{ background: '#FFE5D9', color: '#A85C4A', padding: '1rem', borderRadius: '12px', marginBottom: '2rem', border: '2px solid #FFB89A', textAlign: 'center' }}>
+          <div style={{ background: '#e8cfd3', color: '#6d5c60', padding: '1rem', borderRadius: '12px', marginBottom: '2rem', border: '2px solid #dfb6bd', textAlign: 'center' }}>
             {error}
           </div>
         )}
@@ -389,29 +405,22 @@ const AdminContent = () => {
         )}
 
         {loading ? (
-          <p style={{ textAlign: 'center', color: '#8B4A3A' }}>Loading content...</p>
+          <p style={{ textAlign: 'center', color: '#3f3034' }}>Loading content...</p>
         ) : content && heroData && featuresData && specialtiesData && experienceData && hoursData && contactData && (
           <>
             {activeSection === 'home' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {/* Hero Section */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Hero Section
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Hero Section</h2>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveHero}
                       disabled={saving === 'hero'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'hero' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'hero' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'hero' ? 'Saving...' : 'Save Hero'}
                     </button>
@@ -419,70 +428,66 @@ const AdminContent = () => {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Tagline (First Part)
                       </label>
                       <input
                         type="text"
                         value={heroData.tagline}
                         onChange={(e) => setHeroData({ ...heroData, tagline: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Tagline (Accent Word)
                       </label>
                       <input
                         type="text"
                         value={heroData.taglineAccent}
                         onChange={(e) => setHeroData({ ...heroData, taglineAccent: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Tagline (End Part)
                       </label>
                       <input
                         type="text"
                         value={heroData.taglineEnd}
                         onChange={(e) => setHeroData({ ...heroData, taglineEnd: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Subtitle
                       </label>
                       <input
                         type="text"
                         value={heroData.subtitle}
                         onChange={(e) => setHeroData({ ...heroData, subtitle: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Features Section */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Features Section
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Features Section</h2>
+                      <p className="admin-panel-desc">
+                        Updates the &quot;Why Choose Us&quot; section on the Home page.
+                      </p>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveFeatures}
                       disabled={saving === 'features'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'features' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'features' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'features' ? 'Saving...' : 'Save Features'}
                     </button>
@@ -490,77 +495,79 @@ const AdminContent = () => {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     {featuresData.map((feature, index) => (
-                      <div key={index} style={{ padding: '1.5rem', background: '#FFF8F0', borderRadius: '12px', border: '2px solid #FFE5D9' }}>
-                        <h3 style={{ color: '#8B4A3A', marginBottom: '1rem' }}>Feature {index + 1}</h3>
+                      <div key={index} style={{ padding: '1.5rem', background: '#e9d6d2', borderRadius: '12px', border: '2px solid #e8cfd3' }}>
+                        <h3 style={{ color: '#3f3034', marginBottom: '1rem' }}>Feature {index + 1}</h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Icon (emoji)
                             </label>
-                            <div style={{ marginBottom: '0.75rem' }}>
-                              <div style={{ 
-                                display: 'grid', 
-                                gridTemplateColumns: 'repeat(8, 1fr)', 
-                                gap: '0.5rem',
-                                padding: '0.75rem',
-                                background: '#FFF8F0',
-                                borderRadius: '8px',
-                                border: '2px solid #FFE5D9',
-                                marginBottom: '0.5rem'
-                              }}>
-                                {['⚡', '💰', '🎨', '👨‍🍳', '⭐', '❤️', '🎂', '🍰', '🧁', '🍪', '🥧', '🍩', '🎁', '🎉', '✨', '🔥', '💎', '🏆', '🎯', '🚀', '💪', '🌟', '💫', '🎊', '🎈', '🎀', '🍓', '🍒', '🍇', '🍊', '🍋', '🍌', '🍉', '🍑', '🍍', '🥭', '🍎', '🍏', '🍐', '🍊'].map((emoji) => (
-                                  <button
-                                    key={emoji}
-                                    type="button"
-                                    onClick={() => {
+                            <div
+                              className="admin-emoji-select"
+                              ref={openEmojiPicker === index ? emojiPickerRef : undefined}
+                            >
+                              <button
+                                type="button"
+                                className={`admin-emoji-trigger${openEmojiPicker === index ? ' is-open' : ''}`}
+                                onClick={() =>
+                                  setOpenEmojiPicker(openEmojiPicker === index ? null : index)
+                                }
+                                aria-expanded={openEmojiPicker === index}
+                                aria-haspopup="listbox"
+                              >
+                                <span className="admin-emoji-preview" aria-hidden="true">
+                                  {feature.icon || '🎂'}
+                                </span>
+                                <span className="admin-emoji-trigger-copy">
+                                  <span className="admin-emoji-trigger-label">
+                                    {feature.icon ? 'Change icon' : 'Choose icon'}
+                                  </span>
+                                  <span className="admin-emoji-trigger-value">
+                                    {feature.icon || 'None selected'}
+                                  </span>
+                                </span>
+                                <span className="admin-emoji-chevron" aria-hidden="true" />
+                              </button>
+
+                              {openEmojiPicker === index && (
+                                <div className="admin-emoji-menu" role="listbox" aria-label="Feature icons">
+                                  <div className="admin-emoji-picker">
+                                    {FEATURE_EMOJIS.map((emoji) => (
+                                      <button
+                                        key={emoji}
+                                        type="button"
+                                        role="option"
+                                        className={`admin-emoji-btn${feature.icon === emoji ? ' is-selected' : ''}`}
+                                        aria-selected={feature.icon === emoji}
+                                        aria-label={`Select ${emoji}`}
+                                        onClick={() => {
+                                          const updated = [...featuresData];
+                                          updated[index].icon = emoji;
+                                          setFeaturesData(updated);
+                                          setOpenEmojiPicker(null);
+                                        }}
+                                      >
+                                        {emoji}
+                                      </button>
+                                    ))}
+                                  </div>
+                                  <input
+                                    type="text"
+                                    value={feature.icon}
+                                    onChange={(e) => {
                                       const updated = [...featuresData];
-                                      updated[index].icon = emoji;
+                                      updated[index].icon = e.target.value;
                                       setFeaturesData(updated);
                                     }}
-                                    style={{
-                                      background: feature.icon === emoji ? '#E8A87C' : '#FFFFFF',
-                                      border: `2px solid ${feature.icon === emoji ? '#E8A87C' : '#FFB89A'}`,
-                                      borderRadius: '6px',
-                                      padding: '0.5rem',
-                                      fontSize: '1.5rem',
-                                      cursor: 'pointer',
-                                      transition: 'all 0.2s ease',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                    }}
-                                    onMouseOver={(e) => {
-                                      if (feature.icon !== emoji) {
-                                        e.currentTarget.style.background = '#FFE5D9';
-                                        e.currentTarget.style.transform = 'scale(1.1)';
-                                      }
-                                    }}
-                                    onMouseOut={(e) => {
-                                      if (feature.icon !== emoji) {
-                                        e.currentTarget.style.background = '#FFFFFF';
-                                        e.currentTarget.style.transform = 'scale(1)';
-                                      }
-                                    }}
-                                  >
-                                    {emoji}
-                                  </button>
-                                ))}
-                              </div>
-                              <input
-                                type="text"
-                                value={feature.icon}
-                                onChange={(e) => {
-                                  const updated = [...featuresData];
-                                  updated[index].icon = e.target.value;
-                                  setFeaturesData(updated);
-                                }}
-                                placeholder="Or type custom emoji"
-                                style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
-                              />
+                                    placeholder="Or type a custom emoji"
+                                    className="admin-emoji-custom"
+                                  />
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Title
                             </label>
                             <input
@@ -571,11 +578,11 @@ const AdminContent = () => {
                                 updated[index].title = e.target.value;
                                 setFeaturesData(updated);
                               }}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                             />
                           </div>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Description
                             </label>
                             <textarea
@@ -586,7 +593,7 @@ const AdminContent = () => {
                                 setFeaturesData(updated);
                               }}
                               rows={3}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                             />
                           </div>
                         </div>
@@ -596,23 +603,16 @@ const AdminContent = () => {
                 </div>
 
                 {/* Specialties Section */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Specialties Section
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Specialties Section</h2>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveSpecialties}
                       disabled={saving === 'specialties'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'specialties' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'specialties' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'specialties' ? 'Saving...' : 'Save Specialties'}
                     </button>
@@ -620,11 +620,11 @@ const AdminContent = () => {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     {specialtiesData.map((specialty, index) => (
-                      <div key={index} style={{ padding: '1.5rem', background: '#FFF8F0', borderRadius: '12px', border: '2px solid #FFE5D9' }}>
-                        <h3 style={{ color: '#8B4A3A', marginBottom: '1rem' }}>Specialty {index + 1}</h3>
+                      <div key={index} style={{ padding: '1.5rem', background: '#e9d6d2', borderRadius: '12px', border: '2px solid #e8cfd3' }}>
+                        <h3 style={{ color: '#3f3034', marginBottom: '1rem' }}>Specialty {index + 1}</h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Title
                             </label>
                             <input
@@ -635,11 +635,11 @@ const AdminContent = () => {
                                 updated[index].title = e.target.value;
                                 setSpecialtiesData(updated);
                               }}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                             />
                           </div>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Description
                             </label>
                             <textarea
@@ -650,7 +650,7 @@ const AdminContent = () => {
                                 setSpecialtiesData(updated);
                               }}
                               rows={3}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                             />
                           </div>
                         </div>
@@ -664,58 +664,44 @@ const AdminContent = () => {
             {activeSection === 'about' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {/* Meet the Baker */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Meet the Baker
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Meet the Baker</h2>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveBakerIntro}
                       disabled={saving === 'baker-intro'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'baker-intro' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'baker-intro' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'baker-intro' ? 'Saving...' : 'Save Intro'}
                     </button>
                   </div>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                       Introduction Paragraph
                     </label>
                     <textarea
                       value={bakerIntro}
                       onChange={(e) => setBakerIntro(e.target.value)}
                       rows={5}
-                      style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                      style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                     />
                   </div>
                 </div>
 
                 {/* Experience & Education */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Experience & Education
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Experience & Education</h2>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveExperience}
                       disabled={saving === 'experience'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'experience' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'experience' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'experience' ? 'Saving...' : 'Save Experience'}
                     </button>
@@ -723,92 +709,85 @@ const AdminContent = () => {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Main Experience Text
                       </label>
                       <textarea
                         value={experienceData.main}
                         onChange={(e) => setExperienceData({ ...experienceData, main: e.target.value })}
                         rows={3}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Education
                       </label>
                       <input
                         type="text"
                         value={experienceData.education}
                         onChange={(e) => setExperienceData({ ...experienceData, education: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Specialization
                       </label>
                       <input
                         type="text"
                         value={experienceData.specialization}
                         onChange={(e) => setExperienceData({ ...experienceData, specialization: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Years of Experience
                       </label>
                       <input
                         type="text"
                         value={experienceData.years}
                         onChange={(e) => setExperienceData({ ...experienceData, years: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Certifications
                       </label>
                       <input
                         type="text"
                         value={experienceData.certifications}
                         onChange={(e) => setExperienceData({ ...experienceData, certifications: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* What I Bake */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      What I Bake
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>What I Bake</h2>
+                      <p className="admin-panel-desc">
+                        Maximum 20 items allowed. You can add, edit, or delete items. Click &quot;Save Items&quot; to save changes.
+                      </p>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveWhatIBake}
                       disabled={saving === 'what-i-bake'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'what-i-bake' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'what-i-bake' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'what-i-bake' ? 'Saving...' : 'Save Items'}
                     </button>
                   </div>
-                  <p style={{ color: '#A85C4A', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                    Maximum 20 items allowed. You can add, edit, or delete items. Click "Save Items" to save changes.
-                  </p>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
                     {whatIBakeData.map((item, index) => (
-                      <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', background: '#FFF8F0', borderRadius: '8px' }}>
+                      <div key={index} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem', background: '#e9d6d2', borderRadius: '8px' }}>
                         <input
                           type="text"
                           value={item}
@@ -817,7 +796,7 @@ const AdminContent = () => {
                             updated[index] = e.target.value;
                             setWhatIBakeData(updated);
                           }}
-                          style={{ flex: 1, padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                          style={{ flex: 1, padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                         />
                         <button
                           onClick={() => {
@@ -828,8 +807,8 @@ const AdminContent = () => {
                           }}
                           style={{
                             padding: '0.75rem 1.5rem',
-                            background: '#A85C4A',
-                            color: '#FFFFFF',
+                            background: '#6d5c60',
+                            color: '#f4e8e5',
                             border: 'none',
                             borderRadius: '8px',
                             cursor: 'pointer',
@@ -848,7 +827,7 @@ const AdminContent = () => {
                         type="text"
                         id="new-bake-item"
                         placeholder="Enter new item name"
-                        style={{ flex: 1, padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ flex: 1, padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
                             const input = e.currentTarget;
@@ -869,8 +848,8 @@ const AdminContent = () => {
                         }}
                         style={{
                           padding: '0.75rem 1.5rem',
-                          background: '#E8A87C',
-                          color: '#FFFFFF',
+                          background: '#b56f7c',
+                          color: '#f4e8e5',
                           border: 'none',
                           borderRadius: '8px',
                           cursor: 'pointer',
@@ -884,23 +863,16 @@ const AdminContent = () => {
                 </div>
 
                 {/* Working Hours & Contact */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      Working Hours & Contact
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>Working Hours & Contact</h2>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveHoursAndContact}
                       disabled={saving === 'hours-contact'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'hours-contact' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'hours-contact' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'hours-contact' ? 'Saving...' : 'Save Hours & Contact'}
                     </button>
@@ -909,14 +881,14 @@ const AdminContent = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                     {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
                       <div key={day}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600', textTransform: 'capitalize' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600', textTransform: 'capitalize' }}>
                           {day}
                         </label>
                         <input
                           type="text"
                           value={hoursData[day as keyof typeof hoursData]}
                           onChange={(e) => setHoursData({ ...hoursData, [day]: e.target.value })}
-                          style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                          style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                         />
                       </div>
                     ))}
@@ -924,62 +896,55 @@ const AdminContent = () => {
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Email
                       </label>
                       <input
                         type="email"
                         value={contactData.email}
                         onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                         Phone
                       </label>
                       <input
                         type="tel"
                         value={contactData.phone}
                         onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* FAQ Section */}
-                <div style={{ background: '#FFFFFF', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #FFE5D9' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <h2 style={{ fontFamily: '"DM Serif Display", serif', fontSize: '1.75rem', color: '#8B4A3A' }}>
-                      FAQ Section
-                    </h2>
+                <div style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
+                  <div className="admin-panel-header">
+                    <div className="admin-panel-heading">
+                      <h2>FAQ Section</h2>
+                      <p className="admin-panel-desc">
+                        Maximum 10 questions allowed. You can add, edit, or delete questions. Click &quot;Save FAQ&quot; to save changes.
+                      </p>
+                    </div>
                     <button
+                      type="button"
+                      className="admin-save-btn"
                       onClick={saveFAQ}
                       disabled={saving === 'faq'}
-                      style={{
-                        padding: '0.75rem 1.5rem',
-                        background: saving === 'faq' ? '#A85C4A' : '#E8A87C',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: saving === 'faq' ? 'not-allowed' : 'pointer',
-                        fontWeight: '600',
-                      }}
                     >
                       {saving === 'faq' ? 'Saving...' : 'Save FAQ'}
                     </button>
                   </div>
-                  <p style={{ color: '#A85C4A', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-                    Maximum 10 questions allowed. You can add, edit, or delete questions. Click "Save FAQ" to save changes.
-                  </p>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1.5rem' }}>
                     {faqData.map((faq, index) => (
-                      <div key={index} style={{ padding: '1.5rem', background: '#FFF8F0', borderRadius: '12px', border: '2px solid #FFE5D9' }}>
+                      <div key={index} style={{ padding: '1.5rem', background: '#e9d6d2', borderRadius: '12px', border: '2px solid #e8cfd3' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1rem' }}>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Question
                             </label>
                             <input
@@ -990,11 +955,11 @@ const AdminContent = () => {
                                 updated[index].question = e.target.value;
                                 setFaqData(updated);
                               }}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                             />
                           </div>
                           <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                               Answer
                             </label>
                             <textarea
@@ -1005,7 +970,7 @@ const AdminContent = () => {
                                 setFaqData(updated);
                               }}
                               rows={3}
-                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                              style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                             />
                           </div>
                         </div>
@@ -1018,8 +983,8 @@ const AdminContent = () => {
                           }}
                           style={{
                             padding: '0.75rem 1.5rem',
-                            background: '#A85C4A',
-                            color: '#FFFFFF',
+                            background: '#6d5c60',
+                            color: '#f4e8e5',
                             border: 'none',
                             borderRadius: '8px',
                             cursor: 'pointer',
@@ -1033,29 +998,29 @@ const AdminContent = () => {
                   </div>
 
                   {faqData.length < 10 && (
-                    <div style={{ padding: '1.5rem', background: '#FFF8F0', borderRadius: '12px', border: '2px dashed #FFB89A' }}>
-                      <h3 style={{ color: '#8B4A3A', marginBottom: '1rem' }}>Add New FAQ</h3>
+                    <div style={{ padding: '1.5rem', background: '#e9d6d2', borderRadius: '12px', border: '2px dashed #dfb6bd' }}>
+                      <h3 style={{ color: '#3f3034', marginBottom: '1rem' }}>Add New FAQ</h3>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div>
-                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                             Question
                           </label>
                           <input
                             type="text"
                             id="new-faq-question"
                             placeholder="Enter question"
-                            style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem' }}
+                            style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem' }}
                           />
                         </div>
                         <div>
-                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#8B4A3A', fontWeight: '600' }}>
+                          <label style={{ display: 'block', marginBottom: '0.5rem', color: '#3f3034', fontWeight: '600' }}>
                             Answer
                           </label>
                           <textarea
                             id="new-faq-answer"
                             placeholder="Enter answer"
                             rows={3}
-                            style={{ width: '100%', padding: '0.75rem', border: '2px solid #FFB89A', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
+                            style={{ width: '100%', padding: '0.75rem', border: '2px solid #dfb6bd', borderRadius: '8px', fontSize: '1rem', fontFamily: 'inherit' }}
                           />
                         </div>
                         <button
@@ -1073,8 +1038,8 @@ const AdminContent = () => {
                           }}
                           style={{
                             padding: '0.75rem 1.5rem',
-                            background: '#E8A87C',
-                            color: '#FFFFFF',
+                            background: '#b56f7c',
+                            color: '#f4e8e5',
                             border: 'none',
                             borderRadius: '8px',
                             cursor: 'pointer',
@@ -1092,13 +1057,7 @@ const AdminContent = () => {
           </>
         )}
 
-        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-          <Link href="/admin" style={{ color: '#E8A87C', textDecoration: 'none', fontSize: '1.1rem', fontFamily: '"Space Grotesk", sans-serif' }}>
-            ← Back to Admin Panel
-          </Link>
-        </div>
-      </div>
-    </div>
+    </AdminShell>
   );
 };
 
