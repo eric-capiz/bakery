@@ -1,61 +1,50 @@
 import Link from "next/link";
 
-const VALUES = [
-  {
-    title: "Depth over brightness",
-    description: "We favour wine, dusk, and hush — color that holds a room.",
-  },
-  {
-    title: "Bouquets as architecture",
-    description: "Form first, then bloom. Every piece must sit well in the hand.",
-  },
-  {
-    title: "Small by design",
-    description: "Few commissions. Full attention. No theatre on the day.",
-  },
-];
-
 const About = () => {
   return (
-    <div className="br-page br-practice">
-      <header className="br-page-head">
-        <p className="br-kicker">Practice</p>
-        <h1>The Brume studio</h1>
+    <div className="pt-page pt-about">
+      <header className="pt-page-head">
+        <p className="pt-kicker">About</p>
+        <h1>Built for the pit.</h1>
         <p>
-          A dark, measured floral practice for weddings and private evenings.
+          PIT runs a real bay and a mobile van — same honesty either place.
         </p>
       </header>
 
-      <section className="br-practice-lead">
-        <img
-          src="/img/brume/home/detail.jpg"
-          alt="Table arrangement by Brume"
-        />
+      <section className="pt-about-block">
+        <img src="/img/pit/work/02.jpg" alt="Tools on the workbench" />
         <div>
           <p>
-            Brume began with a preference for florals that feel like dusk — rich
-            without shouting, composed without stiffness.
+            We built PIT for people tired of waiting rooms and vague invoices.
+            You get a clear diagnosis, a price before the work, and a text when
+            it&apos;s ready.
           </p>
           <p>
-            We work with couples and hosts who want bouquets and arrangements
-            that hold presence after the light softens. Restraint is the luxury.
+            Shop for the jobs that need a lift. Mobile for the ones that
+            shouldn&apos;t wreck your day.
           </p>
         </div>
       </section>
 
-      <section className="br-practice-values">
-        {VALUES.map((v) => (
-          <article key={v.title}>
-            <h2>{v.title}</h2>
-            <p>{v.description}</p>
-          </article>
-        ))}
+      <section className="pt-pillars">
+        <article>
+          <h2>01</h2>
+          <p>Say it straight — if it can wait, we say so.</p>
+        </article>
+        <article>
+          <h2>02</h2>
+          <p>Post the price — shop and mobile, up front.</p>
+        </article>
+        <article>
+          <h2>03</h2>
+          <p>Show up — bay or driveway, on the time we book.</p>
+        </article>
       </section>
 
-      <div className="br-page-foot">
-        <p>Ready to talk through a date?</p>
-        <Link href="/commission" className="br-btn">
-          Commission
+      <div className="pt-page-foot">
+        <p>Ready to get on the board?</p>
+        <Link href="/book" className="pt-btn">
+          Book now
         </Link>
       </div>
     </div>

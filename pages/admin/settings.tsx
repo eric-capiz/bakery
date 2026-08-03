@@ -110,7 +110,7 @@ const AdminSettings = () => {
   return (
     <AdminShell
       title="Account Settings"
-      subtitle="Update your Brume admin username and password."
+      subtitle="Update your Clutch admin username and password."
     >
         <form onSubmit={handleSubmit} style={{ background: '#f4e8e5', padding: '2.5rem', borderRadius: '16px', boxShadow: '0 4px 20px rgba(139, 74, 58, 0.1)', border: '2px solid #e8cfd3' }}>
           <div style={{ marginBottom: '1.5rem' }}>

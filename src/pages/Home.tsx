@@ -1,94 +1,113 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+const TAPE = [
+  "Oil & filter",
+  "Brakes",
+  "Battery",
+  "Diagnostics",
+  "Coolant",
+  "Spark plugs",
+  "A/C",
+  "Mobile service",
+];
+
 const Home = () => {
   return (
-    <div className="br-home">
-      <section className="br-chamber">
-        <motion.div
-          className="br-chamber-copy"
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <p className="br-brand">Brume</p>
-          <h1>Florals for evenings that matter.</h1>
-          <p className="br-lede">
-            Bridal bouquets and private arrangements composed in deep color —
-            restrained, modern, sure of themselves.
-          </p>
-          <div className="br-actions">
-            <Link href="/commission" className="br-btn">
-              Commission
-            </Link>
-            <Link href="/portfolio" className="br-btn br-btn--ghost">
-              Portfolio
-            </Link>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="br-chamber-aperture"
-          initial={{ opacity: 0, scale: 1.06 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <img
-            src="/img/brume/home/hero.jpg"
-            alt="Burgundy bridal bouquet by Brume"
-          />
-        </motion.div>
-      </section>
-
-      <section className="br-strip">
-        <div className="br-shell">
-          <p className="br-kicker">Selected work</p>
-          <div className="br-strip-row">
-            <Link href="/portfolio" className="br-strip-card">
-              <img src="/img/brume/work/02.jpg" alt="Apricot bridal bouquet" />
-              <span>Bridal bouquets</span>
-            </Link>
-            <Link href="/portfolio" className="br-strip-card">
-              <img src="/img/brume/work/05.jpg" alt="Table arrangement" />
-              <span>Table vessels</span>
-            </Link>
-            <Link href="/portfolio" className="br-strip-card">
-              <img src="/img/brume/work/07.jpg" alt="Studio bouquet" />
-              <span>Studio studies</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="br-shell br-statement">
-        <div>
-          <p className="br-kicker">Practice</p>
-          <h2>Color with intention. Silence where it counts.</h2>
-          <p>
-            Brume is a small studio. We design for the hand, the aisle, and the
-            room after dark — never for the feed alone.
-          </p>
-          <Link href="/practice" className="br-text-link">
-            Meet the practice
-          </Link>
-        </div>
+    <div className="pt-home">
+      <section className="pt-hero" aria-label="PIT hero">
         <img
-          src="/img/brume/home/secondary.jpg"
-          alt="Peach and cream bridal bouquet"
+          src="/img/pit/home/hero.jpg"
+          alt="Mechanic working under a vehicle in the bay"
         />
+        <div className="pt-hero-shade" aria-hidden="true" />
+        <motion.div
+          className="pt-hero-copy"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <h1>Pit</h1>
+          <p className="pt-hero-line">Bay work. Driveway saves.</p>
+          <p className="pt-hero-sub">
+            Shop lift or mobile van — posted prices, straight answers, no
+            mystery invoice.
+          </p>
+          <div className="pt-actions">
+            <Link href="/book" className="pt-btn">
+              Book a slot
+            </Link>
+            <Link href="/services" className="pt-btn pt-btn--ghost">
+              Price board
+            </Link>
+          </div>
+        </motion.div>
       </section>
 
-      <section className="br-close">
-        <div className="br-shell">
-          <p className="br-kicker">Commission</p>
-          <h2>Begin with a date and a feeling.</h2>
-          <p>We reply with availability and a clear next step.</p>
-          <div className="br-actions">
-            <Link href="/commission" className="br-btn">
-              Commission
-            </Link>
-            <Link href="/praise" className="br-btn br-btn--ghost">
-              Praise
+      <div className="pt-tape" aria-hidden="true">
+        <div className="pt-tape-track">
+          {[...TAPE, ...TAPE].map((item, i) => (
+            <span key={`${item}-${i}`}>{item}</span>
+          ))}
+        </div>
+      </div>
+
+      <section className="pt-lanes">
+        <article>
+          <img src="/img/pit/home/bay.jpg" alt="PIT service bay" />
+          <div>
+            <p className="pt-kicker">Shop</p>
+            <h2>Full bay.</h2>
+            <p>Lift jobs, deep diagnostics, anything that needs the floor.</p>
+          </div>
+        </article>
+        <article>
+          <img src="/img/pit/home/mobile.jpg" alt="PIT mobile van" />
+          <div>
+            <p className="pt-kicker">Mobile</p>
+            <h2>We roll.</h2>
+            <p>Oil, batteries, pads, roadside — priced by zone on services.</p>
+          </div>
+        </article>
+      </section>
+
+      <section className="pt-order">
+        <div className="pt-shell">
+          <p className="pt-kicker">Work order</p>
+          <h2>Starting rates</h2>
+          <div className="pt-order-grid">
+            <div>
+              <span>Oil change</span>
+              <strong>$69 / $99</strong>
+              <small>Shop / Mobile</small>
+            </div>
+            <div>
+              <span>Brake pads</span>
+              <strong>$189 / $249</strong>
+              <small>Shop / Mobile</small>
+            </div>
+            <div>
+              <span>Battery install</span>
+              <strong>$149 / $189</strong>
+              <small>Shop / Mobile</small>
+            </div>
+            <div>
+              <span>Diagnostic</span>
+              <strong>$129 / $159</strong>
+              <small>Shop / Mobile</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="pt-punch">
+        <div className="pt-shell">
+          <p className="pt-kicker">Ready</p>
+          <h2>Get on the board.</h2>
+          <p>Tell us shop or mobile, what&apos;s wrong, and when you need it.</p>
+          <div className="pt-actions">
+            <Link href="/book" className="pt-btn">
+              Book now
             </Link>
           </div>
         </div>

@@ -1,0 +1,14 @@
+---
+description: Always kill local servers and free ports when finishing work
+alwaysApply: true
+---
+
+# Kill ports when done
+
+When a task is finished (or before ending the turn after starting a local server), free the ports you used.
+
+- Stop any Next.js / Node / Vite / other local servers started in the session.
+- Kill processes holding common project ports (especially `3000`, and any other ports this session opened).
+- Prefer killing by port/PID for this project rather than leaving `npm run dev` running.
+- Do this by default at the end of the task — the user should not have to ask.
+- Do not leave background servers running after you are done unless the user explicitly asked to keep them up.

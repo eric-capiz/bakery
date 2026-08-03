@@ -3,31 +3,31 @@ import Link from "next/link";
 const NOTES = [
   {
     id: "1",
-    name: "Clara & Jonah",
-    text: "The bouquet felt inevitable — deep, quiet, and completely ours. Guests still ask who made it.",
+    name: "Marcus T.",
+    text: "Mobile oil change in my driveway before work. Clean, on time, done.",
   },
   {
     id: "2",
-    name: "Simone R.",
-    text: "No fuss, no theatrics. Just beautiful florals that held their composure all night.",
+    name: "Dana K.",
+    text: "Shop found a misfire two other places missed. Explained it like a person.",
   },
   {
     id: "3",
-    name: "The Harlow Dinner",
-    text: "Tables looked designed, not decorated. Brume understood the room before we finished describing it.",
+    name: "Luis R.",
+    text: "Dead battery at the office — van was there fast. Worth it.",
   },
 ];
 
-const Praise = () => {
+const Reviews = () => {
   return (
-    <div className="br-page br-praise">
-      <header className="br-page-head">
-        <p className="br-kicker">Praise</p>
-        <h1>Words from the evening</h1>
-        <p>Notes from weddings and private dinners we dressed.</p>
+    <div className="pt-page pt-reviews">
+      <header className="pt-page-head">
+        <p className="pt-kicker">Reviews</p>
+        <h1>From the lot</h1>
+        <p>Short notes from the bay and the driveway.</p>
       </header>
 
-      <div className="br-praise-list">
+      <div className="pt-quotes">
         {NOTES.map((n) => (
           <blockquote key={n.id}>
             <p>“{n.text}”</p>
@@ -36,14 +36,14 @@ const Praise = () => {
         ))}
       </div>
 
-      <div className="br-page-foot">
-        <p>Begin a conversation for your date.</p>
-        <Link href="/commission" className="br-btn">
-          Commission
+      <div className="pt-page-foot">
+        <p>Your turn.</p>
+        <Link href="/book" className="pt-btn">
+          Book now
         </Link>
       </div>
     </div>
   );
 };
 
-export default Praise;
+export default Reviews;

@@ -18,7 +18,6 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     userRef.current?.focus();
-
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -33,7 +32,6 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -41,7 +39,6 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
-
       if (response.ok) {
         onLogin();
         onClose();
@@ -56,9 +53,9 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
   };
 
   return (
-    <div className="br-auth" onClick={onClose} role="presentation">
+    <div className="pt-auth" onClick={onClose} role="presentation">
       <div
-        className="br-auth-panel"
+        className="pt-auth-panel"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -66,21 +63,17 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
       >
         <button
           type="button"
-          className="br-auth-close"
+          className="pt-auth-close"
           onClick={onClose}
           aria-label="Close"
         >
           Close
         </button>
-
-        <p className="br-kicker">Studio access</p>
-        <h2 id={titleId}>Brume admin</h2>
-        <p className="br-auth-lede">
-          Sign in to manage content, images, and commissions.
-        </p>
-
-        <form className="br-auth-form" onSubmit={handleSubmit}>
-          <label className="br-auth-field">
+        <p className="pt-kicker">Shop access</p>
+        <h2 id={titleId}>Pit admin</h2>
+        <p className="pt-auth-lede">Sign in to manage the site.</p>
+        <form className="pt-auth-form" onSubmit={handleSubmit}>
+          <label className="pt-auth-field">
             <span>Username</span>
             <input
               ref={userRef}
@@ -92,10 +85,9 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
               required
             />
           </label>
-
-          <label className="br-auth-field">
+          <label className="pt-auth-field">
             <span>Password</span>
-            <div className="br-auth-password">
+            <div className="pt-auth-password">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -113,16 +105,14 @@ const AdminLogin = ({ onLogin, onClose }: AdminLoginProps) => {
               </button>
             </div>
           </label>
-
           {error ? (
-            <p className="br-auth-error" role="alert">
+            <p className="pt-auth-error" role="alert">
               {error}
             </p>
           ) : null}
-
           <button
             type="submit"
-            className="br-btn br-auth-submit"
+            className="pt-btn pt-auth-submit"
             disabled={isLoading}
           >
             {isLoading ? "Signing in…" : "Sign in"}

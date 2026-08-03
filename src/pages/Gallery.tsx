@@ -1,186 +1,169 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
 
-interface Piece {
+type Loc = "shop" | "mobile";
+
+interface Service {
   id: string;
   name: string;
-  description: string;
-  image: string;
-  category: string;
+  blurb: string;
+  shop: number;
+  mobile: number;
+  tag: string;
 }
 
-const PIECES: Piece[] = [
+const SERVICES: Service[] = [
   {
-    id: "1",
-    name: "Night berry",
-    description: "Wine dahlias, garden roses, and dark berries — held close.",
-    image: "/img/brume/work/01.jpg",
-    category: "Bridal bouquet",
+    id: "oil",
+    name: "Oil & filter",
+    blurb: "Blend oil, new filter, top-offs, quick walkaround.",
+    shop: 69,
+    mobile: 99,
+    tag: "Maintenance",
   },
   {
-    id: "2",
-    name: "Apricot vow",
-    description: "Peach and cream roses with soft greenery for the aisle.",
-    image: "/img/brume/work/02.jpg",
-    category: "Bridal bouquet",
+    id: "brakes",
+    name: "Brake pads / axle",
+    blurb: "Pads, hardware check, rotor measure. Rotors extra if needed.",
+    shop: 189,
+    mobile: 249,
+    tag: "Brakes",
   },
   {
-    id: "3",
-    name: "Ivory dusk",
-    description: "White roses, eucalyptus, and cool textural accents.",
-    image: "/img/brume/work/03.jpg",
-    category: "Bridal bouquet",
+    id: "battery",
+    name: "Battery install",
+    blurb: "Test, swap, clean terminals. Battery billed at cost.",
+    shop: 149,
+    mobile: 189,
+    tag: "Electrical",
   },
   {
-    id: "4",
-    name: "Garden hush",
-    description: "A full bridal silhouette against soft white.",
-    image: "/img/brume/work/04.jpg",
-    category: "Bridal bouquet",
+    id: "diag",
+    name: "Full diagnostic",
+    blurb: "Scan, live data, plain-English write-up.",
+    shop: 129,
+    mobile: 159,
+    tag: "Diagnostics",
   },
   {
-    id: "5",
-    name: "Fig vessel",
-    description: "Pink and white stems composed for the long table.",
-    image: "/img/brume/work/05.jpg",
-    category: "Table arrangement",
+    id: "tires",
+    name: "Rotate & balance",
+    blurb: "Four tires, balance, set pressures.",
+    shop: 79,
+    mobile: 119,
+    tag: "Tires",
   },
   {
-    id: "6",
-    name: "Gathered rose",
-    description: "A round hand-tied bouquet for guests and portraits.",
-    image: "/img/brume/work/06.jpg",
-    category: "Hand-tied bouquet",
+    id: "coolant",
+    name: "Coolant flush",
+    blurb: "Drain, flush, refill to spec.",
+    shop: 159,
+    mobile: 199,
+    tag: "Maintenance",
   },
   {
-    id: "7",
-    name: "Copper study",
-    description: "Peach roses with succulents — modern studio composition.",
-    image: "/img/brume/work/07.jpg",
-    category: "Studio bouquet",
+    id: "plugs",
+    name: "Spark plugs (4-cyl)",
+    blurb: "Plugs + boot check. 6/8-cyl quoted after look.",
+    shop: 179,
+    mobile: 229,
+    tag: "Engine",
   },
   {
-    id: "8",
-    name: "Altar white",
-    description: "Intimate white blooms for vows and quiet rooms.",
-    image: "/img/brume/work/08.jpg",
-    category: "Ceremony bouquet",
+    id: "ac",
+    name: "A/C recharge",
+    blurb: "Leak check, vacuum, recharge.",
+    shop: 169,
+    mobile: 209,
+    tag: "Comfort",
+  },
+  {
+    id: "wipers",
+    name: "Wiper blades",
+    blurb: "Front install. Blades at cost.",
+    shop: 39,
+    mobile: 59,
+    tag: "Quick",
+  },
+  {
+    id: "ppi",
+    name: "Pre-purchase inspect",
+    blurb: "Lift, scan, road notes. Shop bay only.",
+    shop: 149,
+    mobile: 0,
+    tag: "Inspect",
   },
 ];
 
-const Portfolio = () => {
-  const [active, setActive] = useState<Piece | null>(null);
+const money = (n: number) => (n === 0 ? "—" : `$${n}`);
 
-  useEffect(() => {
-    if (!active) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(null);
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        const i = PIECES.findIndex((p) => p.id === active.id);
-        setActive(
-          e.key === "ArrowRight"
-            ? PIECES[(i + 1) % PIECES.length]
-            : PIECES[(i - 1 + PIECES.length) % PIECES.length]
-        );
-      }
-    };
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [active]);
+const Services = () => {
+  const [loc, setLoc] = useState<Loc>("shop");
 
   return (
-    <div className="br-portfolio">
-      <header className="br-page-head">
-        <p className="br-kicker">Portfolio</p>
-        <h1>Bouquets &amp; arrangements</h1>
+    <div className="pt-page pt-services">
+      <header className="pt-page-head">
+        <p className="pt-kicker">Services</p>
+        <h1>Price board</h1>
         <p>
-          Finished pieces — bridal, table, and studio — photographed as they
-          leave the workbench.
+          Toggle shop vs mobile. Mobile trip fee by zone is listed under the
+          switch.
         </p>
       </header>
 
-      <div className="br-folio">
-        {PIECES.map((piece, i) => (
-          <article
-            key={piece.id}
-            className={`br-folio-row ${i % 2 ? "is-flip" : ""}`}
-          >
-            <button
-              type="button"
-              className="br-folio-media"
-              onClick={() => setActive(piece)}
-              aria-label={`View ${piece.name}`}
-            >
-              <img src={piece.image} alt={piece.name} />
-            </button>
-            <div className="br-folio-copy">
-              <span>{piece.category}</span>
-              <h2>{piece.name}</h2>
-              <p>{piece.description}</p>
-              <button
-                type="button"
-                className="br-text-link"
-                onClick={() => setActive(piece)}
-              >
-                View piece
-              </button>
-            </div>
-          </article>
-        ))}
+      <div className="pt-switch" role="group" aria-label="Location">
+        <button
+          type="button"
+          className={loc === "shop" ? "is-on" : ""}
+          onClick={() => setLoc("shop")}
+        >
+          Shop bay
+        </button>
+        <button
+          type="button"
+          className={loc === "mobile" ? "is-on" : ""}
+          onClick={() => setLoc("mobile")}
+        >
+          Mobile
+        </button>
       </div>
 
-      <section className="br-page-foot">
-        <p>Commission something in this spirit.</p>
-        <Link href="/commission" className="br-btn">
-          Commission
-        </Link>
-      </section>
+      <p className="pt-note">
+        {loc === "mobile"
+          ? "Mobile trip fee: Zone A (0–10 mi) included · Zone B +$25 · Zone C +$45. Parts at cost."
+          : "Shop prices = labor + standard supplies. Parts at cost with receipt."}
+      </p>
 
-      <AnimatePresence>
-        {active ? (
-          <motion.div
-            className="br-lightbox"
-            role="dialog"
-            aria-modal="true"
-            aria-label={active.name}
-            onClick={() => setActive(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="br-lightbox-panel"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <button
-                type="button"
-                className="br-lightbox-close"
-                onClick={() => setActive(null)}
-              >
-                Close
-              </button>
-              <img src={active.image} alt={active.name} />
-              <div className="br-lightbox-meta">
-                <span>{active.category}</span>
-                <h2>{active.name}</h2>
-                <p>{active.description}</p>
+      <div className="pt-board">
+        {SERVICES.map((s) => {
+          const price = loc === "shop" ? s.shop : s.mobile;
+          const blocked = loc === "mobile" && s.mobile === 0;
+          return (
+            <article key={s.id} className="pt-board-row">
+              <div>
+                <span>{s.tag}</span>
+                <h2>{s.name}</h2>
+                <p>{s.blurb}</p>
               </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+              <div className="pt-board-price">
+                <strong>{blocked ? "Shop only" : money(price)}</strong>
+                <small>
+                  Shop {money(s.shop)} · Mobile {money(s.mobile)}
+                </small>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="pt-page-foot">
+        <p>Don&apos;t see it? Ask — we quote before we start.</p>
+        <Link href="/book" className="pt-btn">
+          Book now
+        </Link>
+      </div>
     </div>
   );
 };
 
-export default Portfolio;
+export default Services;

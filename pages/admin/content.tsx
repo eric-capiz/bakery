@@ -367,7 +367,7 @@ const AdminContent = () => {
   return (
     <AdminShell
       title="Content Management"
-      subtitle="Edit Brume home and practice page copy in one place."
+      subtitle="Edit Clutch home and about page copy in one place."
     >
 
         {/* Section Tabs */}

@@ -5,16 +5,15 @@ import AdminLogin from "./AdminLogin";
 
 const LINKS = [
   { href: "/", label: "Home" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/practice", label: "Practice" },
-  { href: "/praise", label: "Praise" },
-  { href: "/commission", label: "Commission" },
+  { href: "/services", label: "Services" },
+  { href: "/about", label: "About" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/book", label: "Book" },
 ];
 
 const Nav = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -28,13 +27,6 @@ const Nav = () => {
         setIsAdmin(false);
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -76,13 +68,13 @@ const Nav = () => {
         />
       ) : null}
 
-      <header className={`br-nav ${scrolled ? "is-scrolled" : ""}`}>
-        <div className="br-nav-inner">
-          <Link href="/" className="br-nav-brand">
-            Brume
+      <header className="pt-nav">
+        <div className="pt-nav-inner">
+          <Link href="/" className="pt-nav-brand">
+            Pit
           </Link>
 
-          <nav className="br-nav-links" aria-label="Primary">
+          <nav className="pt-nav-links" aria-label="Primary">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -94,30 +86,30 @@ const Nav = () => {
             ))}
           </nav>
 
-          <div className="br-nav-end">
+          <div className="pt-nav-end">
             {!isAdmin ? (
               <button
                 type="button"
-                className="br-nav-admin"
+                className="pt-nav-admin"
                 onClick={() => setShowLogin(true)}
               >
                 Admin
               </button>
             ) : (
               <>
-                <Link href="/admin" className="br-nav-admin">
+                <Link href="/admin" className="pt-nav-admin">
                   Panel
                 </Link>
-                <button type="button" className="br-nav-admin" onClick={logout}>
+                <button type="button" className="pt-nav-admin" onClick={logout}>
                   Log out
                 </button>
               </>
             )}
             <button
               type="button"
-              className="br-nav-menu"
+              className="pt-nav-menu"
               aria-expanded={open}
-              aria-controls="br-drawer"
+              aria-controls="pt-drawer"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? "Close" : "Menu"}
@@ -128,8 +120,8 @@ const Nav = () => {
 
       {open ? (
         <div
-          id="br-drawer"
-          className="br-drawer"
+          id="pt-drawer"
+          className="pt-drawer"
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
@@ -144,7 +136,7 @@ const Nav = () => {
               {link.label}
             </Link>
           ))}
-          <div className="br-drawer-admin">
+          <div className="pt-drawer-admin">
             {!isAdmin ? (
               <button
                 type="button"
@@ -166,13 +158,6 @@ const Nav = () => {
               </>
             )}
           </div>
-          <button
-            type="button"
-            className="br-drawer-dismiss"
-            onClick={() => setOpen(false)}
-          >
-            Close menu
-          </button>
         </div>
       ) : null}
     </>

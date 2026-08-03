@@ -5,13 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
   FaCalendar,
   FaClock,
-  FaUsers,
-  FaDollarSign,
+  FaCar,
+  FaWrench,
   FaUser,
   FaEnvelope,
   FaPhone,
   FaComments,
-  FaLeaf,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 interface ConsultationData {
@@ -73,13 +73,19 @@ const ConsultationForm = () => {
     formData.append("name", consultation.name);
     formData.append("email", consultation.email);
     formData.append("phone", consultation.phone);
-    formData.append("date", consultation.date ? consultation.date.toLocaleDateString() : "");
+    formData.append(
+      "date",
+      consultation.date ? consultation.date.toLocaleDateString() : ""
+    );
     formData.append("time", consultation.time);
-    formData.append("eventType", consultation.eventType);
-    formData.append("guestCount", consultation.guestCount);
-    formData.append("budget", consultation.budget);
+    formData.append("serviceType", consultation.eventType);
+    formData.append("location", consultation.guestCount);
+    formData.append("vehicle", consultation.budget);
     formData.append("message", consultation.message);
-    formData.append("_subject", `New Consultation Request from ${consultation.name}`);
+    formData.append(
+      "_subject",
+      `PIT booking request from ${consultation.name}`
+    );
 
     try {
       const response = await fetch("https://formsubmit.co/ericcapiz@gmail.com", {
@@ -124,7 +130,7 @@ const ConsultationForm = () => {
             name="name"
             value={consultation.name}
             onChange={(e) => handleConsultationChange("name", e.target.value)}
-            placeholder="Your Name"
+            placeholder="Your name"
             required
           />
         </div>
@@ -138,7 +144,7 @@ const ConsultationForm = () => {
             name="email"
             value={consultation.email}
             onChange={(e) => handleConsultationChange("email", e.target.value)}
-            placeholder="Your Email"
+            placeholder="Email"
             required
           />
         </div>
@@ -152,7 +158,7 @@ const ConsultationForm = () => {
             name="phone"
             value={consultation.phone}
             onChange={(e) => handleConsultationChange("phone", e.target.value)}
-            placeholder="Your Phone Number"
+            placeholder="Phone"
             required
           />
         </div>
@@ -165,7 +171,7 @@ const ConsultationForm = () => {
             selected={consultation.date}
             onChange={(date) => handleConsultationChange("date", date)}
             minDate={new Date()}
-            placeholderText="Select Date"
+            placeholderText="Preferred date"
             className="form-control"
             required
           />
@@ -182,19 +188,22 @@ const ConsultationForm = () => {
             onChange={(e) => handleConsultationChange("time", e.target.value)}
             required
           >
-            <option value="">Select Time</option>
+            <option value="">Preferred time</option>
+            <option value="08:00">8:00 AM</option>
+            <option value="09:00">9:00 AM</option>
             <option value="10:00">10:00 AM</option>
             <option value="11:00">11:00 AM</option>
             <option value="13:00">1:00 PM</option>
             <option value="14:00">2:00 PM</option>
             <option value="15:00">3:00 PM</option>
+            <option value="16:00">4:00 PM</option>
           </Input>
         </div>
       </FormGroup>
 
       <FormGroup className="input-group">
         <div className="icon-input">
-          <FaLeaf className="input-icon" />
+          <FaWrench className="input-icon" />
           <Input
             type="select"
             name="eventType"
@@ -204,21 +213,20 @@ const ConsultationForm = () => {
             }
             required
           >
-            <option value="">Select Occasion</option>
-            <option value="wedding">Wedding</option>
-            <option value="birthday">Birthday</option>
-            <option value="anniversary">Anniversary</option>
-            <option value="corporate">Corporate / Event</option>
-            <option value="sympathy">Sympathy</option>
-            <option value="everyday">Everyday Bouquet</option>
-            <option value="other">Other</option>
+            <option value="">Service needed</option>
+            <option value="oil">Oil & filter</option>
+            <option value="brakes">Brakes</option>
+            <option value="battery">Battery</option>
+            <option value="diag">Diagnostic</option>
+            <option value="tires">Tires</option>
+            <option value="other">Other / not sure</option>
           </Input>
         </div>
       </FormGroup>
 
       <FormGroup className="input-group">
         <div className="icon-input">
-          <FaUsers className="input-icon" />
+          <FaMapMarkerAlt className="input-icon" />
           <Input
             type="select"
             name="guestCount"
@@ -228,31 +236,26 @@ const ConsultationForm = () => {
             }
             required
           >
-            <option value="">Expected Number of Guests</option>
-            <option value="1-20">1-20</option>
-            <option value="21-50">21-50</option>
-            <option value="51-100">51-100</option>
-            <option value="100+">100+</option>
+            <option value="">Shop or mobile?</option>
+            <option value="shop">Shop bay</option>
+            <option value="mobile-a">Mobile · Zone A</option>
+            <option value="mobile-b">Mobile · Zone B</option>
+            <option value="mobile-c">Mobile · Zone C</option>
           </Input>
         </div>
       </FormGroup>
 
       <FormGroup className="input-group">
         <div className="icon-input">
-          <FaDollarSign className="input-icon" />
+          <FaCar className="input-icon" />
           <Input
-            type="select"
+            type="text"
             name="budget"
             value={consultation.budget}
             onChange={(e) => handleConsultationChange("budget", e.target.value)}
+            placeholder="Year / make / model"
             required
-          >
-            <option value="">Budget Range</option>
-            <option value="100-200">$100-$200</option>
-            <option value="201-500">$201-$500</option>
-            <option value="501-1000">$501-$1000</option>
-            <option value="1000+">$1000+</option>
-          </Input>
+          />
         </div>
       </FormGroup>
 
@@ -266,24 +269,24 @@ const ConsultationForm = () => {
             onChange={(e) =>
               handleConsultationChange("message", e.target.value)
             }
-            placeholder="Palette, venue, date, stem preferences, or other arrangement details"
+            placeholder="What's going on? Symptoms, noises, warning lights…"
             required
           />
         </div>
       </FormGroup>
 
       <Button type="submit" color="primary" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Submit Floral Consultation"}
+        {isSubmitting ? "Sending…" : "Request booking"}
       </Button>
 
       {submitStatus === "success" && (
         <div className="success-message">
-          Thank you! Your floral consultation request has been sent successfully.
+          Got it — we&apos;ll confirm time and a price range shortly.
         </div>
       )}
       {submitStatus === "error" && (
         <div className="error-message">
-          Sorry, there was an error sending your request. Please try again.
+          Something went wrong. Try again or call the shop.
         </div>
       )}
     </Form>

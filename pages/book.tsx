@@ -1,2 +1,3 @@
-import Book from "../src/pages/Book";
-export default Book;
+import Consultation from "../src/pages/Consultation";
+
+export default Consultation;

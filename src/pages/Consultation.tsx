@@ -1,48 +1,41 @@
 import Link from "next/link";
 import ConsultationForm from "../components/ConsultationForm";
 
-const Commission = () => {
+const Book = () => {
   return (
-    <div className="br-page br-commission">
-      <header className="br-page-head">
-        <p className="br-kicker">Commission</p>
-        <h1>Tell us the occasion</h1>
+    <div className="pt-page pt-book">
+      <header className="pt-page-head">
+        <p className="pt-kicker">Book</p>
+        <h1>Grab a slot</h1>
         <p>
-          Share the date, setting, and mood. We reply with availability and a
-          clear next step.
+          Shop or mobile, what&apos;s wrong, and when you need it. We confirm
+          time and a range before we turn a wrench.
         </p>
       </header>
 
-      <div className="br-commission-layout">
-        <aside className="br-commission-aside">
-          <img
-            src="/img/brume/work/06.jpg"
-            alt="Hand-tied bouquet by Brume"
-          />
-          <div>
-            <h2>Studio contact</h2>
-            <ul>
-              <li>
-                <span>Email</span>
-                <strong>hello@brume.studio</strong>
-              </li>
-              <li>
-                <span>Phone</span>
-                <strong>(555) 014-3901</strong>
-              </li>
-              <li>
-                <span>Visits</span>
-                <strong>By appointment</strong>
-              </li>
-            </ul>
-            <p>
-              Prefer to browse first?{" "}
-              <Link href="/portfolio">Open the portfolio</Link>.
-            </p>
-          </div>
+      <div className="pt-book-grid">
+        <aside>
+          <img src="/img/pit/work/03.jpg" alt="Service in progress" />
+          <ul>
+            <li>
+              <span>Phone</span>
+              <strong>(555) 014-4820</strong>
+            </li>
+            <li>
+              <span>Shop</span>
+              <strong>418 Ironworks Ave</strong>
+            </li>
+            <li>
+              <span>Hours</span>
+              <strong>Mon–Sat · 8–6</strong>
+            </li>
+          </ul>
+          <p>
+            Price list first? <Link href="/services">Services</Link>
+          </p>
         </aside>
-        <div className="br-commission-form">
-          <h2>Commission form</h2>
+        <div className="pt-book-form">
+          <h2>Request form</h2>
           <ConsultationForm />
         </div>
       </div>
@@ -50,4 +43,4 @@ const Commission = () => {
   );
 };
 
-export default Commission;
+export default Book;

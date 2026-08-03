@@ -8,20 +8,21 @@ import "../src/styles/main.scss";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const isHome = router.pathname === "/";
 
   return (
-    <div className="br-app">
+    <div className={`pt-app${isHome ? " is-home" : ""}`}>
       <SmoothScroll>
         <ScrollTop />
         <Nav />
         <AnimatePresence mode="wait">
           <motion.main
             key={router.asPath}
-            className="br-main"
+            className="pt-main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             <Component {...pageProps} />
           </motion.main>

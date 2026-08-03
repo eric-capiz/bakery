@@ -4,14 +4,11 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-        <meta name="theme-color" content="#121016" />
+        <title>PIT — Shop bay &amp; mobile mechanic</title>
+        <meta name="theme-color" content="#3E4654" />
         <meta
           name="description"
-          content="BRUME — floral design for evenings that matter. Bridal bouquets, tables, and private celebrations."
+          content="PIT — shop bay and mobile mechanic. Straight talk. Posted prices. We show up."
         />
         <link rel="icon" type="image/png" href="/logo3.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,7 +18,7 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Teko:wght@500;600;700&display=swap"
           rel="stylesheet"
         />
       </Head>
