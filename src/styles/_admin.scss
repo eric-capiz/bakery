@@ -189,3 +189,240 @@
   line-height: 1.6;
   font-style: italic;
 }
+
+.admin-panel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.admin-panel-heading {
+  min-width: 0;
+  flex: 1 1 auto;
+
+  h2 {
+    font-family: var(--s-display);
+    font-size: clamp(1.35rem, 4.5vw, 1.75rem);
+    font-weight: 600;
+    color: var(--s-text-strong);
+    margin: 0;
+    line-height: 1.2;
+  }
+}
+
+.admin-panel-desc {
+  margin: 0.45rem 0 0;
+  color: var(--s-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.admin-save-btn {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0.8rem 1.15rem;
+  background: var(--s-rose);
+  color: #fffaf9;
+  border: none;
+  border-radius: 0.75rem;
+  font-family: var(--s-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, opacity 0.2s ease;
+
+  @media (min-width: 640px) {
+    width: auto;
+    padding: 0.75rem 1.35rem;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--s-rose-deep);
+  }
+
+  &:disabled {
+    background: var(--s-muted);
+    cursor: not-allowed;
+    opacity: 0.85;
+  }
+}
+
+.admin-emoji-select {
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+
+.admin-emoji-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--s-surface);
+  border: 1.5px solid var(--s-line);
+  border-radius: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &.is-open {
+    border-color: var(--s-rose);
+    background: #fffaf9;
+  }
+
+  &.is-open {
+    box-shadow: 0 0 0 3px rgba(181, 111, 124, 0.18);
+  }
+}
+
+.admin-emoji-preview {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  font-size: 1.55rem;
+  line-height: 1;
+  background: var(--s-ivory);
+  border: 1px solid var(--s-line);
+  border-radius: 0.7rem;
+}
+
+.admin-emoji-trigger-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.admin-emoji-trigger-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--s-rose-deep);
+}
+
+.admin-emoji-trigger-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--s-text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-emoji-chevron {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--s-muted);
+  border-bottom: 2px solid var(--s-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+  margin-right: 0.2rem;
+
+  .admin-emoji-trigger.is-open & {
+    transform: rotate(225deg);
+    margin-top: 0.25rem;
+  }
+}
+
+.admin-emoji-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  padding: 0.65rem;
+  background: #fffaf9;
+  border: 1.5px solid var(--s-line);
+  border-radius: 0.9rem;
+  box-shadow: 0 14px 32px rgba(143, 79, 92, 0.16);
+  animation: adminEmojiMenuIn 0.18s ease-out;
+}
+
+@keyframes adminEmojiMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-emoji-picker {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.35rem;
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+}
+
+.admin-emoji-btn {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+  background: var(--s-ivory);
+  border: 1.5px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+
+  @media (min-width: 480px) {
+    font-size: 1.3rem;
+  }
+
+  &:hover {
+    background: var(--s-blush);
+    border-color: var(--s-rose-soft);
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  &.is-selected {
+    background: var(--s-rose-deep);
+    border-color: var(--s-rose-deep);
+  }
+}
+
+.admin-emoji-custom {
+  width: 100%;
+  margin-top: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  border: 1.5px solid var(--s-line);
+  border-radius: 0.65rem;
+  background: var(--s-surface);
+  font-size: 0.95rem;
+  color: var(--s-text-strong);
+
+  &:focus {
+    outline: none;
+    border-color: var(--s-rose);
+    box-shadow: 0 0 0 3px rgba(181, 111, 124, 0.15);
+  }
+}
