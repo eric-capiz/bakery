@@ -1,7 +1,15 @@
 import Link from "next/link";
 import ConsultationForm from "../components/ConsultationForm";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const Book = () => {
+type BookProps = {
+  content?: SiteContent;
+};
+
+const Book = ({ content = DEFAULT_CONTENT }: BookProps) => {
+  const { about } = content;
+
   return (
     <div className="el-page el-book">
       <header className="el-page-head">
@@ -19,15 +27,33 @@ const Book = () => {
           <ul>
             <li>
               <span>Telephone</span>
-              <strong>(555) 014-3390</strong>
+              <strong>
+                <a href={`tel:${about.phone.replace(/[^+\d]/g, "")}`}>
+                  {about.phone}
+                </a>
+              </strong>
             </li>
+            {about.email ? (
+              <li>
+                <span>Email</span>
+                <strong>
+                  <a href={`mailto:${about.email}`}>{about.email}</a>
+                </strong>
+              </li>
+            ) : null}
             <li>
               <span>Area</span>
-              <strong>City &amp; nearby</strong>
+              <strong>{about.address}</strong>
             </li>
             <li>
               <span>Hours</span>
-              <strong>Mon–Sat · 7–5</strong>
+              <strong>
+                {about.hours.map((row) => (
+                  <span key={row.day} className="el-hours-row">
+                    {row.day} · {row.time}
+                  </span>
+                ))}
+              </strong>
             </li>
           </ul>
           <p className="el-aside-note">

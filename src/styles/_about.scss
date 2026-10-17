@@ -59,3 +59,33 @@
     }
   }
 }
+
+/* CMS-managed highlights list */
+.el-about-highlights {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--el-line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  li {
+    position: relative;
+    padding-left: 1.3rem;
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--el-mute);
+    line-height: 1.6;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 0.65rem;
+      height: 1px;
+      background: var(--el-copper);
+    }
+  }
+}

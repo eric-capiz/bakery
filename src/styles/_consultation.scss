@@ -178,3 +178,29 @@
     color: var(--el-ink);
   }
 }
+
+/* CMS contact aside */
+.el-book-grid aside strong a {
+  color: inherit;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    color: var(--el-copper);
+    border-bottom-color: var(--el-copper);
+  }
+}
+
+.el-hours-row {
+  display: block;
+  line-height: 1.7;
+}
+
+/* Keep the date picker usable on small screens */
+.react-datepicker-popper {
+  max-width: calc(100vw - 2rem);
+}
+
+.react-datepicker {
+  max-width: 100%;
+  font-family: var(--el-sans);
+}

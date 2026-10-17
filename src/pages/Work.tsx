@@ -1,10 +1,25 @@
 import Link from "next/link";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const SERVICES = [
+interface PriceItem {
+  name: string;
+  price: string;
+  note: string;
+}
+
+interface ServiceMeta {
+  id: string;
+  image: string;
+  imageAlt: string;
+  items: PriceItem[];
+}
+
+/** Editorial structure (images, anchors, price tables). Titles and purpose
+ *  copy come from the CMS; these stay static so the design never breaks. */
+const SERVICE_META: ServiceMeta[] = [
   {
     id: "grounds",
-    title: "Grounds",
-    purpose: "Lawn and garden care so the property stays composed.",
     image: "/img/ellis/home/grounds.jpg",
     imageAlt: "Manicured lawn and garden beds",
     items: [
@@ -16,8 +31,6 @@ const SERVICES = [
   },
   {
     id: "surface",
-    title: "Exterior wash",
-    purpose: "Pressure and soft washing for driveways, stone, and the house.",
     image: "/img/ellis/work/06.jpg",
     imageAlt: "Clean exterior surfaces after washing",
     items: [
@@ -32,9 +45,6 @@ const SERVICES = [
   },
   {
     id: "vehicle",
-    title: "Mobile detailing",
-    purpose:
-      "We come to you for hand wash and interior detail in your driveway.",
     image: "/img/ellis/work/05.jpg",
     imageAlt: "Vehicle after mobile detailing",
     items: [
@@ -45,7 +55,11 @@ const SERVICES = [
   },
 ];
 
-const Services = () => {
+type ServicesProps = {
+  content?: SiteContent;
+};
+
+const Services = ({ content = DEFAULT_CONTENT }: ServicesProps) => {
   return (
     <div className="el-page el-services">
       <header className="el-page-head">
@@ -58,35 +72,45 @@ const Services = () => {
       </header>
 
       <div className="el-service-list">
-        {SERVICES.map((service, index) => (
-          <section
-            key={service.id}
-            id={service.id}
-            className={`el-service-block${index % 2 === 1 ? " is-flip" : ""}`}
-          >
-            <div className="el-service-media">
-              <img src={service.image} alt={service.imageAlt} />
-            </div>
-            <div className="el-service-copy">
-              <p className="el-eyebrow">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h2>{service.title}</h2>
-              <p className="el-service-purpose">{service.purpose}</p>
-              <ul className="el-price-list">
-                {service.items.map((item) => (
-                  <li key={item.name}>
-                    <div>
-                      <span>{item.name}</span>
-                      <small>{item.note}</small>
-                    </div>
-                    <strong>{item.price}</strong>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-        ))}
+        {SERVICE_META.map((meta, index) => {
+          const item = content.services[index];
+          const purpose = item
+            ? item.description.split(/\n\s*\n/)[0]
+            : "";
+          return (
+            <section
+              key={meta.id}
+              id={meta.id}
+              className={`el-service-block${
+                index % 2 === 1 ? " is-flip" : ""
+              }`}
+            >
+              <div className="el-service-media">
+                <img src={meta.image} alt={meta.imageAlt} />
+              </div>
+              <div className="el-service-copy">
+                <p className="el-eyebrow">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <h2>{item ? item.title : ""}</h2>
+                {purpose ? (
+                  <p className="el-service-purpose">{purpose}</p>
+                ) : null}
+                <ul className="el-price-list">
+                  {meta.items.map((price) => (
+                    <li key={price.name}>
+                      <div>
+                        <span>{price.name}</span>
+                        <small>{price.note}</small>
+                      </div>
+                      <strong>{price.price}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </section>
+          );
+        })}
       </div>
 
       <p className="el-services-note">

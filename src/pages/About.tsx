@@ -1,6 +1,17 @@
 import Link from "next/link";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const About = () => {
+type AboutProps = {
+  content?: SiteContent;
+};
+
+const About = ({ content = DEFAULT_CONTENT }: AboutProps) => {
+  const paragraphs = content.about.intro
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
   return (
     <div className="el-page el-about">
       <header className="el-page-head">
@@ -18,34 +29,29 @@ const About = () => {
           alt="Residence with maintained grounds"
         />
         <div>
-          <p>
-            We built Ellis around a simple idea: the lawn, the stone, and the
-            car should feel like one finished place, tended by people who notice
-            the edges.
-          </p>
-          <p>
-            Appointments are paced. Pricing is spoken plainly. The work leaves
-            quietly.
-          </p>
+          {paragraphs.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
+          ))}
+          {content.about.highlights.length > 0 ? (
+            <ul className="el-about-highlights">
+              {content.about.highlights.map((highlight) => (
+                <li key={highlight}>{highlight}</li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       </section>
 
-      <section className="el-principles">
-        <article>
-          <h2>Clarity</h2>
-          <p>A range before we begin. No surprises after the visit.</p>
-        </article>
-        <article>
-          <h2>Pace</h2>
-          <p>
-            We arrive when we say, and move through the property with care.
-          </p>
-        </article>
-        <article>
-          <h2>Finish</h2>
-          <p>Blow-off, rinse, and a last look before we leave the curb.</p>
-        </article>
-      </section>
+      {content.features.length > 0 ? (
+        <section className="el-principles">
+          {content.features.map((feature) => (
+            <article key={feature.title}>
+              <h2>{feature.title}</h2>
+              <p>{feature.description}</p>
+            </article>
+          ))}
+        </section>
+      ) : null}
 
       <div className="el-page-foot">
         <p>Speak with Ellis.</p>

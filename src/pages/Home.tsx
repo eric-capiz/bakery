@@ -1,14 +1,26 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const Home = () => {
+type HomeProps = {
+  content?: SiteContent;
+};
+
+const Home = ({ content = DEFAULT_CONTENT }: HomeProps) => {
+  const { hero, notice } = content;
+  const heroLine = [hero.titleAccent, hero.titleEnd].filter(Boolean).join(" ");
+
   return (
     <div className="el-home">
+      {notice ? (
+        <div className="el-notice" role="status">
+          <p className="el-shell">{notice}</p>
+        </div>
+      ) : null}
+
       <section className="el-hero" aria-label="Ellis hero">
-        <img
-          src="/img/ellis/home/hero.jpg"
-          alt="Modern residence with composed landscape"
-        />
+        <img src={hero.image} alt={hero.imageAlt} />
         <div className="el-hero-veil" aria-hidden="true" />
         <motion.div
           className="el-hero-copy"
@@ -16,21 +28,21 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="el-eyebrow">Outdoor care</p>
-          <h1>Ellis</h1>
-          <p className="el-hero-line">Property, finished.</p>
-          <p className="el-hero-sub">
-            Refined lawn care, exterior washing, and mobile detailing with quiet
-            standards for the modern property.
-          </p>
+          <p className="el-eyebrow">{hero.eyebrow}</p>
+          <h1>{hero.title}</h1>
+          {heroLine ? <p className="el-hero-line">{heroLine}</p> : null}
+          <p className="el-hero-sub">{hero.subtitle}</p>
           <div className="el-actions">
-            <Link href="/book" className="el-btn">
-              Reserve a visit
+            <Link href={hero.ctaPrimaryHref} className="el-btn">
+              {hero.ctaPrimary}
             </Link>
-            <Link href="/services" className="el-btn el-btn--light">
-              View services
+            <Link href={hero.ctaSecondaryHref} className="el-btn el-btn--light">
+              {hero.ctaSecondary}
             </Link>
           </div>
+          {hero.caption ? (
+            <p className="el-hero-caption">{hero.caption}</p>
+          ) : null}
         </motion.div>
       </section>
 

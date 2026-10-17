@@ -201,3 +201,43 @@
     justify-content: center;
   }
 }
+
+/* ── CMS notice banner (only rendered when notice text is set) ───────── */
+.el-notice {
+  background: var(--el-ink);
+  border-bottom: 2px solid var(--el-copper);
+  padding: calc(var(--el-nav) + 1.1rem) 1rem 1.1rem;
+  text-align: center;
+
+  p {
+    color: rgba(240, 242, 245, 0.88);
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 0 auto;
+  }
+}
+
+.el-hero-caption {
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(240, 242, 245, 0.62);
+}
+
+/* Larger tap target for chapter text links */
+.el-chapter-copy .el-link {
+  padding: 0.6rem 0 0.3rem;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Guard against long CMS-edited titles */
+.el-hero-copy h1,
+.el-page-head h1,
+.el-service-copy h2 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
