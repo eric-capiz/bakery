@@ -11,8 +11,6 @@ type AdminShellProps = {
 
 const LINKS = [
   { href: "/admin", label: "Overview" },
-  { href: "/admin/images", label: "Images" },
-  { href: "/admin/content", label: "Content" },
   { href: "/admin/settings", label: "Settings" },
 ];
 

@@ -44,8 +44,6 @@ const AdminPanel = () => {
     >
       <div className="admin-card">
         <div className="admin-home-links">
-          <Link href="/admin/images">Manage Images</Link>
-          <Link href="/admin/content">Manage Content</Link>
           <Link href="/admin/settings">Update Credentials</Link>
         </div>
       </div>
