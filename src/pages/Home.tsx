@@ -1,39 +1,9 @@
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { SiteContent } from "../../lib/content";
 
-interface HomeContent {
-  hero: {
-    tagline: string;
-    taglineAccent: string;
-    taglineEnd: string;
-    subtitle: string;
-  };
-  features: Array<{ icon: string; title: string; description: string }>;
-  specialties: Array<{ title: string; description: string }>;
-}
-
-const GALLERY = [
-  "/img/Cakes/cake2.jpg",
-  "/img/Cakes/cake5.jpg",
-  "/img/Cakes/cake8.jpg",
-  "/img/Cakes/cake11.jpg",
-  "/img/Cakes/cake14.jpg",
-  "/img/Cakes/cake16.jpg",
-];
-
-const MARQUEE = [
-  "Custom Cakes",
-  "Weddings",
-  "Birthdays",
-  "Cupcakes",
-  "Anniversaries",
-  "Private Events",
-  "Sugar Art",
-  "Consultations",
-];
-
-const Home = () => {
+const Home = ({ content }: { content: SiteContent }) => {
   const { ref: craftRef, inView: craftInView } = useInView({
     threshold: 0.15,
     triggerOnce: true,
@@ -59,7 +29,6 @@ const Home = () => {
     triggerOnce: true,
   });
 
-  const [content, setContent] = useState<HomeContent | null>(null);
   const [introReady, setIntroReady] = useState(false);
 
   useEffect(() => {
@@ -67,113 +36,59 @@ const Home = () => {
     return () => window.clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const contentResponse = await fetch("/api/content/get");
-        const contentData = await contentResponse.json();
-        if (contentData.home) setContent(contentData.home);
-      } catch (err) {
-        console.error("Failed to fetch data:", err);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const features =
-    content?.features ??
-    ([
-      {
-        icon: "",
-        title: "Fast Service",
-        description: "Within 24hrs in most cases!",
-      },
-      {
-        icon: "",
-        title: "Affordable",
-        description: "Competitive pricing with promotional discounts available!",
-      },
-      {
-        icon: "",
-        title: "Custom Made",
-        description: "Dream big! We bring your vision to life.",
-      },
-      {
-        icon: "",
-        title: "Professional",
-        description: "8+ years of professional baking experience.",
-      },
-    ] as HomeContent["features"]);
-
-  const specialties =
-    content?.specialties ??
-    ([
-      {
-        title: "Birthday Cakes",
-        description:
-          "Make every birthday unforgettable with our custom designs.",
-      },
-      {
-        title: "Wedding Cakes",
-        description: "Elegant and delicious cakes for your special day.",
-      },
-      {
-        title: "Anniversary Cakes",
-        description: "Celebrate your milestones with style.",
-      },
-      {
-        title: "Corporate Events",
-        description: "Professional cakes for your business occasions.",
-      },
-    ] as HomeContent["specialties"]);
-
-  const tagline = content?.hero.tagline || "The More";
-  const taglineAccent = content?.hero.taglineAccent || "Cake";
-  const taglineEnd = content?.hero.taglineEnd || "The Batter";
-  const subtitle =
-    content?.hero.subtitle || "Contact me for all your sweet tooth needs!";
+  const hero = content.hero;
+  const features = content.features;
+  const specialties = content.services;
+  const gallery = content.gallery ?? [];
+  const marquee = content.marquee ?? [];
+  const showNotice = content.notice.trim().length > 0;
 
   return (
     <div className="home-silk">
+      {showNotice && (
+        <div className="notice-banner" role="status">
+          <span className="notice-banner-inner">{content.notice}</span>
+        </div>
+      )}
+
       <section className={`intro-silk ${introReady ? "is-ready" : ""}`}>
         <div className="intro-silk-copy">
-          <p className="intro-silk-brand">Sweet Dreams Bakery</p>
+          <p className="intro-silk-brand">{hero.eyebrow}</p>
           <h1 className="intro-silk-title">
-            <span>{tagline}</span>
-            <span className="intro-silk-accent">{taglineAccent}</span>
-            <span>{taglineEnd}</span>
+            <span>{hero.title}</span>
+            <span className="intro-silk-accent">{hero.titleAccent}</span>
+            <span>{hero.titleEnd}</span>
           </h1>
-          <p className="intro-silk-subtitle">{subtitle}</p>
+          <p className="intro-silk-subtitle">{hero.subtitle}</p>
           <div className="intro-silk-actions">
-            <Link href="/contact" className="btn-silk">
-              Book a Consultation
+            <Link href={hero.ctaPrimaryHref} className="btn-silk">
+              {hero.ctaPrimary}
             </Link>
-            <Link href="/sample-cakes" className="btn-silk-ghost">
-              View Gallery
+            <Link href={hero.ctaSecondaryHref} className="btn-silk-ghost">
+              {hero.ctaSecondary}
             </Link>
           </div>
         </div>
         <div className="intro-silk-visual">
           <div className="intro-silk-frame">
-            <img
-              src="/img/home/hero-pastry.png"
-              alt="Signature celebration cake"
-            />
+            <img src={hero.image} alt={hero.imageAlt} />
           </div>
-          <p className="intro-silk-caption">Hand finished · Made to order</p>
+          <p className="intro-silk-caption">{hero.caption}</p>
         </div>
       </section>
 
-      <div className="marquee-silk" aria-hidden="true">
-        <div className="marquee-silk-track">
-          {[...MARQUEE, ...MARQUEE].map((word, i) => (
-            <span key={`${word}-${i}`}>
-              {word}
-              <i />
-            </span>
-          ))}
+      {marquee.length > 0 && (
+        <div className="marquee-silk" aria-hidden="true">
+          <div className="marquee-silk-track">
+            {[...marquee, ...marquee].map((word, i) => (
+              <span key={`${word}-${i}`}>
+                {word}
+                <i />
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <section
         ref={craftRef}
@@ -251,45 +166,51 @@ const Home = () => {
         </div>
       </section>
 
-      <section
-        ref={galleryRef}
-        className={`gallery-silk ${galleryInView ? "is-visible" : ""}`}
-      >
-        <div className="silk-shell">
-          <div className="gallery-silk-head">
-            <div>
-              <p className="silk-kicker">Gallery</p>
-              <h2 className="silk-heading">A taste of the work</h2>
-              <p className="gallery-silk-lead">
-                A few recent pieces from the studio. Every cake is made to order
-                and finished by hand.
-              </p>
+      {gallery.length > 0 && (
+        <section
+          ref={galleryRef}
+          className={`gallery-silk ${galleryInView ? "is-visible" : ""}`}
+        >
+          <div className="silk-shell">
+            <div className="gallery-silk-head">
+              <div>
+                <p className="silk-kicker">Gallery</p>
+                <h2 className="silk-heading">A taste of the work</h2>
+                <p className="gallery-silk-lead">
+                  A few recent pieces from the studio. Every cake is made to
+                  order and finished by hand.
+                </p>
+              </div>
+              <Link href="/sample-cakes" className="gallery-silk-link">
+                See all sample cakes
+              </Link>
             </div>
-            <Link href="/sample-cakes" className="gallery-silk-link">
-              See all sample cakes
-            </Link>
-          </div>
-          <div className="gallery-silk-stage">
-            <figure className="gallery-silk-feature">
-              <img src={GALLERY[0]} alt="Featured sample cake" />
-            </figure>
-            <div className="gallery-silk-side">
-              {GALLERY.slice(1, 3).map((src, index) => (
-                <figure key={src} className="gallery-silk-side-item">
-                  <img src={src} alt={`Sample cake ${index + 2}`} />
-                </figure>
-              ))}
-            </div>
-          </div>
-          <div className="gallery-silk-row">
-            {GALLERY.slice(3).map((src, index) => (
-              <figure key={src} className="gallery-silk-row-item">
-                <img src={src} alt={`Sample cake ${index + 4}`} />
+            <div className="gallery-silk-stage">
+              <figure className="gallery-silk-feature">
+                <img src={gallery[0]} alt="Featured sample cake" />
               </figure>
-            ))}
+              {gallery.length > 1 && (
+                <div className="gallery-silk-side">
+                  {gallery.slice(1, 3).map((src, index) => (
+                    <figure key={src} className="gallery-silk-side-item">
+                      <img src={src} alt={`Sample cake ${index + 2}`} />
+                    </figure>
+                  ))}
+                </div>
+              )}
+            </div>
+            {gallery.length > 3 && (
+              <div className="gallery-silk-row">
+                {gallery.slice(3).map((src, index) => (
+                  <figure key={src} className="gallery-silk-row-item">
+                    <img src={src} alt={`Sample cake ${index + 4}`} />
+                  </figure>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section
         ref={quoteRef}

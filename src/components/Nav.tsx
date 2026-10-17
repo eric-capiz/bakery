@@ -67,6 +67,16 @@ const Nav = () => {
     }
   }, [router.isReady, router.pathname]);
 
+  // Lock background scroll while the mobile menu is open.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
       {showLoginModal && (
@@ -103,13 +113,16 @@ const Nav = () => {
             <button
               className={`mobile-menu-toggle-rich ${isMobileMenuOpen ? "active" : ""}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav-menu"
             >
               <span></span>
               <span></span>
               <span></span>
             </button>
             <ul
+              id="mobile-nav-menu"
               className={`nav-links-rich ${isMobileMenuOpen ? "active" : ""}`}
             >
               <li>

@@ -829,6 +829,36 @@
   }
 }
 
+// Announcement banner (CMS `notice` field). Hidden when empty.
+.notice-banner {
+  padding: calc(4.25rem + 0.85rem) 1.25rem 0.85rem;
+  background: linear-gradient(120deg, var(--s-rose-deep), var(--s-rose));
+  color: #fffaf9;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    padding: calc(5rem + 1rem) 2rem 1rem;
+  }
+}
+
+.notice-banner-inner {
+  display: inline-block;
+  max-width: 46rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
+
+// When the banner is present, the hero does not need its full top offset.
+.notice-banner + .intro-silk {
+  padding-top: 3rem;
+
+  @media (min-width: 960px) {
+    padding-top: 3.5rem;
+  }
+}
+
 @keyframes silkRise {
   from {
     opacity: 0;

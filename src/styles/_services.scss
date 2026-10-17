@@ -66,3 +66,10 @@
     }
   }
 }
+
+// CMS emoji icon inside the feature card (replaces the hardcoded react-icons)
+.service-emoji-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}

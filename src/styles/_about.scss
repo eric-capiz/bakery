@@ -372,11 +372,17 @@
           font-size: 1rem;
           text-decoration: none;
           transition: color 0.3s ease;
+          overflow-wrap: anywhere;
 
           &:hover {
             color: var(--s-rose);
             text-decoration: underline;
           }
+        }
+
+        // Plain-text contact values (e.g. address) — not a link.
+        .contact-value-static {
+          color: var(--s-text);
         }
       }
 
@@ -400,11 +406,15 @@
 
   h2 {
     text-align: center;
-    margin-bottom: 5rem;
+    margin-bottom: 2.5rem;
     color: var(--s-text-strong);
     font-family: var(--s-display);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 400;
+
+    @media (min-width: 768px) {
+      margin-bottom: 5rem;
+    }
 
     span {
       display: block;

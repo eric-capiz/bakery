@@ -426,3 +426,240 @@
     box-shadow: 0 0 0 3px rgba(181, 111, 124, 0.15);
   }
 }
+
+// Alerts (used by content / reviews / bookings editors)
+.admin-alert {
+  padding: 0.9rem 1.15rem;
+  border-radius: 0.85rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  &.admin-alert-error {
+    background: var(--s-blush);
+    color: var(--s-rose-deep);
+    border: 1.5px solid var(--s-line);
+  }
+
+  &.admin-alert-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1.5px solid #a5d6a7;
+  }
+}
+
+// Dashboard: live stat cards
+.admin-stats-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.admin-stat-card {
+  text-align: center;
+}
+
+.admin-stat-number {
+  font-family: var(--s-display);
+  font-size: clamp(2.4rem, 6vw, 3.2rem);
+  font-weight: 600;
+  color: var(--s-rose-deep);
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
+}
+
+.admin-stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--s-muted);
+  margin-bottom: 0.75rem;
+}
+
+.admin-stat-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--s-rose-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--s-text-strong);
+  }
+}
+
+// Dashboard: section nav cards
+.admin-dash-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.admin-dash-card {
+  display: block;
+  background: var(--s-surface);
+  border: 1px solid var(--s-line);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+
+  h2 {
+    font-family: var(--s-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--s-text-strong);
+    margin: 0 0 0.4rem;
+  }
+
+  p {
+    font-size: 0.92rem;
+    color: var(--s-muted);
+    line-height: 1.55;
+    margin: 0 0 0.75rem;
+  }
+
+  &:hover {
+    border-color: var(--s-rose);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(143, 79, 92, 0.12);
+  }
+}
+
+.admin-dash-go {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s-rose-deep);
+}
+
+// Reviews / bookings list rows
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-list-item-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem;
+  }
+}
+
+.admin-list-meta {
+  font-size: 0.85rem;
+  color: var(--s-muted);
+  margin: 0;
+}
+
+.admin-list-body {
+  color: var(--s-text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.admin-danger-btn {
+  flex: 0 0 auto;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: var(--s-rose-deep);
+  border: 1.5px solid var(--s-rose);
+  border-radius: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 2.75rem;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--s-rose-deep);
+    border-color: var(--s-rose-deep);
+    color: #fffaf9;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.admin-status-pill {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: var(--s-blush);
+  color: var(--s-rose-deep);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-booking-fields {
+  margin: 0.5rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+
+  > div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--s-rose-deep);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--s-text);
+    font-size: 0.98rem;
+    line-height: 1.6;
+    word-break: break-word;
+
+    a {
+      color: var(--s-rose-deep);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+
+      &:hover {
+        color: var(--s-text-strong);
+      }
+    }
+  }
+}
+
+// CMS editor: working-hours rows stack on mobile, sit side-by-side on desktop
+.admin-hours-row {
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr auto !important;
+    align-items: center;
+  }
+}

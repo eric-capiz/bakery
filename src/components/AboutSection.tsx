@@ -1,8 +1,9 @@
 import ServicesSection from "../components/ServicesSection";
 import FaqSection from "../components/FaqSection";
 import BakerSection from "../components/BakerSection";
+import type { SiteContent } from "../../lib/content";
 
-const About = () => {
+const About = ({ content }: { content: SiteContent }) => {
   return (
     <div className="about-page">
       <div className="about-container">
@@ -14,9 +15,9 @@ const About = () => {
           occasion.
         </p>
       </div>
-      <BakerSection />
-      <ServicesSection />
-      <FaqSection />
+      <BakerSection about={content.about} />
+      <ServicesSection features={content.features} />
+      <FaqSection faq={content.faq} />
     </div>
   );
 };
