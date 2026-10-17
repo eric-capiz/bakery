@@ -5,6 +5,13 @@ import { getData, setData } from '../../../lib/kv';
 import { JWT_SECRET } from '../../../lib/auth';
 import { COOKIE_EXPIRATION_SECONDS } from '../../../lib/constants';
 
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+  throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD environment variables must be set');
+}
+
 const ADMIN_KEY = 'admin';
 
 export default async function handler(
@@ -20,30 +27,16 @@ export default async function handler(
     let adminDataStr = await getData(ADMIN_KEY);
     
     if (!adminDataStr) {
-      // Initialize with defaults
-      const defaultHash = bcrypt.hashSync('breezy', 10);
-      const defaultAdmin = {
-        username: 'breezy',
-        passwordHash: defaultHash,
+      // First run: seed the admin account from environment variables.
+      // No default credentials are baked in — ADMIN_USERNAME and
+      // ADMIN_PASSWORD must be set (enforced above).
+      const passwordHash = bcrypt.hashSync(ADMIN_PASSWORD as string, 10);
+      const seededAdmin = {
+        username: ADMIN_USERNAME,
+        passwordHash,
       };
-      adminDataStr = JSON.stringify(defaultAdmin);
+      adminDataStr = JSON.stringify(seededAdmin);
       await setData(ADMIN_KEY, adminDataStr);
-    } else {
-      // Migrate legacy admin credentials to breezy/breezy
-      try {
-        const existing = JSON.parse(adminDataStr);
-        if (existing.username === 'admin') {
-          const breezyHash = bcrypt.hashSync('breezy', 10);
-          const migratedAdmin = {
-            username: 'breezy',
-            passwordHash: breezyHash,
-          };
-          adminDataStr = JSON.stringify(migratedAdmin);
-          await setData(ADMIN_KEY, adminDataStr);
-        }
-      } catch (migrateError) {
-        console.error('Failed to migrate admin credentials:', migrateError);
-      }
     }
     
     const adminData = JSON.parse(adminDataStr);
