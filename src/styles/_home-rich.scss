@@ -1,4 +1,28 @@
 /* Mobile-first home — Chamber & Aperture */
+
+/* Announcement banner (CMS notice) */
+.br-notice {
+  background: linear-gradient(180deg, #241520 0%, #1c1119 100%);
+  border-bottom: 1px solid rgba(163, 84, 108, 0.4);
+  padding: 0.85rem 1.5rem;
+  text-align: center;
+
+  p {
+    margin: 0 auto;
+    max-width: 60ch;
+    color: #e8d5da;
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.55;
+  }
+}
+
+.br-accent {
+  font-style: italic;
+  color: var(--br-peony-bright);
+}
+
 .br-chamber {
   position: relative;
   display: flex;

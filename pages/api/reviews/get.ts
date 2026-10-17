@@ -25,7 +25,7 @@ function getDefaultReviews(): Review[] {
     {
       id: "review-2",
       title: "Quiet Luxury",
-      description: "I've ordered several arrangements from Liora Atelier and each one feels considered and personal. Beautiful stems, thoughtful composition, and warm communication throughout.",
+      description: "I've ordered several arrangements from Brume and each one feels considered and personal. Beautiful stems, thoughtful composition, and warm communication throughout.",
       name: null,
       image: null,
       date: "2024-01-19T10:15:00Z"
@@ -89,7 +89,7 @@ function getDefaultReviews(): Review[] {
     {
       id: "review-10",
       title: "Will Order Again",
-      description: "Beautiful arrangements, kind service, and fair pricing. I'll definitely be returning to Liora Atelier for the next celebration.",
+      description: "Beautiful arrangements, kind service, and fair pricing. I'll definitely be returning to Brume for the next celebration.",
       name: null,
       image: "rev3.jpg",
       date: "2024-01-11T10:00:00Z"

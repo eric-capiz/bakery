@@ -2,12 +2,16 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import Nav from "../src/components/Nav";
+import Footer from "../src/components/Footer";
 import ScrollTop from "../src/components/ScrollTop";
 import SmoothScroll from "../src/components/SmoothScroll";
+import type { SiteContent } from "../lib/content";
 import "../src/styles/main.scss";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const footerContent =
+    (pageProps as { content?: SiteContent }).content ?? undefined;
 
   return (
     <div className="br-app">
@@ -26,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </motion.main>
         </AnimatePresence>
+        <Footer content={footerContent} />
       </SmoothScroll>
     </div>
   );

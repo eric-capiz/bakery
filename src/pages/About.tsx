@@ -1,21 +1,17 @@
 import Link from "next/link";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const VALUES = [
-  {
-    title: "Depth over brightness",
-    description: "We favour wine, dusk, and hush — color that holds a room.",
-  },
-  {
-    title: "Bouquets as architecture",
-    description: "Form first, then bloom. Every piece must sit well in the hand.",
-  },
-  {
-    title: "Small by design",
-    description: "Few commissions. Full attention. No theatre on the day.",
-  },
-];
+type AboutProps = {
+  content?: SiteContent;
+};
 
-const About = () => {
+const About = ({ content = DEFAULT_CONTENT }: AboutProps) => {
+  const introParagraphs = content.about.intro
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
   return (
     <div className="br-page br-practice">
       <header className="br-page-head">
@@ -32,20 +28,20 @@ const About = () => {
           alt="Table arrangement by Brume"
         />
         <div>
-          <p>
-            Brume began with a preference for florals that feel like dusk — rich
-            without shouting, composed without stiffness.
-          </p>
-          <p>
-            We work with couples and hosts who want bouquets and arrangements
-            that hold presence after the light softens. Restraint is the luxury.
-          </p>
+          {introParagraphs.map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
         </div>
       </section>
 
       <section className="br-practice-values">
-        {VALUES.map((v) => (
+        {content.features.map((v) => (
           <article key={v.title}>
+            {v.icon ? (
+              <span className="br-value-icon" aria-hidden="true">
+                {v.icon}
+              </span>
+            ) : null}
             <h2>{v.title}</h2>
             <p>{v.description}</p>
           </article>
@@ -54,8 +50,8 @@ const About = () => {
 
       <div className="br-page-foot">
         <p>Ready to talk through a date?</p>
-        <Link href="/commission" className="br-btn">
-          Commission
+        <Link href={content.hero.ctaPrimaryHref} className="br-btn">
+          {content.hero.ctaPrimary}
         </Link>
       </div>
     </div>

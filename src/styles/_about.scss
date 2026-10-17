@@ -40,6 +40,14 @@
   }
 }
 
+.br-value-icon {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--br-copper);
+}
+
 @media (min-width: 820px) {
   .br-practice-lead {
     width: min(1100px, calc(100% - 3.5rem));

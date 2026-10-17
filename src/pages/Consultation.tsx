@@ -1,7 +1,15 @@
 import Link from "next/link";
 import ConsultationForm from "../components/ConsultationForm";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const Commission = () => {
+type ConsultationProps = {
+  content?: SiteContent;
+};
+
+const Commission = ({ content = DEFAULT_CONTENT }: ConsultationProps) => {
+  const contact = content.about;
+
   return (
     <div className="br-page br-commission">
       <header className="br-page-head">
@@ -24,17 +32,32 @@ const Commission = () => {
             <ul>
               <li>
                 <span>Email</span>
-                <strong>hello@brume.studio</strong>
+                <strong>
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                </strong>
               </li>
               <li>
                 <span>Phone</span>
-                <strong>(555) 014-3901</strong>
+                <strong>{contact.phone}</strong>
               </li>
               <li>
                 <span>Visits</span>
-                <strong>By appointment</strong>
+                <strong>{contact.address}</strong>
               </li>
             </ul>
+            {contact.hours.length > 0 ? (
+              <>
+                <h2>Studio hours</h2>
+                <ul>
+                  {contact.hours.map((h) => (
+                    <li key={h.day}>
+                      <span>{h.day}</span>
+                      <strong>{h.time}</strong>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
             <p>
               Prefer to browse first?{" "}
               <Link href="/portfolio">Open the portfolio</Link>.
