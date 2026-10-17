@@ -293,3 +293,44 @@
     }
   }
 }
+
+/* CMS-driven shop notice banner (top of home) */
+.pt-notice {
+  padding: calc(var(--pt-nav) + 1rem) 1.25rem 1rem;
+  background: var(--pt-hazard);
+  color: var(--pt-asphalt);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-bottom: 2px solid var(--pt-asphalt);
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 1rem;
+  }
+}
+
+.pt-notice-tag {
+  flex: 0 0 auto;
+  font-family: var(--pt-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pt-asphalt);
+}
+
+.pt-notice p {
+  color: var(--pt-asphalt);
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.45;
+  max-width: 70ch;
+}
+
+/* CMS hero eyebrow */
+.pt-hero-kicker {
+  color: var(--pt-hazard);
+  margin-bottom: 0.25rem;
+}

@@ -1,56 +1,70 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import AdminShell from "../src/components/AdminShell";
+import { useAdminAuth } from "../src/components/useAdminAuth";
 
 const AdminPanel = () => {
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
+  const { ready, mounted, isChecking } = useAdminAuth();
+  const [reviewCount, setReviewCount] = useState<number | null>(null);
 
   useEffect(() => {
-    setMounted(true);
-    const checkAuth = async () => {
+    if (!ready) return;
+    (async () => {
       try {
-        const response = await fetch("/api/auth/verify");
-        const data = await response.json();
-        if (data.authenticated) {
-          setIsAuthenticated(true);
-        } else {
-          router.push("/");
-        }
-      } catch (err) {
-        router.push("/");
-      } finally {
-        setIsChecking(false);
+        const res = await fetch("/api/reviews/get");
+        const data = await res.json();
+        setReviewCount(Array.isArray(data) ? data.length : 0);
+      } catch {
+        setReviewCount(null);
       }
-    };
-    checkAuth();
-  }, [router]);
+    })();
+  }, [ready]);
 
   if (!mounted || isChecking) {
     return <AdminShell title="Admin Panel" loading />;
   }
 
-  if (!isAuthenticated) {
+  if (!ready) {
     return null;
   }
 
   return (
     <AdminShell
-      title="Admin Panel"
-      subtitle="Manage PIT content, images, and account settings."
+      title="Shop office"
+      subtitle="Pit site controls — content, reviews, and account settings."
     >
-      <div className="admin-card">
-        <div className="admin-home-links">
-          <Link href="/admin/settings">Update Credentials</Link>
-        </div>
+      <div className="admin-dash-grid">
+        <Link href="/admin/content" className="admin-dash-card">
+          <span className="admin-dash-kicker">Content</span>
+          <strong>Site copy</strong>
+          <span className="admin-dash-desc">
+            Hero, services, about, hours, notice banner, and more.
+          </span>
+        </Link>
+        <Link href="/admin/reviews" className="admin-dash-card">
+          <span className="admin-dash-kicker">Reviews</span>
+          <strong>
+            Reviews
+            {reviewCount !== null ? (
+              <em className="admin-dash-count">{reviewCount}</em>
+            ) : null}
+          </strong>
+          <span className="admin-dash-desc">
+            Read and delete customer reviews.
+          </span>
+        </Link>
+        <Link href="/admin/settings" className="admin-dash-card">
+          <span className="admin-dash-kicker">Settings</span>
+          <strong>Credentials</strong>
+          <span className="admin-dash-desc">
+            Update your admin username and password.
+          </span>
+        </Link>
       </div>
       <div className="admin-card">
         <p className="admin-note">
-          Need changes that are not available here? Contact the developer for
-          additional updates or new feature requests.
+          Booking requests go straight to the shop email via the request
+          form — there&apos;s no internal bookings inbox on this site.
         </p>
       </div>
     </AdminShell>

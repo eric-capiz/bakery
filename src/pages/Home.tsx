@@ -1,25 +1,31 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const TAPE = [
-  "Oil & filter",
-  "Brakes",
-  "Battery",
-  "Diagnostics",
-  "Coolant",
-  "Spark plugs",
-  "A/C",
-  "Mobile service",
-];
+type HomeProps = {
+  /** Optional so legacy alias routes keep rendering branch defaults. */
+  content?: SiteContent;
+};
 
-const Home = () => {
+const Home = ({ content = DEFAULT_CONTENT }: HomeProps) => {
+  const { hero, marquee, notice } = content;
+  const tape = marquee && marquee.length > 0 ? marquee : [];
+  const h1 = [hero.title, hero.titleAccent, hero.titleEnd]
+    .filter((s) => s && s.trim().length > 0)
+    .join(" ");
+
   return (
     <div className="pt-home">
+      {notice && notice.trim().length > 0 ? (
+        <div className="pt-notice" role="status">
+          <span className="pt-notice-tag">Shop notice</span>
+          <p>{notice}</p>
+        </div>
+      ) : null}
+
       <section className="pt-hero" aria-label="PIT hero">
-        <img
-          src="/img/pit/home/hero.jpg"
-          alt="Mechanic working under a vehicle in the bay"
-        />
+        <img src={hero.image} alt={hero.imageAlt} />
         <div className="pt-hero-shade" aria-hidden="true" />
         <motion.div
           className="pt-hero-copy"
@@ -27,18 +33,18 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h1>Pit</h1>
-          <p className="pt-hero-line">Bay work. Driveway saves.</p>
-          <p className="pt-hero-sub">
-            Shop lift or mobile van — posted prices, straight answers, no
-            mystery invoice.
-          </p>
+          {hero.eyebrow ? (
+            <p className="pt-kicker pt-hero-kicker">{hero.eyebrow}</p>
+          ) : null}
+          <h1>{h1}</h1>
+          <p className="pt-hero-line">{hero.subtitle}</p>
+          {hero.caption ? <p className="pt-hero-sub">{hero.caption}</p> : null}
           <div className="pt-actions">
-            <Link href="/book" className="pt-btn">
-              Book a slot
+            <Link href={hero.ctaPrimaryHref} className="pt-btn">
+              {hero.ctaPrimary}
             </Link>
-            <Link href="/services" className="pt-btn pt-btn--ghost">
-              Price board
+            <Link href={hero.ctaSecondaryHref} className="pt-btn pt-btn--ghost">
+              {hero.ctaSecondary}
             </Link>
           </div>
         </motion.div>
@@ -46,7 +52,7 @@ const Home = () => {
 
       <div className="pt-tape" aria-hidden="true">
         <div className="pt-tape-track">
-          {[...TAPE, ...TAPE].map((item, i) => (
+          {[...tape, ...tape].map((item, i) => (
             <span key={`${item}-${i}`}>{item}</span>
           ))}
         </div>
@@ -106,8 +112,8 @@ const Home = () => {
           <h2>Get on the board.</h2>
           <p>Tell us shop or mobile, what&apos;s wrong, and when you need it.</p>
           <div className="pt-actions">
-            <Link href="/book" className="pt-btn">
-              Book now
+            <Link href={hero.ctaPrimaryHref} className="pt-btn">
+              {hero.ctaPrimary}
             </Link>
           </div>
         </div>

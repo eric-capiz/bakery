@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
 type Loc = "shop" | "mobile";
 
@@ -97,8 +99,14 @@ const SERVICES: Service[] = [
 
 const money = (n: number) => (n === 0 ? "—" : `$${n}`);
 
-const Services = () => {
+type ServicesProps = {
+  /** Optional so legacy alias routes keep rendering branch defaults. */
+  content?: SiteContent;
+};
+
+const Services = ({ content = DEFAULT_CONTENT }: ServicesProps) => {
   const [loc, setLoc] = useState<Loc>("shop");
+  const cmsServices = content.services || [];
 
   return (
     <div className="pt-page pt-services">
@@ -135,15 +143,22 @@ const Services = () => {
       </p>
 
       <div className="pt-board">
-        {SERVICES.map((s) => {
+        {SERVICES.map((s, i) => {
+          const cms = cmsServices[i];
+          const name =
+            cms && cms.title.trim().length > 0 ? cms.title : s.name;
+          const blurb =
+            cms && cms.description.trim().length > 0
+              ? cms.description
+              : s.blurb;
           const price = loc === "shop" ? s.shop : s.mobile;
           const blocked = loc === "mobile" && s.mobile === 0;
           return (
             <article key={s.id} className="pt-board-row">
               <div>
                 <span>{s.tag}</span>
-                <h2>{s.name}</h2>
-                <p>{s.blurb}</p>
+                <h2>{name}</h2>
+                <p>{blurb}</p>
               </div>
               <div className="pt-board-price">
                 <strong>{blocked ? "Shop only" : money(price)}</strong>

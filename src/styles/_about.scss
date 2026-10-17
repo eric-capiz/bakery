@@ -76,3 +76,48 @@
     }
   }
 }
+
+/* CMS highlights checklist on the About page */
+.pt-checklist {
+  width: 100%;
+  margin: 2.5rem 0 0;
+  padding: 2.5rem 0;
+  background: var(--pt-iron);
+  border-top: 1px solid var(--pt-line);
+  border-bottom: 1px solid var(--pt-line);
+
+  .pt-kicker {
+    color: var(--pt-hazard);
+    margin-bottom: 1.25rem;
+  }
+
+  ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+
+    @media (min-width: 700px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2rem;
+    }
+  }
+
+  li {
+    position: relative;
+    padding-left: 2rem;
+    font-size: 1rem;
+    color: var(--pt-fog);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.35em;
+      width: 0.95rem;
+      height: 0.95rem;
+      background: var(--pt-hazard);
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+  }
+}

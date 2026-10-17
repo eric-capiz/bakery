@@ -1,7 +1,16 @@
 import Link from "next/link";
 import ConsultationForm from "../components/ConsultationForm";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const Book = () => {
+type BookProps = {
+  /** Optional so legacy alias routes keep rendering branch defaults. */
+  content?: SiteContent;
+};
+
+const Book = ({ content = DEFAULT_CONTENT }: BookProps) => {
+  const { about, faq } = content;
+
   return (
     <div className="pt-page pt-book">
       <header className="pt-page-head">
@@ -19,16 +28,28 @@ const Book = () => {
           <ul>
             <li>
               <span>Phone</span>
-              <strong>(555) 014-4820</strong>
+              <strong>{about.phone}</strong>
             </li>
             <li>
               <span>Shop</span>
-              <strong>418 Ironworks Ave</strong>
+              <strong>{about.address}</strong>
             </li>
             <li>
               <span>Hours</span>
-              <strong>Mon–Sat · 8–6</strong>
+              <strong>
+                {about.hours.map((h, i) => (
+                  <span key={i} className="pt-hours-line">
+                    {h.day} · {h.time}
+                  </span>
+                ))}
+              </strong>
             </li>
+            {about.email ? (
+              <li>
+                <span>Email</span>
+                <strong>{about.email}</strong>
+              </li>
+            ) : null}
           </ul>
           <p>
             Price list first? <Link href="/services">Services</Link>
@@ -39,6 +60,23 @@ const Book = () => {
           <ConsultationForm />
         </div>
       </div>
+
+      {faq.length > 0 ? (
+        <section className="pt-faq" aria-label="Common questions">
+          <div className="pt-shell">
+            <p className="pt-kicker">Common questions</p>
+            <h2>Before you book</h2>
+            <div className="pt-faq-list">
+              {faq.map((f, i) => (
+                <details key={i} className="pt-faq-item">
+                  <summary>{f.question}</summary>
+                  <p>{f.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 };

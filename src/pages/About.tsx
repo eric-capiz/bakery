@@ -1,6 +1,19 @@
 import Link from "next/link";
+import type { SiteContent } from "../../lib/content";
+import { DEFAULT_CONTENT } from "../../lib/defaults";
 
-const About = () => {
+type AboutProps = {
+  /** Optional so legacy alias routes keep rendering branch defaults. */
+  content?: SiteContent;
+};
+
+const About = ({ content = DEFAULT_CONTENT }: AboutProps) => {
+  const { about, features } = content;
+  const introParas = about.intro
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
   return (
     <div className="pt-page pt-about">
       <header className="pt-page-head">
@@ -14,31 +27,34 @@ const About = () => {
       <section className="pt-about-block">
         <img src="/img/pit/work/02.jpg" alt="Tools on the workbench" />
         <div>
-          <p>
-            We built PIT for people tired of waiting rooms and vague invoices.
-            You get a clear diagnosis, a price before the work, and a text when
-            it&apos;s ready.
-          </p>
-          <p>
-            Shop for the jobs that need a lift. Mobile for the ones that
-            shouldn&apos;t wreck your day.
-          </p>
+          {introParas.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
         </div>
       </section>
 
+      {about.highlights.length > 0 ? (
+        <section className="pt-checklist" aria-label="Why the pit">
+          <div className="pt-shell">
+            <p className="pt-kicker">Straight from the bay</p>
+            <ul>
+              {about.highlights.map((h, i) => (
+                <li key={i}>{h}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
       <section className="pt-pillars">
-        <article>
-          <h2>01</h2>
-          <p>Say it straight — if it can wait, we say so.</p>
-        </article>
-        <article>
-          <h2>02</h2>
-          <p>Post the price — shop and mobile, up front.</p>
-        </article>
-        <article>
-          <h2>03</h2>
-          <p>Show up — bay or driveway, on the time we book.</p>
-        </article>
+        {features.map((f, i) => (
+          <article key={i}>
+            <h2>{String(i + 1).padStart(2, "0")}</h2>
+            <p>
+              <strong>{f.title}</strong> — {f.description}
+            </p>
+          </article>
+        ))}
       </section>
 
       <div className="pt-page-foot">
