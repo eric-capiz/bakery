@@ -223,12 +223,9 @@ If the type changes later in the flow, **reset** fields that no longer apply (fo
 
 ### Admin Access
 
-1. Open any page and choose Admin Login in the navigation
-2. Default credentials:
-   - Username: `admin`
-   - Password: `admin`
-3. Change the default credentials right after first login
-4. Admin routes:
+1. Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in your environment (see below) — there are no default credentials.
+2. Open any page and choose Admin Login in the navigation, then sign in with those credentials.
+3. Admin routes:
    - `/admin` Overview
    - `/admin/settings` Update username and password
    - `/admin/images` Hero and gallery images
@@ -242,12 +239,21 @@ Create a `.env.local` file in the root directory:
 JWT_SECRET=your-secret-key-change-in-production
 KV_REST_API_URL=https://your-redis-instance.upstash.io
 KV_REST_API_TOKEN=your-redis-token
+ADMIN_USERNAME=choose-an-admin-username
+ADMIN_PASSWORD=choose-a-strong-password
+# Optional: override the Redis key namespace (defaults to the package name).
+# Set a unique SITE_ID per deployment if several sites share one Redis database.
+SITE_ID=sweet-dreams-bakery
 ```
 
 **Required for production (Vercel)**
 - `JWT_SECRET` Secret for signing JWT tokens
 - `KV_REST_API_URL` Upstash Redis REST API URL
 - `KV_REST_API_TOKEN` Upstash Redis REST API token
+- `ADMIN_USERNAME` / `ADMIN_PASSWORD` Initial admin login (no defaults exist; the app throws at startup if unset)
+
+**Optional**
+- `SITE_ID` Prefix applied to every Redis key (`<SITE_ID>:<key>`). Multiple site variants can share one Upstash Redis database safely by giving each deployment a unique `SITE_ID`. Note: keys written before namespacing (unprefixed) are not read once this is deployed — migrate old data to `<SITE_ID>:<key>` if needed.
 
 Create a Redis database in Upstash and add those values to Vercel environment variables.
 
@@ -281,7 +287,7 @@ Deployed on Vercel:
 4. Add the environment variables above
 5. Deploy
 
-On first deploy, Redis initializes with defaults. Log in as admin to set content and images.
+On first deploy, set `ADMIN_USERNAME`/`ADMIN_PASSWORD` and the Redis credentials above, then log in as admin to set content and images.
 
 ## License
 
